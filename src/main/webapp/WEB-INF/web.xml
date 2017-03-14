@@ -1,0 +1,13 @@
+<web-app>
+
+    <servlet>
+        <servlet-name>bookApi</servlet-name>
+        <servlet-class>servlet.BookAPI</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>bookApi</servlet-name>
+        <url-pattern>/api/book</url-pattern>
+    </servlet-mapping>
+
+</web-app>

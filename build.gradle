@@ -1,0 +1,30 @@
+group 'Reading App'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath 'org.akhikhl.gretty:gretty:+'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'org.akhikhl.gretty'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    compile group: 'mysql', name: 'mysql-connector-java', version: '5.+'
+    compile 'javax.servlet:servlet-api:3.+'
+    compile group: 'com.google.code.gson', name: 'gson', version: '1.+'
+}

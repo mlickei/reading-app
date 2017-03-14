@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Management</title>
+</head>
+<body>
+<div class="form">
+    <div class="form-title">Add a book</div>
+    <form method="post" action="/reading-app/api/book">
+        <div class="field">
+            <label for="book-title">Title:</label><input name="title" id="book-title" type="text"/>
+        </div>
+        <div class="field">
+            <label for="book-isbn">ISBN:</label><input name="isbn" id="book-isbn" type="text"/>
+        </div>
+        <div class="field">
+            <label for="book-pages">Pages:</label><input name="pages" id="book-pages" type="number"/>
+        </div>
+        <div class="field">
+            <label for="book-author-first">Author First</label><input name="author-first" id="book-author-first" type="text"/>
+        </div>
+        <div class="field">
+            <label for="book-author-last">Author Last</label><input name="author-last" id="book-author-last" type="text"/>
+        </div>
+        <input type="submit" name="submit" value="Submit"/>
+    </form>
+</div>
+</body>
+</html>
