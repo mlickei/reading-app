@@ -1,9 +1,9 @@
-package servlet;
+package com.servlet;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import data.Book;
-import data.factory.BookFactory;
+import com.data.Book;
+import com.data.factory.BookFactory;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

@@ -1,8 +1,8 @@
-package data.factory;
+package com.data.factory;
 
-import data.ReadingEntry;
-import data.User;
-import data.driver.DatabaseDriver;
+import com.data.ReadingEntry;
+import com.data.User;
+import com.data.driver.DatabaseDriver;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -69,7 +69,7 @@ public class ReadingEntryFactory {
 			statement.setInt(5, readingEntry.getStartPage());
 			statement.setInt(6, readingEntry.getEndPage());
 
-			statement.executeQuery();
+			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {

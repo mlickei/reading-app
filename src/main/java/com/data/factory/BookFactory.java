@@ -1,7 +1,7 @@
-package data.factory;
+package com.data.factory;
 
-import data.Book;
-import data.driver.DatabaseDriver;
+import com.data.Book;
+import com.data.driver.DatabaseDriver;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -61,7 +61,7 @@ public class BookFactory {
 			statement.setString(4, book.getAuthorLast());
 			statement.setInt(5, book.getPages());
 
-			statement.executeQuery();
+			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} finally {

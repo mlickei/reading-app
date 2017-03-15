@@ -1,5 +1,5 @@
-<%@ page import="data.factory.BookFactory" %>
-<%@ page import="data.Book" %>
+<%@ page import="com.data.factory.BookFactory" %>
+<%@ page import="com.data.Book" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.util.ArrayList" %>

@@ -1,29 +1,37 @@
+DROP DATABASE IF EXISTS reading_app;
 CREATE DATABASE reading_app;
 
-create TABLE user (
+USE reading_app;
+
+DROP TABLE IF EXISTS app_user;
+CREATE TABLE app_user (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  username VARCHAR(255) NOT NULL,
-  firstName VARCHAR(255) NOT NULL,
-  lastName VARCHAR(255) NOT NULL,
-  email VARCHAR(255) NOT NULL
+  username VARCHAR(256) NOT NULL,
+  firstName VARCHAR(256) NOT NULL,
+  lastName VARCHAR(256) NOT NULL,
+  email VARCHAR(256) NOT NULL,
+  hash VARCHAR(256) NOT NULL,
+  salt VARCHAR(256) NOT NULL
 );
 
+DROP TABLE IF EXISTS book;
 CREATE TABLE book (
-  isbn VARCHAR(255) NOT NULL PRIMARY KEY,
-  title VARCHAR(255) NOT NULL,
+  isbn VARCHAR(256) NOT NULL PRIMARY KEY,
+  title VARCHAR(256) NOT NULL,
   pages INT,
-  authorFirst VARCHAR(255),
-  authorLast VARCHAR(255)
+  authorFirst VARCHAR(256),
+  authorLast VARCHAR(256)
 );
 
+DROP TABLE IF EXISTS reading_entry;
 CREATE TABLE reading_entry (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  isbn VARCHAR(255) NOT NULL,
+  isbn VARCHAR(256) NOT NULL,
   userId INT NOT NULL,
   startPage INT,
   endPage INT,
   startTime TIMESTAMP,
   endTime TIMESTAMP,
   FOREIGN KEY (isbn) REFERENCES book (isbn),
-  FOREIGN KEY (userId) REFERENCES user (id)
+  FOREIGN KEY (userId) REFERENCES app_user (id)
 );

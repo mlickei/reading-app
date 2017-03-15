@@ -2,12 +2,20 @@
 
     <servlet>
         <servlet-name>bookApi</servlet-name>
-        <servlet-class>servlet.BookAPI</servlet-class>
+        <servlet-class>com.servlet.BookAPI</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>bookApi</servlet-name>
         <url-pattern>/api/book</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>authenticateApi</servlet-name>
+        <servlet-class>com.servlet.AuthenticateAPI</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>authenticateApi</servlet-name>
+        <url-pattern>/api/auth</url-pattern>
     </servlet-mapping>
 
 </web-app>
