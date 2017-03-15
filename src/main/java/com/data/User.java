@@ -1,14 +1,20 @@
 package com.data;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by Matthew on 3/12/2017.
  */
 public class User {
 
 	private int id;
+	@Expose
 	private String username;
+	@Expose
 	private String email;
+	@Expose
 	private String firstName;
+	@Expose
 	private String lastName;
 	private String hash;
 	private String salt;

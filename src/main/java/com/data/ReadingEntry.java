@@ -1,5 +1,7 @@
 package com.data;
 
+import com.google.gson.annotations.Expose;
+
 import java.sql.Timestamp;
 
 /**
@@ -8,12 +10,30 @@ import java.sql.Timestamp;
 public class ReadingEntry {
 
 	private int id;
+	@Expose
 	private Book book;
+	@Expose
 	private User user;
+	@Expose
 	private int startPage;
+	@Expose
 	private int endPage;
+	@Expose
 	private Timestamp startTime;
+	@Expose
 	private Timestamp endTime;
+
+	public ReadingEntry() {
+	}
+
+	public ReadingEntry(Book book, User user, int startPage, int endPage, Timestamp startTime, Timestamp endTime) {
+		this.book = book;
+		this.user = user;
+		this.startPage = startPage;
+		this.endPage = endPage;
+		this.startTime = startTime;
+		this.endTime = endTime;
+	}
 
 	public int getId() {
 		return id;

@@ -18,4 +18,13 @@
         <url-pattern>/api/auth</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>readingEntryApi</servlet-name>
+        <servlet-class>com.servlet.ReadingEntryAPI</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>readingEntryApi</servlet-name>
+        <url-pattern>/api/reading-entry</url-pattern>
+    </servlet-mapping>
+
 </web-app>
