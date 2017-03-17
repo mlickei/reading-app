@@ -48,15 +48,25 @@ String nodeExecutable() {
 }
 
 compileTypeScript {
-    sourcemap = true
-    declaration = true
-    target = "ES5"
     compilerExecutable "${nodeExecutable()} node_modules/typescript/lib/tsc.js"
     dependsOn "npmInstall"
+    source = [file('src/main/ts')]
+    target = "es5"
+    module = "commonjs"
+    moduleResolution = "node"
+    isolatedModules = false
+    declaration = false
+    preserveConstEnums = true
+    noLib = false
+    noImplicitAny = false
+    noImplicitUseStrict = false
 }
 
 war {
     into("resources/javascript") {
         from compileTypeScript.outputs
+    }
+    into("resources/javascript/lib") {
+        from (["node_modules/jquery/dist/jquery.min.js"])
     }
 }

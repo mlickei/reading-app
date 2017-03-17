@@ -4,8 +4,22 @@
     <meta charset="UTF-8">
     <title>Home</title>
     <link href="resources/css/basic-styles.css" rel="stylesheet"/>
+    <script src="resources/javascript/lib/jquery.min.js"></script>
+    <script src="resources/javascript/login.js"></script>
 </head>
 <body>
 <h1>Reading App Tracker</h1>
+<div class="form">
+    <div class="form-title">Login</div>
+    <form class="login" method="get" action="/reading-app/api/auth">
+        <div class="field">
+            <label for="user-username">Username:</label><input name="username" id="user-username" type="text"/>
+        </div>
+        <div class="field">
+            <label for="user-password">Password</label><input name="password" id="user-password" type="password"/>
+        </div>
+        <input type="submit" name="submit" value="Submit"/>
+    </form>
+</div>
 </body>
 </html>

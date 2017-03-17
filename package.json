@@ -14,11 +14,16 @@
   "license": "",
   "homepage": "",
   "devDependencies": {
+    "@types/jquery": "^2.0.41",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-bower": "0.0.13",
     "gulp-plumber": "^1.0.1",
-    "gulp-sass": "^2.0.4"
+    "gulp-sass": "^2.0.4",
+    "jquery": "^3.2"
   },
-  "dependencies": { "typescript": "1.8.7" }
+  "dependencies": {
+    "@types/jquery": "^2.0.41",
+    "typescript": "^2.2"
+  }
 }

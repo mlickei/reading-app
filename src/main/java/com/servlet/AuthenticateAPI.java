@@ -47,23 +47,27 @@ public class AuthenticateAPI extends HttpServlet {
 		String password = req.getParameter("password");
 		String username = req.getParameter("username");
 
+		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+		Gson gson = gsonBuilder.create();
+
 		if (password != null && password.length() >= 0) {
-			if (BasicAuthenticator.authenticateUser(username, password)) {
-				try {
-					User user = UserFactory.getUser(username);
-					req.getSession().setAttribute(SessionAttributes.USER, user);
-					resp.getWriter().print("Successfully logged in: " + user.getFirstName() + " " + user.getLastName());
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
+			User user = null;
+
+			try {
+				user = UserFactory.getUser(username);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+			if (user != null && BasicAuthenticator.authenticateUser(username, password)) {
+				req.getSession().setAttribute(SessionAttributes.USER, user);
+				resp.getWriter().print(gson.toJson(user));
 			} else {
-				resp.getWriter().print("Failed to log in.");
+				resp.sendError(401, "Failed to log in.");
 			}
 		} else {
 			User curUser = (User) req.getSession().getAttribute(SessionAttributes.USER);
 			if (curUser != null) {
-				GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-				Gson gson = gsonBuilder.create();
 				resp.getWriter().print(gson.toJson(curUser));
 			} else {
 				resp.getWriter().print("No user signed in!");
