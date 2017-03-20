@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
@@ -46,11 +47,17 @@ public class AuthenticateAPI extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String password = req.getParameter("password");
 		String username = req.getParameter("username");
+		String logoutParam = req.getParameter("logout");
+		boolean doLogout = Integer.parseInt((logoutParam != null) ? logoutParam : "0") == 1;
 
+		PrintWriter pw = resp.getWriter();
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		Gson gson = gsonBuilder.create();
 
-		if (password != null && password.length() >= 0) {
+		if(doLogout) {
+			req.getSession().removeAttribute(SessionAttributes.USER);
+			pw.print("User logged out.");
+		} else if (password != null && password.length() >= 0) {
 			User user = null;
 
 			try {
@@ -61,16 +68,16 @@ public class AuthenticateAPI extends HttpServlet {
 
 			if (user != null && BasicAuthenticator.authenticateUser(username, password)) {
 				req.getSession().setAttribute(SessionAttributes.USER, user);
-				resp.getWriter().print(gson.toJson(user));
+				pw.print(gson.toJson(user));
 			} else {
 				resp.sendError(401, "Failed to log in.");
 			}
 		} else {
 			User curUser = (User) req.getSession().getAttribute(SessionAttributes.USER);
 			if (curUser != null) {
-				resp.getWriter().print(gson.toJson(curUser));
+				pw.print(gson.toJson(curUser));
 			} else {
-				resp.getWriter().print("No user signed in!");
+				pw.print("No user signed in!");
 			}
 		}
 	}

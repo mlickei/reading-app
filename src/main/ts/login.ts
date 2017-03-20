@@ -7,18 +7,60 @@ class User {
 }
 
 class Authenticator {
-    user: User;
+    loggedInUser: User = null;
+    $accountBox = $('.account-box');
+    $loginForm = this.$accountBox.find('.login-form form');
+    $passField = this.$loginForm.find('#user-password');
+    $userInfoBox = this.$accountBox.find('.user-info');
+    $usernameBox = this.$accountBox.find('.username');
+    $logoutBtn = this.$accountBox.find('.logout-btn');
 
-    constructor(public data) {
+    constructor() {
+        this.$logoutBtn.on('click', () => {
+            this.logoutUser();
+        });
 
+        this.$loginForm.on('submit', (evt) => {
+            evt.preventDefault();
+            this.authenticate(this.$loginForm.serialize());
+        });
+
+        this.$accountBox.addClass('show-login');
     }
 
-    authenticate() {
+    authenticate(data) {
         $.ajax('http://localhost:8080/reading-app/api/auth', {
             type: "GET",
-            data: this.data
+            data: data
         }).done((data)=>{
-            loggedInUser = new User(data.firstName, data.lastName, data.username, data.email);
+            data = JSON.parse(data);
+            this.loggedInUser = new User(data.firstName, data.lastName, data.username, data.email);
+            this.updateAccountBox();
+        }).fail(()=>{
+            alert("Failed to log in. Wrong username or password.");
+        });
+    }
+
+    updateAccountBox() {
+        if(this.loggedInUser != null) {
+            this.$accountBox.addClass('show-user').removeClass('show-login');
+            this.$usernameBox.text(this.loggedInUser.username);
+        } else {
+            this.$accountBox.addClass('show-login').removeClass('show-user');
+            this.$usernameBox.text('');
+            this.$passField.val('');
+        }
+    }
+
+    logoutUser() {
+        $.ajax('http://localhost:8080/reading-app/api/auth', {
+            type: "GET",
+            data: {
+                logout: 1
+            }
+        }).done(() => {
+            this.loggedInUser = null;
+            this.updateAccountBox();
         }).fail(()=>{
             alert("Failed to log in. Wrong username or password.");
         });
@@ -26,8 +68,5 @@ class Authenticator {
 }
 
 window.onload = () => {
-    $('form.login').on('submit', (evt) => {
-        evt.preventDefault();
-        new Authenticator($('form.login').serialize()).authenticate();
-    });
+    let auth = new Authenticator();
 };

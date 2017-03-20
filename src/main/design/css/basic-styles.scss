@@ -1,3 +1,50 @@
+@import "config/base-import";
+
 h1 {
   text-align: center;
+}
+
+header {
+  display: flex;
+  align-items: center;
+
+  .header-left {
+    flex: 1 0 auto;
+  }
+
+  .header-right {
+    flex: 1 0 auto;
+    display: flex;
+  }
+
+  .logo a {
+    font-family: $logo-font;
+    font-size: 60px;
+  }
+
+  .account-box {
+    margin-left: auto;
+
+    .user-info {
+      display: flex;
+
+      .logout-btn {
+        margin-left: 10px;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .account-box .login-form,
+  .account-box .user-info {
+    display: none;
+  }
+
+  .account-box.show-login .login-form {
+    display: block;
+  }
+
+  .account-box.show-user .user-info {
+    display: block;
+  }
 }
