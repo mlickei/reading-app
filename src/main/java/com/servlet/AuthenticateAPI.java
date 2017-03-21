@@ -4,6 +4,8 @@ import com.data.User;
 import com.data.factory.UserFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.security.BasicAuthenticator;
 
 import javax.servlet.ServletException;
@@ -48,6 +50,8 @@ public class AuthenticateAPI extends HttpServlet {
 		String password = req.getParameter("password");
 		String username = req.getParameter("username");
 		String logoutParam = req.getParameter("logout");
+		String redirectParam = req.getParameter("ret");
+
 		boolean doLogout = Integer.parseInt((logoutParam != null) ? logoutParam : "0") == 1;
 
 		PrintWriter pw = resp.getWriter();
@@ -68,16 +72,21 @@ public class AuthenticateAPI extends HttpServlet {
 
 			if (user != null && BasicAuthenticator.authenticateUser(username, password)) {
 				req.getSession().setAttribute(SessionAttributes.USER, user);
-				pw.print(gson.toJson(user));
+				JsonObject returnData = new JsonObject();
+				returnData.add("user", gson.toJsonTree(user));
+				returnData.addProperty("redirectURL", redirectParam);
+				pw.print(returnData.toString());
 			} else {
 				resp.sendError(401, "Failed to log in.");
 			}
 		} else {
 			User curUser = (User) req.getSession().getAttribute(SessionAttributes.USER);
 			if (curUser != null) {
-				pw.print(gson.toJson(curUser));
+				JsonObject returnData = new JsonObject();
+				returnData.add("user", gson.toJsonTree(curUser));
+				pw.print(returnData);
 			} else {
-				pw.print("No user signed in!");
+				resp.sendError(401, "No user signed in.");
 			}
 		}
 	}

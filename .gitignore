@@ -48,4 +48,7 @@ gradle-app.setting
 
 ### NODE SHIT
 /node_modules
+
+### NOT NEEDED GENERATED FILES
 src/main/webapp/resources/css
+src/main/webapp/resources/fonts

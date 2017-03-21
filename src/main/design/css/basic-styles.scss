@@ -1,4 +1,5 @@
 @import "config/base-import";
+@import "normalize";
 
 h1 {
   text-align: center;
@@ -18,33 +19,36 @@ header {
   }
 
   .logo a {
+    display: inline-block;
     font-family: $logo-font;
     font-size: 60px;
   }
+}
 
-  .account-box {
-    margin-left: auto;
+.btn {
+  cursor: pointer;
+  padding: 10px 15px;
+}
 
-    .user-info {
-      display: flex;
+.account-box {
+  margin-left: auto;
 
-      .logout-btn {
-        margin-left: 10px;
-        cursor: pointer;
-      }
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+
+  .logout-btn {
+    margin-left: 10px;
+
+    &:after {
+      content: "\f08b";
+      @include fa-icon();
+      margin-left: 12px;
     }
   }
+}
 
-  .account-box .login-form,
-  .account-box .user-info {
-    display: none;
-  }
-
-  .account-box.show-login .login-form {
-    display: block;
-  }
-
-  .account-box.show-user .user-info {
-    display: block;
-  }
+.main-content {
+  padding: 15px 20px;
 }

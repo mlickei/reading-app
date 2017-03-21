@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Werm | Login</title>
+    <link href="resources/css/basic-styles.css" rel="stylesheet"/>
+    <link href="resources/css/login.css" rel="stylesheet"/>
+    <script src="resources/javascript/lib/jquery.min.js"></script>
+    <script src="resources/javascript/login.js"></script>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <div class="logo">
+            <a href="/">Book Werm</a>
+        </div>
+    </div>
+    <div class="header-right">
+    </div>
+</header>
+<div class="main-content">
+    <div class="login-form">
+        <div class="form-title"><h1>Login</h1></div>
+        <div class="login-form-container">
+            <form method="get" action="/reading-app/api/auth">
+                <div class="field">
+                    <label for="user-username">Username</label><input name="username" id="user-username" type="text"/>
+                </div>
+                <div class="field">
+                    <label for="user-password">Password</label><input name="password" id="user-password" type="password"/>
+                </div>
+                <input class="btn" type="submit" name="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer-left">
+        <div class="copyright">&copy; Book Trail by D. Bruchetta</div>
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,30 @@
+@import "config/base-import";
+
+.main-content {
+  text-align: center;
+}
+
+.login-form {
+
+  .form-title {
+
+  }
+
+  form {
+    display: inline-block;
+  }
+
+  .field {
+    display: flex;
+    margin-bottom: 10px;
+
+    label {
+      width: 75px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      margin-left: 12px;
+    }
+  }
+}

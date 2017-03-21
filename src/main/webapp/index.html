@@ -2,35 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Book Trail</title>
+    <title>Book Werm</title>
     <link href="resources/css/basic-styles.css" rel="stylesheet"/>
     <script src="resources/javascript/lib/jquery.min.js"></script>
-    <script src="resources/javascript/login.js"></script>
+    <script src="resources/javascript/app.js"></script>
 </head>
 <body>
 <header>
     <div class="header-left">
         <div class="logo">
-            <a href="/">Book Trail</a>
+            <a href="/">Book Werm</a>
         </div>
     </div>
     <div class="header-right">
         <div class="account-box">
-            <div class="login-form">
-                <div class="form-title">Login</div>
-                <form method="get" action="/reading-app/api/auth">
-                    <div class="field">
-                        <label for="user-username">Username:</label><input name="username" id="user-username" type="text"/>
-                    </div>
-                    <div class="field">
-                        <label for="user-password">Password</label><input name="password" id="user-password" type="password"/>
-                    </div>
-                    <input type="submit" name="submit" value="Submit"/>
-                </form>
-            </div>
+            <!--<div class="login-form">-->
+                <!--<div class="form-title btn">Login</div>-->
+                <!--<div class="login-form-container">-->
+                    <!--<form method="get" action="/reading-app/api/auth">-->
+                        <!--<div class="field">-->
+                            <!--<label for="user-username">Username</label><input name="username" id="user-username" type="text"/>-->
+                        <!--</div>-->
+                        <!--<div class="field">-->
+                            <!--<label for="user-password">Password</label><input name="password" id="user-password" type="password"/>-->
+                        <!--</div>-->
+                        <!--<input class="btn" type="submit" name="submit" value="Submit"/>-->
+                    <!--</form>-->
+                <!--</div>-->
+            <!--</div>-->
             <div class="user-info">
                 <div class="username"></div>
-                <div class="logout-btn">Logout</div>
+                <div class="logout-btn btn">Logout</div>
             </div>
         </div>
     </div>
