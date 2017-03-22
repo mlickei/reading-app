@@ -21,12 +21,12 @@ import java.util.List;
 public class BookAPI extends HttpServlet {
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String title = req.getParameter("title");
 		String isbn = req.getParameter("isbn");
 		int pages = Integer.parseInt(req.getParameter("pages"));
-		String authorFirst = req.getParameter("author-first");
-		String authorLast = req.getParameter("author-last");
+		String authorFirst = req.getParameter("authorFirst");
+		String authorLast = req.getParameter("authorLast");
 
 		Book book = new Book(isbn, title, pages, authorFirst, authorLast);
 		try {

@@ -34,6 +34,8 @@ class Authenticator {
     }
 }
 
+//FIXME Add user creation
+
 window.onload = () => {
     let auth = new Authenticator();
 };

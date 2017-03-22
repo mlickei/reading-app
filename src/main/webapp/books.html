@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Werm | Books</title>
+    <link href="resources/css/basic-styles.css" rel="stylesheet"/>
+    <script src="resources/javascript/lib/jquery.min.js"></script>
+    <script src="resources/javascript/app.js"></script>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <div class="logo">
+            <a href="/">Book Werm</a>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="account-box">
+            <!--<div class="login-form">-->
+            <!--<div class="form-title btn">Login</div>-->
+            <!--<div class="login-form-container">-->
+            <!--<form method="get" action="/reading-app/api/auth">-->
+            <!--<div class="field">-->
+            <!--<label for="user-username">Username</label><input name="username" id="user-username" type="text"/>-->
+            <!--</div>-->
+            <!--<div class="field">-->
+            <!--<label for="user-password">Password</label><input name="password" id="user-password" type="password"/>-->
+            <!--</div>-->
+            <!--<input class="btn" type="submit" name="submit" value="Submit"/>-->
+            <!--</form>-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="user-info">
+                <div class="username"></div>
+                <div class="logout-btn btn">Logout</div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="main-content">
+    <div class="book-management">
+        <div class="form add-book-form">
+            <div class="form-title">Add a book</div>
+            <form>
+                <div class="field">
+                    <label for="book-title">Title:</label><input name="title" id="book-title" type="text"/>
+                </div>
+                <div class="field">
+                    <label for="book-isbn">ISBN:</label><input name="isbn" id="book-isbn" type="text"/>
+                </div>
+                <div class="field">
+                    <label for="book-pages">Pages:</label><input name="pages" id="book-pages" type="number"/>
+                </div>
+                <div class="field">
+                    <label for="book-author-first">Author First</label><input name="authorFirst" id="book-author-first" type="text"/>
+                </div>
+                <div class="field">
+                    <label for="book-author-last">Author Last</label><input name="authorLast" id="book-author-last" type="text"/>
+                </div>
+                <input type="submit" name="submit" value="Submit"/>
+            </form>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer-left">
+        <div class="copyright">&copy; Book Trail by D. Bruchetta</div>
+    </div>
+</footer>
+</body>
+</html>
