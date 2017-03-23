@@ -11,7 +11,7 @@ class Serializable {
 }
 
 class User extends Serializable {
-    constructor(public firstName:string, public lastName:string, public username:string, public email:string) {
+    constructor(public id:number, public firstName:string, public lastName:string, public username:string, public email:string) {
         super();
     }
 }
@@ -30,6 +30,8 @@ class Requirement {
 const AUTH_URL = '/reading-app/api/auth';
 
 class AppAuth {
+    public currentUser:User;
+
     public static logoutUser() {
         $.ajax(AUTH_URL, {
             type: "GET",
@@ -47,28 +49,32 @@ class AppAuth {
         $('.user-info .username').text(user.username);
     }
 
-    public static checkForLoggedInuser() {
+    public checkForLoggedInuser() {
         $.ajax(AUTH_URL, {
             type: "GET"
         }).done((data) => {
             data = JSON.parse(data);
             let user = data.user;
-            let loggedInUser = new User(user.firstName, user.lastName, user.username, user.email);
-            AppAuth.updateAccountBox(loggedInUser);
+            this.currentUser = new User(user.id, user.firstName, user.lastName, user.username, user.email);
+            AppAuth.updateAccountBox(this.currentUser);
         }).fail(() => {
             window.location.replace('/login.html');
         });
     }
 }
 
+declare let appAuth: AppAuth;
+
 function init() {
     $('.user-info .logout-btn').on('click', () => {
         AppAuth.logoutUser();
     });
 
-    AppAuth.checkForLoggedInuser();
+    appAuth = new AppAuth();
+    appAuth.checkForLoggedInuser();
 
-    new Requirement("EntryManager", "resources/javascript/management/book-management.js", () => new EntryManager());
+    new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager());
+    new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager());
 }
 
 window.onload = () => {

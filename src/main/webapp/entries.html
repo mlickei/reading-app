@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book Werm | Entries</title>
+    <link href="resources/css/basic-styles.css" rel="stylesheet"/>
+    <script src="resources/javascript/lib/jquery.min.js"></script>
+    <script src="resources/javascript/app.js"></script>
+    <script src="resources/javascript/management/entry-management.js"></script>
+</head>
+<body>
+<header>
+    <div class="header-left">
+        <div class="logo">
+            <a href="/">Book Werm</a>
+        </div>
+    </div>
+    <div class="header-right">
+        <div class="account-box">
+            <!--<div class="login-form">-->
+            <!--<div class="form-title btn">Login</div>-->
+            <!--<div class="login-form-container">-->
+            <!--<form method="get" action="/reading-app/api/auth">-->
+            <!--<div class="field">-->
+            <!--<label for="user-username">Username</label><input name="username" id="user-username" type="text"/>-->
+            <!--</div>-->
+            <!--<div class="field">-->
+            <!--<label for="user-password">Password</label><input name="password" id="user-password" type="password"/>-->
+            <!--</div>-->
+            <!--<input class="btn" type="submit" name="submit" value="Submit"/>-->
+            <!--</form>-->
+            <!--</div>-->
+            <!--</div>-->
+            <div class="user-info">
+                <div class="username"></div>
+                <div class="logout-btn btn">Logout</div>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="main-content">
+    <div class="entry-management">
+        <div class="form add-entry-form">
+            <div class="form-title">Add an entry</div>
+            <form>
+                <div class="field">
+                    <label for="entry-book">Book:</label><select name="book" id="entry-book"></select>
+                </div>
+                <div class="field">
+                    <label for="entry-start-page">Start Page:</label><input name="startPage" id="entry-start-page" type="number"/>
+                </div>
+                <div class="field">
+                    <label for="entry-end-page">End Page:</label><input name="endPage" id="entry-end-page" type="number"/>
+                </div>
+                <div class="field">
+                    <label for="entry-start-time">Start Time</label><input name="startTime" id="entry-start-time" type="text"/>
+                </div>
+                <div class="field">
+                    <label for="entry-end-time">End Time</label><input name="endTime" id="entry-end-time" type="text"/>
+                </div>
+                <input type="submit" name="submit" value="Submit"/>
+            </form>
+        </div>
+        <div class="entry-listing">
+            <div class="listing-title"><h3>Your Entries:</h3></div>
+            <div class="entries"></div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer-left">
+        <div class="copyright">&copy; Book Trail by D. Bruchetta</div>
+    </div>
+</footer>
+</body>
+</html>

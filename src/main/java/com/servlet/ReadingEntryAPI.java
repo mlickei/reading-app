@@ -27,13 +27,13 @@ import java.util.List;
 public class ReadingEntryAPI extends HttpServlet {
 
 	@Override
-	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String isbn = req.getParameter("isbn");
-		int userId = Integer.parseInt(req.getParameter("user"));
-		int startPg = Integer.parseInt(req.getParameter("start-page"));
-		int endPg = Integer.parseInt(req.getParameter("end-page"));
-		String startTimeStr = req.getParameter("start-time");
-		String endTimeStr = req.getParameter("end-time");
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String isbn = req.getParameter("book[isbn]");
+		int userId = Integer.parseInt(req.getParameter("user[id]"));
+		int startPg = Integer.parseInt(req.getParameter("startPage"));
+		int endPg = Integer.parseInt(req.getParameter("endPage"));
+		String startTimeStr = req.getParameter("startTime");
+		String endTimeStr = req.getParameter("endTime");
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 		Timestamp startTime = null;
