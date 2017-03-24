@@ -83,12 +83,8 @@ gretty {
     contextPath='/'
 }
 
-task deleteOldWar(type: Delete) {
-    delete "${tomcatHome}/webapps/reading-app/*"
-}
-
 task deployToTomcat(type: Copy) {
     from war.archivePath
-    into "${tomcatHome}/webapps/reading-app"
-    dependsOn deleteOldWar, war
+    into "${tomcatHome}/webapps"
+    dependsOn war
 }
