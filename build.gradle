@@ -78,3 +78,7 @@ war {
         from (["node_modules/jquery/dist/jquery.min.js"])
     }
 }
+
+gretty {
+    contextPath='/'
+}

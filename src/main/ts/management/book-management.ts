@@ -6,7 +6,7 @@ class Book extends Serializable {
 
 class BookManager {
     private $bookMgt;
-    private static BOOK_URL = '/reading-app/api/book';
+    private static BOOK_URL = '/api/book';
 
     constructor() {
         this.$bookMgt = $('.book-management');

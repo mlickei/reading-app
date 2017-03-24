@@ -26,8 +26,7 @@ class Requirement {
     }
 }
 
-//FIXME Remove reading-app
-const AUTH_URL = '/reading-app/api/auth';
+const AUTH_URL = '/api/auth';
 
 class AppAuth {
     public currentUser:User;

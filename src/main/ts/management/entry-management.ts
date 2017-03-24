@@ -6,7 +6,7 @@ class ReadingEntry extends Serializable {
 
 class EntryManager {
     private $entryMgt;
-    private static ENTRY_URL = '/reading-app/api/reading-entry';
+    private static ENTRY_URL = '/api/reading-entry';
 
     constructor() {
         this.$entryMgt = $('.entry-management');

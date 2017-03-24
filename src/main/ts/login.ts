@@ -17,7 +17,7 @@ class Authenticator {
     }
 
     authenticate(data) {
-        $.ajax('http://localhost:8080/reading-app/api/auth', {
+        $.ajax('/api/auth', {
             type: "GET",
             data: data
         }).done((data)=>{
