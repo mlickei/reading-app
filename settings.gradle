@@ -1,2 +1,1 @@
 rootProject.name = 'reading-app'
-tomcatHome = '/var/lib/tomcat7'
