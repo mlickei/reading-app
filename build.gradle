@@ -82,3 +82,9 @@ war {
 gretty {
     contextPath='/'
 }
+
+task deployToTomcat(type: Copy) {
+    from war.archivePath
+    into "${tomcatHome}/webapps"
+    dependsOn war
+}
