@@ -25,3 +25,8 @@ In order get the styles for the pages, you'll need to have NodeJS installed. Onc
 This will get you to the point that you can now download the node dependencies and run the gulp tasks. Before running tasks firs the first time, make sure to do `npm install` to download the latest dependencies.
 
 To run all default tasks do `gulp`, to run a specific task to `gulp {task-name}`
+
+## Deployment
+To deploy, make sure that gradle.properties is updated with the correct tomcatHome path. Once that's known as correct, make sure that your `ROOT` directory in the tomcat home is a symbolic link to the current version you're building.
+
+Once it's all the above is ready to go, run `gradle deployToTomcat`. NOTE: You might have to be sudo. I'll fix this later...
