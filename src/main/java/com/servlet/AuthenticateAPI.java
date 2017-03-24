@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import com.security.BasicAuthenticator;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 /**
  * Created by Matthew on 3/14/2017.
  */
+@WebServlet("/api/auth2")
 public class AuthenticateAPI extends HttpServlet {
 
 	@Override

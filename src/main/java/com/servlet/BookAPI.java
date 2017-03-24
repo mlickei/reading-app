@@ -6,6 +6,7 @@ import com.data.Book;
 import com.data.factory.BookFactory;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,6 +19,7 @@ import java.util.List;
 /**
  * Created by Matthew on 3/12/2017.
  */
+@WebServlet("/api/book")
 public class BookAPI extends HttpServlet {
 
 	@Override
