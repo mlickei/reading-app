@@ -15,7 +15,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>authenticateApi</servlet-name>
-        <url-pattern>/api/auth</url-pattern>
+        <url-pattern>/api/auth2</url-pattern>
     </servlet-mapping>
 
     <servlet>

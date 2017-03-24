@@ -33,6 +33,7 @@ public class PasswordHasher
 	 */
 	public void hashPassword(String password)
 	{
+		System.out.println(password);
 		char passChars[] = password.toCharArray();
 		byte saltBytes[] = genSalt();
 
