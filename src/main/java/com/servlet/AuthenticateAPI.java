@@ -31,6 +31,10 @@ public class AuthenticateAPI extends HttpServlet {
 		String lastName = req.getParameter("lastName");
 		String password = req.getParameter("pwd");
 
+		for(int i=0; i < req.getParameterMap().keySet().size(); i++) {
+			System.out.println(req.getParameterMap().keySet().toArray()[i]);
+		}
+
 		if (BasicAuthenticator.doesUserExist(username)) {
 			resp.getWriter().print("Failed: Username taken!");
 			return;
