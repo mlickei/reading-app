@@ -62,7 +62,7 @@ class Authenticator {
                 window.location.replace('/');
             }
         }).fail(()=>{
-            alert("Failed to log in. Wrong username or password.");
+            alert("Failed to create account. ╰(ಥдಥ)ノ");
         });
     }
 }
