@@ -29,7 +29,7 @@ gulp_default.dependsOn 'npmInstall'
 gulp_default.dependsOn 'installGulp'
 processResources.dependsOn gulp_default
 
-sourceCompatibility = 1.8
+sourceCompatibility = 1.7
 
 repositories {
     mavenCentral()
