@@ -25,8 +25,8 @@ public class AuthenticateAPI extends HttpServlet {
 	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String email = req.getParameter("email");
-		String firstName = req.getParameter("first-name");
-		String lastName = req.getParameter("last-name");
+		String firstName = req.getParameter("firstName");
+		String lastName = req.getParameter("lastName");
 
 		if (BasicAuthenticator.doesUserExist(username)) {
 			resp.getWriter().print("Failed: Username taken!");

@@ -1,6 +1,11 @@
 @import "config/base-import";
 @import "normalize";
 
+html {
+  height: 100%;
+  background-color: #f9f9f9;
+}
+
 h1 {
   text-align: center;
 }
@@ -22,6 +27,18 @@ header {
     display: inline-block;
     font-family: $logo-font;
     font-size: 60px;
+  }
+}
+
+form {
+  input[type="submit"] {
+    background-color: #0f4390;
+    border: none;
+    display: block;
+    width: 100%;
+    color: #fff;
+    box-shadow: $basic-box-shadow;
+    text-shadow: $basic-text-shadow;
   }
 }
 
@@ -47,6 +64,10 @@ header {
       margin-left: 12px;
     }
   }
+}
+
+.hidden {
+  display: none!important;
 }
 
 .main-content {

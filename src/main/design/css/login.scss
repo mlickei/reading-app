@@ -4,10 +4,18 @@
   text-align: center;
 }
 
-.login-form {
+.auth-box {
+  display: inline-block;
+  padding: 10px 15px;
+  border: 1px solid #141414;
+  min-width: 350px;
 
   .form-title {
+    margin-bottom: 10px;
 
+    h1 {
+      margin: 0;
+    }
   }
 
   form {
@@ -15,16 +23,26 @@
   }
 
   .field {
-    display: flex;
     margin-bottom: 10px;
 
     label {
-      width: 75px;
+      display: block;
+      margin-bottom: 4px;
     }
 
     input[type="text"],
     input[type="password"] {
       margin-left: 12px;
     }
+  }
+}
+
+.auth-box-controls {
+  margin-top: 10px;
+
+  .btn {
+    display: block;
+    color: #1227ff;
+    text-decoration: underline;
   }
 }
