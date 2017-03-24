@@ -29,7 +29,7 @@ gulp_default.dependsOn 'npmInstall'
 gulp_default.dependsOn 'installGulp'
 processResources.dependsOn gulp_default
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -41,6 +41,7 @@ dependencies {
     compile group: 'mysql', name: 'mysql-connector-java', version: '5.+'
     compile 'javax.servlet:servlet-api:3.+'
     compile group: 'com.google.code.gson', name: 'gson', version: '1.+'
+
 }
 
 import com.moowork.gradle.node.NodeExtension

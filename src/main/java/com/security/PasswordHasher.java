@@ -20,7 +20,7 @@ public class PasswordHasher
 	private int iterations = 1000;
 
 	private String secRandInst = "SHA1PRNG";
-	private String secKeyInst = "PBKDF2HmacSHA1Factory";
+	private String secKeyInst = "PBKDF2WithHmacSHA512";
 
 	private String hash;
 	private String salt;
@@ -33,7 +33,6 @@ public class PasswordHasher
 	 */
 	public void hashPassword(String password)
 	{
-		System.out.println(password);
 		char passChars[] = password.toCharArray();
 		byte saltBytes[] = genSalt();
 

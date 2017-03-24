@@ -40,9 +40,6 @@ public class AuthenticateAPI extends HttpServlet {
 
 		User user = new User(username, email, firstName, lastName);
 		try {
-
-			System.out.println("Password: " + password);
-			assert password != null;
 			UserFactory.insertUser(user, password);
 			User newUser = UserFactory.getUser(username);
 			req.getSession().setAttribute(SessionAttributes.USER, newUser);
