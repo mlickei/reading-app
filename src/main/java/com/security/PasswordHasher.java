@@ -20,7 +20,7 @@ public class PasswordHasher
 	private int iterations = 1000;
 
 	private String secRandInst = "SHA1PRNG";
-	private String secKeyInst = "PBKDF2WithHmacSHA512";
+	private String secKeyInst = "PBKDF2HmacSHA1Factory";
 
 	private String hash;
 	private String salt;
