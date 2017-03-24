@@ -12,6 +12,7 @@ buildscript {
         classpath 'org.akhikhl.gretty:gretty:+'
         classpath "com.moowork.gradle:gradle-node-plugin:0.12"
         classpath "de.richsource.gradle.plugins:typescript-gradle-plugin:1.8.0"
+        classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
     }
 }
 
@@ -20,6 +21,13 @@ apply plugin: 'war'
 apply plugin: 'org.akhikhl.gretty'
 apply plugin: 'com.moowork.node'
 apply plugin: 'de.richsource.gradle.plugins.typescript'
+
+apply plugin: 'com.moowork.node'
+apply plugin: 'com.moowork.gulp'
+
+gulp_default.dependsOn 'npmInstall'
+gulp_default.dependsOn 'installGulp'
+processResources.dependsOn gulp_default
 
 sourceCompatibility = 1.8
 
