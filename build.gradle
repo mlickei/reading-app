@@ -1,5 +1,5 @@
 group 'Reading App'
-version '0.2-SNAPSHOT'
+version ''//FIXME not needing this as null
 
 buildscript {
     repositories {
