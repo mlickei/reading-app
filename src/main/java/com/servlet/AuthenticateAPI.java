@@ -29,8 +29,7 @@ public class AuthenticateAPI extends HttpServlet {
 		String email = req.getParameter("email");
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
-
-		System.out.println("TESTSETLSKJET:LKSJE:LTKJSE:LTKJ");
+		String password = req.getParameter("pwd");
 
 		if (BasicAuthenticator.doesUserExist(username)) {
 			resp.getWriter().print("Failed: Username taken!");
@@ -39,8 +38,8 @@ public class AuthenticateAPI extends HttpServlet {
 
 		User user = new User(username, email, firstName, lastName);
 		try {
-			String password = req.getParameter("password");
-			System.out.println("Password" + password);
+
+			System.out.println("Password: " + password);
 			assert password != null;
 			UserFactory.insertUser(user, password);
 			User newUser = UserFactory.getUser(username);
