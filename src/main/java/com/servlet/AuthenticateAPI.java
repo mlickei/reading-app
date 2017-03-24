@@ -20,7 +20,7 @@ import java.sql.SQLException;
 /**
  * Created by Matthew on 3/14/2017.
  */
-@WebServlet("/api/auth2")
+@WebServlet("/api/auth")
 public class AuthenticateAPI extends HttpServlet {
 
 	@Override
