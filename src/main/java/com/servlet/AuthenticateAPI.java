@@ -24,7 +24,7 @@ import java.sql.SQLException;
 public class AuthenticateAPI extends HttpServlet {
 
 	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String username = req.getParameter("username");
 		String email = req.getParameter("email");
 		String firstName = req.getParameter("firstName");

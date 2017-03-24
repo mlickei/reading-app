@@ -51,7 +51,7 @@ class Authenticator {
 
     register(data) {
         $.ajax('/api/auth', {
-            type: "PUT",
+            type: "POST",
             data: data
         }).done((data)=>{
             alert("⊂(▀¯▀⊂) Succesfully Registered! ⊂(▀¯▀⊂)");
