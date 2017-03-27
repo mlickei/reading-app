@@ -31,8 +31,6 @@ public class AuthenticateAPI extends HttpServlet {
 		String lastName = req.getParameter("lastName");
 		String password = req.getParameter("pwd");
 
-		System.out.println("Confirmed");
-
 		if (BasicAuthenticator.doesUserExist(username)) {
 			resp.getWriter().print("Failed: Username taken!");
 			return;

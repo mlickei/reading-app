@@ -29,7 +29,7 @@ import java.util.List;
 public class ReadingEntryAPI extends HttpServlet {
 
 	@Override
-	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String isbn = req.getParameter("book[isbn]");
 		int userId = Integer.parseInt(req.getParameter("user[id]"));
 		int startPg = Integer.parseInt(req.getParameter("startPage"));
