@@ -87,7 +87,7 @@ class BookManager {
 
     public static insertBook(newBook:Book) {
         $.ajax(this.BOOK_URL, {
-            type: "PUT",
+            type: "POST",
             data: JSON.parse(JSON.stringify(newBook))
         }).done(() => {
             alert("Successfully added " + newBook.title + " to library");

@@ -110,7 +110,7 @@ class EntryManager {
 
     public static insertBook(newEntry:ReadingEntry) {
         $.ajax(this.ENTRY_URL, {
-            type: "PUT",
+            type: "POST",
             data: JSON.parse(JSON.stringify(newEntry))
         }).done(() => {
             alert("Successfully added entry!");
