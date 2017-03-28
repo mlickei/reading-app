@@ -24,11 +24,7 @@ public class BookAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String title = req.getParameter("title");
 		String isbn = req.getParameter("isbn");
-		int pages = Integer.parseInt(req.getParameter("pages"));
-		String authorFirst = req.getParameter("authorFirst");
-		String authorLast = req.getParameter("authorLast");
 		String delete = req.getParameter("delete");
 
 		PrintWriter pw = resp.getWriter();
@@ -41,6 +37,11 @@ public class BookAPI extends HttpServlet {
 				pw.print(e.toString());
 			}
 		} else {
+			String title = req.getParameter("title");
+			int pages = Integer.parseInt(req.getParameter("pages"));
+			String authorFirst = req.getParameter("authorFirst");
+			String authorLast = req.getParameter("authorLast");
+
 			Book book = new Book(isbn, title, pages, authorFirst, authorLast);
 			try {
 				BookFactory.insertBook(book);

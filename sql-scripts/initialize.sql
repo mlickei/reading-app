@@ -31,7 +31,8 @@ CREATE TABLE reading_entry (
   startPage INT,
   endPage INT,
   startTime TIMESTAMP,
-  endTime TIMESTAMP,
-  FOREIGN KEY (isbn) REFERENCES book (isbn),
-  FOREIGN KEY (userId) REFERENCES app_user (id)
+  endTime TIMESTAMP
 );
+
+ALTER TABLE reading_entry ADD CONSTRAINT reading_entry_book FOREIGN KEY (isbn) REFERENCES book(isbn) ON DELETE CASCADE;
+ALTER TABLE reading_entry ADD CONSTRAINT reading_entry_user FOREIGN KEY (userId) REFERENCES app_user(id) ON DELETE CASCADE;

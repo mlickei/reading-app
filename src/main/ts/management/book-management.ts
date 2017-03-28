@@ -32,14 +32,28 @@ class BookManager {
     }
 
     private static buildBookHTML(book:Book):string {
-        return `<div class="book"><div class="book-title">${book.title}</div><div class="book-isbn">${book.isbn}</div><div class="book-author"><div class="author-last">${book.authorLast}</div><div class="author-first">${book.authorFirst}</div></div></div>`;
+        return `<div class="book">
+                    <div class="book-title">${book.title}</div>
+                    <div class="book-isbn">${book.isbn}</div>
+                    <div class="book-author">
+                        <div class="author-last">${book.authorLast}</div>
+                        <div class="author-first">${book.authorFirst}</div>
+                    </div>
+                    <div class="actions book-actions">
+                        <button class="btn delete-btn">Delete</button>
+                        <button class="btn update-btn" disabled="disabled">Update</button>
+                    </div>
+                </div>`;
     }
 
     private static setupListing($listing) {
         let $list = $listing.find('.books');
         BookManager.getAllBooks((books:Book[]) => {
             for(let book of books) {
-                $list.append(BookManager.buildBookHTML(book));
+                let $newBook = $(BookManager.buildBookHTML(book)).appendTo($list);
+                $newBook.find('.actions').on('click', '.delete-btn', () => {
+                    BookManager.deleteBook(book);
+                });
             }
         });
     }
@@ -54,6 +68,8 @@ class BookManager {
         if($bookListing.length) {
             return BookManager.setupListing($bookListing);
         }
+
+        //TODO Add refresh button and function
     }
 
     public static getAllBooks(callback:(array:Book[])=> void) {
@@ -96,4 +112,19 @@ class BookManager {
             alert("Failed to create book (-_-｡)");
         });
     }
+
+    public static deleteBook(book:Book) {
+        $.ajax(this.BOOK_URL, {
+            type: "POST",
+            data: {
+                isbn: book.isbn,
+                delete: 1
+            }
+        }).done(() => {
+            alert("Deleted book!");
+        }).fail(() => {
+            alert("Failed to delete book ༼    ಠ   ͟ʖ  ಠ   ༽")
+        });
+    }
+
 }
