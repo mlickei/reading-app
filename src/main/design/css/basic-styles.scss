@@ -38,11 +38,9 @@ form {
 
   input[type="submit"] {
     background-color: #0f4390;
-    border: none;
     display: block;
     width: 100%;
     color: #fff;
-    box-shadow: $basic-box-shadow;
     text-shadow: $basic-text-shadow;
   }
 
@@ -52,10 +50,27 @@ form {
   }
 }
 
+.text-btn {
+  cursor: pointer;
+  padding: 10px 15px;
+}
+
 .btn {
   cursor: pointer;
   padding: 10px 15px;
   max-width: 210px;
+  border: none;
+  box-shadow: $basic-box-shadow;
+}
+
+.delete-btn {
+  background-color: #e21212;
+  color: #fff;
+}
+
+.update-btn {
+  background-color: #0f9013;
+  color: #fff;
 }
 
 .account-box {

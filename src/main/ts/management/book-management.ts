@@ -33,15 +33,20 @@ class BookManager {
 
     private static buildBookHTML(book:Book):string {
         return `<div class="book">
-                    <div class="book-title">${book.title}</div>
-                    <div class="book-isbn">${book.isbn}</div>
-                    <div class="book-author">
-                        <div class="author-last">${book.authorLast}</div>
-                        <div class="author-first">${book.authorFirst}</div>
+                    <div class="book-info">
+                        <div class="book-title"><span class="attr-lbl">Title</span><span class="attr-val">${book.title}</span></div>
+                        <div class="book-isbn"><span class="attr-lbl">ISBN</span><span class="attr-val">${book.isbn}</span></div>
+                        <div class="book-author">
+                            <span class="attr-lbl">Author</span>
+                            <div class="attr-val">
+                                <div class="author-last">${book.authorLast}</div>
+                                <div class="author-first">${book.authorFirst}</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="actions book-actions">
-                        <button class="btn delete-btn">Delete</button>
                         <button class="btn update-btn" disabled="disabled">Update</button>
+                        <button class="btn delete-btn">Delete</button>
                     </div>
                 </div>`;
     }
