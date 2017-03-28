@@ -9,6 +9,7 @@ import java.sql.Timestamp;
  */
 public class ReadingEntry {
 
+	@Expose
 	private int id;
 	@Expose
 	private Book book;

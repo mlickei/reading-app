@@ -69,6 +69,25 @@ public class BookFactory {
 		}
 	}
 
+	public static void deleteBook(String isbn) throws SQLException {
+		PreparedStatement statement = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("DELETE FROM book where isbn = ?");
+			statement.setString(1, isbn);
+
+			statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(null, statement, conn);
+		}
+	}
+
 	public static Book getBook(String isbn) throws SQLException {
 		Book book = null;
 		PreparedStatement statement = null;

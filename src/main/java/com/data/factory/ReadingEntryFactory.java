@@ -77,6 +77,25 @@ public class ReadingEntryFactory {
 		}
 	}
 
+	public static void deleteReadingEntry(int id) throws SQLException {
+		PreparedStatement statement = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("DELETE FROM reading_entry where id = ?");
+			statement.setInt(1, id);
+
+			statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(null, statement, conn);
+		}
+	}
+
 	public static ReadingEntry getReadingEntry(int id) throws SQLException {
 		ReadingEntry readingEntry = null;
 		PreparedStatement statement = null;

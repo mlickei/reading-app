@@ -37,24 +37,39 @@ public class ReadingEntryAPI extends HttpServlet {
 		String startTimeStr = req.getParameter("startTime");
 		String endTimeStr = req.getParameter("endTime");
 
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-		Timestamp startTime = null;
-		Timestamp endTime = null;
-		try {
-			startTime = new Timestamp(sdf.parse(startTimeStr).getTime());
-			endTime = new Timestamp(sdf.parse(endTimeStr).getTime());
-		} catch (ParseException e) {
-			e.printStackTrace();
-			resp.getWriter().print(e.toString());
-		}
+		int entryId = Integer.parseInt(req.getParameter("id"));
+		String delete = req.getParameter("delete");
 
-		try {
-			ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, endPg, startTime, endTime);
-			ReadingEntryFactory.insertReadingEntry(entry);
-			resp.getWriter().print("Success");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			resp.getWriter().print(e.toString());
+		PrintWriter pw = resp.getWriter();
+		if (delete != null && delete.length() > 0 && Integer.parseInt(delete) == 1) {
+			try {
+				ReadingEntryFactory.deleteReadingEntry(entryId);
+				pw.print("Success");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+		} else {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Timestamp startTime = null;
+			Timestamp endTime = null;
+
+			try {
+				startTime = new Timestamp(sdf.parse(startTimeStr).getTime());
+				endTime = new Timestamp(sdf.parse(endTimeStr).getTime());
+			} catch (ParseException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+
+			try {
+				ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, endPg, startTime, endTime);
+				ReadingEntryFactory.insertReadingEntry(entry);
+				pw.print("Success");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
 		}
 	}
 

@@ -29,14 +29,26 @@ public class BookAPI extends HttpServlet {
 		int pages = Integer.parseInt(req.getParameter("pages"));
 		String authorFirst = req.getParameter("authorFirst");
 		String authorLast = req.getParameter("authorLast");
+		String delete = req.getParameter("delete");
 
-		Book book = new Book(isbn, title, pages, authorFirst, authorLast);
-		try {
-			BookFactory.insertBook(book);
-			resp.getWriter().print("Success");
-		} catch (SQLException e) {
-			e.printStackTrace();
-			resp.getWriter().print(e.toString());
+		PrintWriter pw = resp.getWriter();
+		if (delete != null && delete.length() > 0 && Integer.parseInt(delete) == 1) {
+			try {
+				BookFactory.deleteBook(isbn);
+				pw.print("Success");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+		} else {
+			Book book = new Book(isbn, title, pages, authorFirst, authorLast);
+			try {
+				BookFactory.insertBook(book);
+				pw.print("Success");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
 		}
 	}
 
