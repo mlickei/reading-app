@@ -28,6 +28,8 @@ header {
     display: inline-block;
     font-family: $logo-font;
     font-size: 60px;
+    color: #0f1f90;
+    text-decoration: none;
   }
 }
 
@@ -68,8 +70,10 @@ form {
   color: #fff;
 }
 
+$green-i-like: #0f9013;
+
 .update-btn {
-  background-color: #0f9013;
+  background-color: #0f4390;
   color: #fff;
 }
 

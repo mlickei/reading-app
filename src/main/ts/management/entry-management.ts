@@ -55,14 +55,16 @@ class EntryManager {
     }
 
     private static buildEntryHTML(entry:ReadingEntry):string {
-        return `<div class="entry">
-                    <div class="entry-book-title">${entry.book.title}</div>
-                    <div class="pages-read">${(entry.endPage - entry.startPage) + 1}</div>
-                    <div class="start-time">${entry.startTime}</div>
-                    <div class="end-time">${entry.endTime}</div>
+        return `<div class="entry item">
+                    <div class="entry-info item-info">
+                        <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
+                        <div class="pages-read"><span class="attr-lbl">Pages</span><span class="attr-val">${(entry.endPage - entry.startPage) + 1}</span></div>
+                        <div class="start-time"><span class="attr-lbl">Start Time</span><span class="attr-val">${entry.startTime}</span></div>
+                        <div class="end-time"><span class="attr-lbl">End Time</span><span class="attr-val">${entry.endTime}</span></div>
+                    </div>
                     <div class="actions entry-actions">
-                        <button class="btn delete-btn">Delete</button>
                         <button class="btn update-btn" disabled="disabled">Update</button>
+                        <button class="btn delete-btn">Delete</button>
                     </div>
                 </div>`;
     }

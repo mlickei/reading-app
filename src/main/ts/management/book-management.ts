@@ -32,8 +32,8 @@ class BookManager {
     }
 
     private static buildBookHTML(book:Book):string {
-        return `<div class="book">
-                    <div class="book-info">
+        return `<div class="book item">
+                    <div class="book-info item-info">
                         <div class="book-title"><span class="attr-lbl">Title</span><span class="attr-val">${book.title}</span></div>
                         <div class="book-isbn"><span class="attr-lbl">ISBN</span><span class="attr-val">${book.isbn}</span></div>
                         <div class="book-author">
