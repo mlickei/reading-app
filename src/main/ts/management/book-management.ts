@@ -123,7 +123,7 @@ class BookManager {
         }).done(() => {
             alert("Deleted book!");
         }).fail(() => {
-            alert("Failed to delete book ༼    ಠ   ͟ʖ  ಠ   ༽")
+            alert("Failed to delete book ༼    ಠ   ͟ʖ  ಠ   ༽");
         });
     }
 
