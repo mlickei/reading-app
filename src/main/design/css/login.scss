@@ -1,5 +1,9 @@
 @import "config/base-import";
 
+header .logo {
+  margin: 0 auto 15px;
+}
+
 .main-content {
   text-align: center;
 }
@@ -26,11 +30,6 @@
 
     label {
     }
-
-    input[type="text"],
-    input[type="password"] {
-      margin-left: 12px;
-    }
   }
 }
 
@@ -41,5 +40,11 @@
     display: block;
     color: #1227ff;
     text-decoration: underline;
+    margin: 0 auto;
   }
+}
+
+footer {
+  margin-top: 15px;
+  text-align: center;
 }
