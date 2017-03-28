@@ -30,11 +30,12 @@ public class ReadingEntryAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		int entryId = Integer.parseInt(req.getParameter("id"));
 		String delete = req.getParameter("delete");
 
 		PrintWriter pw = resp.getWriter();
 		if (delete != null && delete.length() > 0 && Integer.parseInt(delete) == 1) {
+			int entryId = Integer.parseInt(req.getParameter("id"));
+
 			try {
 				ReadingEntryFactory.deleteReadingEntry(entryId);
 				pw.print("Success");
