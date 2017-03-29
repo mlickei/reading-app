@@ -68,6 +68,12 @@ form {
 .delete-btn {
   background-color: #e21212;
   color: #fff;
+
+  &:after {
+    content: "\f1f8";
+    @include fa-icon();
+    margin-left: 7px;
+  }
 }
 
 $green-i-like: #0f9013;
@@ -75,6 +81,39 @@ $green-i-like: #0f9013;
 .update-btn {
   background-color: #0f4390;
   color: #fff;
+
+  &:after {
+    content: "\f044";
+    @include fa-icon();
+    margin-left: 7px;
+  }
+}
+
+.refresh-btn {
+
+  &:after {
+    content: "\f021";
+    @include fa-icon();
+    margin-left: 1px;
+  }
+}
+
+.expand-btn {
+
+  &:after {
+    content: "\f0fe";
+    @include fa-icon();
+    margin-left: 1px;
+  }
+}
+
+.collapse-btn {
+
+  &:after {
+    content: "\f146";
+    @include fa-icon();
+    margin-left: 1px;
+  }
 }
 
 .account-box {
