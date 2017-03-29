@@ -64,6 +64,19 @@ class AppAuth {
 
 declare let appAuth: AppAuth;
 
+function initExpandable() {
+    let $expandables = $('.expandable-ctrl');
+
+    if($expandables.length) {
+        new Requirement("Expandable", "resources/javascript/components/expandable.ts", () => {
+            $expandables.each((idx, el) => {
+                const $el = $(el);
+                new Expandable($el, $($el.data('expandable-target')));
+            });
+        });
+    }
+}
+
 function init() {
     $('.user-info .logout-btn').on('click', () => {
         AppAuth.logoutUser();
@@ -74,6 +87,8 @@ function init() {
 
     new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager());
     new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager());
+
+    initExpandable();
 }
 
 window.onload = () => {

@@ -8,6 +8,7 @@
     <link href="resources/css/books.css" rel="stylesheet"/>
     <script src="resources/javascript/lib/jquery.min.js"></script>
     <script src="resources/javascript/app.js"></script>
+    <script src="resources/javascript/components/expandable.js"></script>
 </head>
 <body>
 <header>
@@ -34,24 +35,30 @@
 <div class="main-content">
     <div class="book-management">
         <div class="form add-book-form">
-            <div class="form-title">Add a book</div>
-            <form>
-                <div class="field">
-                    <label for="book-title">Title</label><input name="title" id="book-title" type="text"/>
+            <div class="form-title expandable-ctrl" data-expandable-target=".book-management .form form"><span class="expand-lbl">Add a book</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn"></span></div>
+            <form class="flex-form">
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="book-title">Title</label><input name="title" id="book-title" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="book-isbn">ISBN</label><input name="isbn" id="book-isbn" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="book-pages">Pages</label><input name="pages" id="book-pages" type="number"/>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="book-isbn">ISBN</label><input name="isbn" id="book-isbn" type="text"/>
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="book-author-first">Author First</label><input name="authorFirst" id="book-author-first" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="book-author-last">Author Last</label><input name="authorLast" id="book-author-last" type="text"/>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="book-pages">Pages</label><input name="pages" id="book-pages" type="number"/>
+                <div class="fields-wrap actions-container">
+                    <input class="btn" type="submit" name="submit" value="Submit"/>
                 </div>
-                <div class="field">
-                    <label for="book-author-first">Author First</label><input name="authorFirst" id="book-author-first" type="text"/>
-                </div>
-                <div class="field">
-                    <label for="book-author-last">Author Last</label><input name="authorLast" id="book-author-last" type="text"/>
-                </div>
-                <input class="btn" type="submit" name="submit" value="Submit"/>
             </form>
         </div>
         <div class="book-listing">

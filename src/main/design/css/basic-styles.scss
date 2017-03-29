@@ -33,6 +33,10 @@ header {
   }
 }
 
+.form-title {
+  margin-bottom: 10px;
+}
+
 form {
   .field {
     margin-bottom: 10px;
@@ -52,6 +56,28 @@ form {
   }
 }
 
+.flex-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+
+  .fields-wrap {
+    display: flex;
+    align-items: center;
+    flex: 1 0 auto;
+    width: 100%;
+
+    .field + .field {
+      margin-left: 25px;
+    }
+  }
+
+  input[type="submit"] {
+    max-height: 38px;
+  }
+}
+
 .text-btn {
   cursor: pointer;
   padding: 10px 15px;
@@ -63,6 +89,10 @@ form {
   max-width: 210px;
   border: none;
   box-shadow: $basic-box-shadow;
+}
+
+.span-btn {
+  cursor: pointer;
 }
 
 .delete-btn {
@@ -99,7 +129,6 @@ $green-i-like: #0f9013;
 }
 
 .expand-btn {
-
   &:after {
     content: "\f0fe";
     @include fa-icon();
@@ -108,12 +137,16 @@ $green-i-like: #0f9013;
 }
 
 .collapse-btn {
-
   &:after {
     content: "\f146";
     @include fa-icon();
     margin-left: 1px;
   }
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  color: rgba(224, 224, 224, 0.55);
 }
 
 .account-box {
