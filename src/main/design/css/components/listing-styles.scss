@@ -1,3 +1,12 @@
+.listing-header {
+  display: flex;
+  align-items: center;
+
+  .listing-actions {
+    margin-left: auto;
+  }
+}
+
 .listing {
   .item {
     display: flex;

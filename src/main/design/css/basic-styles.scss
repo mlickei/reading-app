@@ -106,8 +106,6 @@ form {
   }
 }
 
-$green-i-like: #0f9013;
-
 .update-btn {
   background-color: #0f4390;
   color: #fff;
@@ -119,12 +117,34 @@ $green-i-like: #0f9013;
   }
 }
 
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .refresh-btn {
+  background-color: #0f9013;
+  color: #fff;
 
   &:after {
     content: "\f021";
     @include fa-icon();
-    margin-left: 1px;
+    margin-left: 7px;
+  }
+
+  &:hover:after {
+    animation: rotate;
+  }
+
+  &:hover:after {
+    animation-duration: 1000ms;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
   }
 }
 

@@ -16,6 +16,30 @@ class User extends Serializable {
     }
 }
 
+abstract class Management {
+    protected $listingActions;
+
+    constructor(protected $target) {
+        this.$listingActions = this.$target.find('.listing-actions');
+
+        if(this.$listingActions.length) {
+            this.initActions();
+        }
+    }
+
+    private initActions() {
+        let $refresh = this.$listingActions.find('.refresh-btn');
+
+        if($refresh.length) {
+            $refresh.on('click', () => {
+                this.refreshResults();
+            });
+        }
+    }
+
+    abstract refreshResults();
+}
+
 class Requirement {
     constructor(private className:string, private libSrc:string, private callback:()=> void) {
         if(typeof window[className] === 'undefined') {

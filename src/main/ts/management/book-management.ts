@@ -4,19 +4,27 @@ class Book extends Serializable {
     }
 }
 
-class BookManager {
+class BookManager extends Management {
     private $bookMgt;
     private static BOOK_URL = '/api/book';
 
     constructor() {
-        this.$bookMgt = $('.book-management');
+        super($('.book-management'));
+        this.$bookMgt = this.$target;
 
         if(this.$bookMgt.length) {
             this.init();
         }
     }
 
-    private static setupInsertForm($form) {
+    refreshResults() {
+        BookManager.getAllBooks((books: Book[]) => {
+            this.emptyList();
+            this.buildBooksListing(books, this.$bookMgt.find('.listing'));
+        });
+    }
+
+    private setupInsertForm($form) {
         $form.on('submit', (evt) => {
             evt.preventDefault();
 
@@ -27,7 +35,10 @@ class BookManager {
             let authorLast: string = $form.find('input[name="authorLast"]').val();
 
             let newBook: Book = new Book(isbn, title, pages, authorFirst, authorLast);
-            BookManager.insertBook(newBook);
+            BookManager.insertBook(newBook, () => {
+                this.refreshResults();
+            });
+            //TODO EMPTY FORM OF WHAT WAS LAST ENTERED
         });
     }
 
@@ -51,30 +62,39 @@ class BookManager {
                 </div>`;
     }
 
-    private static setupListing($listing) {
+    private buildBooksListing(books:Book[], $target) {
+        for (let book of books) {
+            let $newBook = $(BookManager.buildBookHTML(book)).appendTo($target);
+            $newBook.find('.actions').on('click', '.delete-btn', () => {
+                BookManager.deleteBook(book, () => {
+                    this.refreshResults();
+                });
+            });
+        }
+    }
+
+    private setupListing($listing) {
         let $list = $listing.find('.books');
         BookManager.getAllBooks((books:Book[]) => {
-            for(let book of books) {
-                let $newBook = $(BookManager.buildBookHTML(book)).appendTo($list);
-                $newBook.find('.actions').on('click', '.delete-btn', () => {
-                    BookManager.deleteBook(book);
-                });
-            }
+            this.buildBooksListing(books, $list);
         });
+    }
+
+    private emptyList() {
+        const $list = this.$bookMgt.find('.listing');
+        $list.empty();
     }
 
     public init() {
         const $bookMgtForm = this.$bookMgt.find('.add-book-form form');
         if($bookMgtForm.length) {
-            BookManager.setupInsertForm($bookMgtForm);
+            this.setupInsertForm($bookMgtForm);
         }
 
         const $bookListing = this.$bookMgt.find('.book-listing');
         if($bookListing.length) {
-            return BookManager.setupListing($bookListing);
+            return this.setupListing($bookListing);
         }
-
-        //TODO Add refresh button and function
     }
 
     public static getAllBooks(callback:(array:Book[])=> void) {
@@ -106,19 +126,21 @@ class BookManager {
         return null;
     }
 
-    public static insertBook(newBook:Book) {
+    public static insertBook(newBook:Book, doneCallback:() => void) {
         $.ajax(this.BOOK_URL, {
             type: "POST",
             data: JSON.parse(JSON.stringify(newBook))
         }).done(() => {
             alert("Successfully added " + newBook.title + " to library");
+            doneCallback();
         }).fail(() => {
             //TODO make random donger retrieval
             alert("Failed to create book (-_-｡)");
+            doneCallback();
         });
     }
 
-    public static deleteBook(book:Book) {
+    public static deleteBook(book:Book, doneCallback:() => void) {
         $.ajax(this.BOOK_URL, {
             type: "POST",
             data: {
@@ -127,8 +149,10 @@ class BookManager {
             }
         }).done(() => {
             alert("Deleted book!");
+            doneCallback();
         }).fail(() => {
             alert("Failed to delete book ༼    ಠ   ͟ʖ  ಠ   ༽");
+            doneCallback();
         });
     }
 
