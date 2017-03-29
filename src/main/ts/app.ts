@@ -68,7 +68,7 @@ function initExpandable() {
     let $expandables = $('.expandable-ctrl');
 
     if($expandables.length) {
-        new Requirement("Expandable", "resources/javascript/components/expandable.ts", () => {
+        new Requirement("Expandable", "resources/javascript/components/expandable.js", () => {
             $expandables.each((idx, el) => {
                 const $el = $(el);
                 new Expandable($el, $($el.data('expandable-target')));

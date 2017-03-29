@@ -34,24 +34,32 @@
 <div class="main-content">
     <div class="entry-management">
         <div class="form add-entry-form">
-            <div class="form-title">Add an entry</div>
-            <form>
-                <div class="field">
-                    <label for="entry-book">Book</label><select name="book" id="entry-book"></select>
+            <div class="form-title expandable-ctrl" data-expandable-target=".entry-management .form form"><span class="expand-lbl">Add an entry</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn"></span></div>
+            <form class="flex-form">
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="entry-book">Book</label><select name="book" id="entry-book"></select>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="entry-start-page">Start Page</label><input name="startPage" id="entry-start-page" type="number"/>
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="entry-start-page">Start Page</label><input name="startPage" id="entry-start-page" type="number"/>
+                    </div>
+                    <div class="field">
+                        <label for="entry-end-page">End Page</label><input name="endPage" id="entry-end-page" type="number"/>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="entry-end-page">End Page</label><input name="endPage" id="entry-end-page" type="number"/>
+                <div class="fields-wrap">
+                    <div class="field time-field">
+                        <label for="entry-start-time">Start Time</label><input name="startTime" id="entry-start-time" type="text"/>
+                    </div>
+                    <div class="field time-field">
+                        <label for="entry-end-time">End Time</label><input name="endTime" id="entry-end-time" type="text"/>
+                    </div>
                 </div>
-                <div class="field">
-                    <label for="entry-start-time">Start Time</label><input name="startTime" id="entry-start-time" type="text"/>
+                <div class="fields-wrap actions-container">
+                    <input class="btn" type="submit" name="submit" value="Submit"/>
                 </div>
-                <div class="field">
-                    <label for="entry-end-time">End Time</label><input name="endTime" id="entry-end-time" type="text"/>
-                </div>
-                <input class="btn" type="submit" name="submit" value="Submit"/>
             </form>
         </div>
         <div class="entry-listing">
