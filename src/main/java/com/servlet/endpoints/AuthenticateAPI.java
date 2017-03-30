@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.endpoints;
 
 import com.data.User;
 import com.data.factory.UserFactory;
@@ -7,6 +7,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.security.BasicAuthenticator;
+import com.servlet.SessionAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

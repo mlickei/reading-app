@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.endpoints;
 
 import com.data.ReadingEntry;
 import com.data.User;
@@ -7,6 +7,7 @@ import com.data.factory.ReadingEntryFactory;
 import com.data.factory.UserFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.servlet.SessionAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;

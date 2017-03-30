@@ -1,4 +1,4 @@
-package com.servlet;
+package com.servlet.endpoints;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
