@@ -76,7 +76,7 @@ war {
         from compileTypeScript.outputs
     }
     into("resources/javascript/lib") {
-        from (["node_modules/jquery/dist/jquery.min.js"])
+        from (["node_modules/jquery/dist/jquery.min.js","node_modules/flatpickr/dist/flatpickr.min.js"])
     }
 }
 

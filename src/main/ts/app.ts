@@ -106,6 +106,15 @@ function initExpandable() {
     }
 }
 
+function initTimePickers() {
+    let $timePickers = $('input[data-time-picker="timestamp"]');
+
+    new Requirement("Flatpickr", "resources/javascript/lib/flatpickr.min.js", () => {
+        //noinspection TypeScriptUnresolvedFunction
+        $timePickers.flatpickr({enableTime: true, enableSeconds: true});
+    });
+}
+
 function init() {
     $('.user-info .logout-btn').on('click', () => {
         AppAuth.logoutUser();
@@ -118,6 +127,7 @@ function init() {
     new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager());
 
     initExpandable();
+    initTimePickers();
 }
 
 window.onload = () => {

@@ -27,6 +27,7 @@
   },
   "dependencies": {
     "@types/jquery": "^2.0.41",
+    "flatpickr": "^2.4.7",
     "typescript": "^2.2"
   }
 }
