@@ -37,6 +37,11 @@ abstract class Management {
         }
     }
 
+    protected emptyList() {
+        const $list = this.$target.find('.listing');
+        $list.empty();
+    }
+
     abstract refreshResults();
 }
 

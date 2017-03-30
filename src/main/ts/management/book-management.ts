@@ -80,11 +80,6 @@ class BookManager extends Management {
         });
     }
 
-    private emptyList() {
-        const $list = this.$bookMgt.find('.listing');
-        $list.empty();
-    }
-
     public init() {
         const $bookMgtForm = this.$bookMgt.find('.add-book-form form');
         if($bookMgtForm.length) {

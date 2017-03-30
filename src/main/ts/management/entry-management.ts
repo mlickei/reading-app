@@ -6,17 +6,25 @@ class ReadingEntry extends Serializable {
     }
 }
 
-class EntryManager {
+class EntryManager extends Management {
     private $entryMgt;
     private static ENTRY_URL = '/api/reading-entry';
 
     constructor() {
-        this.$entryMgt = $('.entry-management');
+        super($('.entry-management'));
+        this.$entryMgt = this.$target;
 
         new Requirement("BookManagement", "resources/javascript/management/book-management.js", ()=> {
             if(this.$entryMgt.length) {
                 this.init();
             }
+        });
+    }
+
+    refreshResults() {
+        EntryManager.getAllEntries((entries: ReadingEntry[]) => {
+            this.emptyList();
+            this.buildEntriesListing(entries, this.$entryMgt.find('.listing'));
         });
     }
 
@@ -34,7 +42,7 @@ class EntryManager {
         return `<option value="${book.isbn}"><i>${book.title}</i> ${book.authorLast}, ${book.authorFirst} - ${book.isbn}</option>`;
     }
 
-    private static setupInsertForm($form, books:Book[]) {
+    private setupInsertForm($form, books:Book[]) {
         const $bookSel = $form.find('select[name="book"]');
         for(let book of books) {
             $bookSel.append(EntryManager.buildBookOpt(book));
@@ -50,7 +58,9 @@ class EntryManager {
             let endTime: string = $form.find('input[name="endTime"]').val();
 
             let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), appAuth.currentUser, startPage, endPage, startTime, endTime);
-            EntryManager.insertBook(newBook);
+            EntryManager.insertBook(newBook, () => {
+                this.refreshResults();
+            });
         });
     }
 
@@ -69,15 +79,21 @@ class EntryManager {
                 </div>`;
     }
 
-    private static setupListing($listing) {
+    private buildEntriesListing(entries:ReadingEntry[], $target) {
+        for(let entry of entries) {
+            let $entry = $(EntryManager.buildEntryHTML(entry)).appendTo($target);
+            $entry.find('.actions').on('click', '.delete-btn', () => {
+                EntryManager.deleteEntry(entry, () => {
+                    this.refreshResults();
+                });
+            });
+        }
+    }
+
+    private setupListing($listing) {
         let $list = $listing.find('.entries');
         EntryManager.getAllEntries((entries:ReadingEntry[]) => {
-            for(let entry of entries) {
-                let $entry = $(EntryManager.buildEntryHTML(entry)).appendTo($list);
-                $entry.find('.actions').on('click', '.delete-btn', () => {
-                    EntryManager.deleteEntry(entry);
-                });
-            }
+            this.buildEntriesListing(entries, $list);
         });
     }
 
@@ -85,13 +101,13 @@ class EntryManager {
         const $entryMgtForm = this.$entryMgt.find('.add-entry-form form');
         if($entryMgtForm.length) {
             BookManager.getAllBooks((books:Book[]) => {
-                EntryManager.setupInsertForm($entryMgtForm, books);
+                this.setupInsertForm($entryMgtForm, books);
             });
         }
 
         const $entryListing = this.$entryMgt.find('.entry-listing');
         if($entryListing.length) {
-            return EntryManager.setupListing($entryListing);
+            this.setupListing($entryListing);
         }
     }
 
@@ -126,19 +142,21 @@ class EntryManager {
         return null;
     }
 
-    public static insertBook(newEntry:ReadingEntry) {
+    public static insertBook(newEntry:ReadingEntry, doneCallback:() => void) {
         $.ajax(this.ENTRY_URL, {
             type: "POST",
             data: JSON.parse(JSON.stringify(newEntry))
         }).done(() => {
             alert("Successfully added entry!");
+            doneCallback();
         }).fail(() => {
             //TODO make random donger retrieval
             alert("Failed to create entry (-_-｡)");
+            doneCallback();
         });
     }
 
-    public static deleteEntry(entry:ReadingEntry) {
+    public static deleteEntry(entry:ReadingEntry, doneCallback:() => void) {
         $.ajax(this.ENTRY_URL, {
             type: "POST",
             data: {
@@ -147,8 +165,10 @@ class EntryManager {
             }
         }).done(() => {
             alert("Deleted book!");
+            doneCallback();
         }).fail(() => {
             alert("Failed to delete book ( ✖ _ ✖ )");
+            doneCallback();
         });
     }
 }

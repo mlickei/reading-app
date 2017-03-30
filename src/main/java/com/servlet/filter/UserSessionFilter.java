@@ -37,7 +37,7 @@ public class UserSessionFilter implements Filter {
 
 		String requestPath = req.getRequestURI().substring(req.getContextPath().length());
 
-		if(!filterMap.containsKey(requestPath) && (session == null || session.getAttribute(SessionAttributes.USER) == null)) {
+		if(!(filterMap.containsKey(requestPath) || requestPath.contains("/resources")) && (session == null || session.getAttribute(SessionAttributes.USER) == null)) {
 			resp.sendRedirect(req.getContextPath() + "/login.html");
 		} else {
 			chain.doFilter(req, resp);
