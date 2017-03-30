@@ -1,11 +1,16 @@
 @import "config/base-import";
 
-header .logo {
-  margin: 0 auto 15px;
+header {
+  padding-top: 15px;
+
+  .logo {
+    margin: 0 auto 7px;
+  }
 }
 
 .main-content {
   text-align: center;
+  background-color: #f9f9f9;
 }
 
 .auth-box {
@@ -45,6 +50,5 @@ header .logo {
 }
 
 footer {
-  margin-top: 15px;
-  text-align: center;
+  justify-content: center;
 }

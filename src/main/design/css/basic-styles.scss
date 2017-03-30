@@ -8,6 +8,10 @@ html {
   font-weight: 400;
 }
 
+html, body {
+  height: 100%;
+}
+
 h1 {
   text-align: center;
 }
@@ -15,6 +19,7 @@ h1 {
 header {
   display: flex;
   align-items: center;
+  padding-left: 15px;
 
   .header-left {
     flex: 1 0 auto;
@@ -180,6 +185,7 @@ button[disabled] {
 
   .logout-btn {
     margin-left: 10px;
+    box-shadow: none;
 
     &:after {
       content: "\f08b";
@@ -190,6 +196,9 @@ button[disabled] {
 }
 
 .main-nav {
+  margin-top: 15px;
+  padding-right: 15px;
+
   ul {
     display: flex;
     margin: 0;
@@ -201,6 +210,26 @@ button[disabled] {
   .mi a {
     display: block;
     padding: 10px;
+    color: #0f1f90;
+    font-weight: 600;
+    text-decoration: none;
+    position: relative;
+
+    &:after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background-color: #0f1f90;
+      transition: width 250ms;
+      position: absolute;
+      left: 0;
+      bottom: 0;
+    }
+
+    &:hover:after {
+      width: 100%;
+    }
   }
 
   .mi + .mi {
@@ -212,6 +241,17 @@ button[disabled] {
   display: none!important;
 }
 
+$footer-height: 50px;
+
 .main-content {
   padding: 15px 20px;
+  background-color: #fff;
+  min-height: calc(100% - 91px - 30px - 50px);
+}
+
+footer {
+  height: $footer-height;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
 }
