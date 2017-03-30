@@ -80,7 +80,7 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("DELETE FROM book where isbn = ?");
+			statement = conn.prepareStatement("DELETE FROM book where isbn = ? ORDER BY createdOn desc");
 			statement.setString(1, isbn);
 
 			statement.executeUpdate();
@@ -101,7 +101,7 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("SELECT * FROM book where isbn = ?");
+			statement = conn.prepareStatement("SELECT * FROM book where isbn = ? ORDER BY createdOn desc");
 			statement.setString(1, isbn);
 
 			rs = statement.executeQuery();
