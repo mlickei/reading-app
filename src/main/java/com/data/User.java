@@ -7,6 +7,7 @@ import com.google.gson.annotations.Expose;
  */
 public class User {
 
+	//FIXME remove the necessity of this being exposed
 	@Expose
 	private int id;
 	@Expose

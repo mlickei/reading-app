@@ -53,13 +53,16 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("INSERT INTO book (isbn, title, authorFirst, authorLast, pages) VALUES (?, ?, ?, ?, ?)");
+			statement = conn.prepareStatement("INSERT INTO book (isbn, title, authorFirst, authorLast, pages, createdOn, createdByUserId) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 			statement.setString(1, book.getIsbn());
 			statement.setString(2, book.getTitle());
 			statement.setString(3, book.getAuthorFirst());
 			statement.setString(4, book.getAuthorLast());
 			statement.setInt(5, book.getPages());
+			statement.setTimestamp(6, book.getCreatedOn());
+			//noinspection ConstantConditions
+			statement.setInt(7, book.getCreatedBy() == null ? null : book.getCreatedBy().getId());
 
 			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {

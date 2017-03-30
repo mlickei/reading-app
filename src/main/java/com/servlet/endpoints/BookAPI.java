@@ -1,9 +1,11 @@
 package com.servlet.endpoints;
 
+import com.data.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.data.Book;
 import com.data.factory.BookFactory;
+import com.servlet.SessionAttributes;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -13,7 +15,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,8 +45,9 @@ public class BookAPI extends HttpServlet {
 			int pages = Integer.parseInt(req.getParameter("pages"));
 			String authorFirst = req.getParameter("authorFirst");
 			String authorLast = req.getParameter("authorLast");
+			User user = (User) req.getSession().getAttribute(SessionAttributes.USER);
 
-			Book book = new Book(isbn, title, pages, authorFirst, authorLast);
+			Book book = new Book(isbn, title, pages, authorFirst, authorLast, new Timestamp(new Date().getTime()), user);
 			try {
 				BookFactory.insertBook(book);
 				pw.print("Success");

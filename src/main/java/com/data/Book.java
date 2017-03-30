@@ -2,6 +2,8 @@ package com.data;
 
 import com.google.gson.annotations.Expose;
 
+import java.sql.Timestamp;
+
 /**
  * Created by Matthew on 3/12/2017.
  */
@@ -17,16 +19,22 @@ public class Book {
 	private String authorFirst;
 	@Expose
 	private String authorLast;
+	@Expose
+	private Timestamp createdOn;
+	@Expose
+	private User createdBy;
 
 	public Book() {
 	}
 
-	public Book(String isbn, String title, int pages, String authorFirst, String authorLast) {
+	public Book(String isbn, String title, int pages, String authorFirst, String authorLast, Timestamp createdOn, User createdBy) {
 		this.isbn = isbn;
 		this.title = title;
 		this.pages = pages;
 		this.authorFirst = authorFirst;
 		this.authorLast = authorLast;
+		this.createdOn = createdOn;
+		this.createdBy = createdBy;
 	}
 
 	public String getIsbn() {
@@ -67,5 +75,21 @@ public class Book {
 
 	public void setAuthorLast(String authorLast) {
 		this.authorLast = authorLast;
+	}
+
+	public Timestamp getCreatedOn() {
+		return createdOn;
+	}
+
+	public void setCreatedOn(Timestamp createdOn) {
+		this.createdOn = createdOn;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
 	}
 }
