@@ -28,7 +28,7 @@ gulp.task('styles', function() {
 gulp.task('html', function () {
 	gulp.src(['./src/main/design/html/**/*.html', '!./src/main/design/html/**/_*.html'])
 		.pipe(preprocess({context: { NODE_ENV: 'production', DEBUG: true}})) //To set environment variables in-line
-		.pipe(gulp.dest('./src/main/webapp/dist'));
+		.pipe(gulp.dest('./src/main/webapp'));
 });
 
 gulp.task('fonts', function () {
