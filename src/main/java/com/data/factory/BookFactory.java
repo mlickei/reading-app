@@ -22,7 +22,7 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("SELECT * FROM reading_app.book");
+			statement = conn.prepareStatement("SELECT * FROM reading_app.book ORDER BY createdOn desc");
 			rs = statement.executeQuery();
 
 			while(rs.next()) {
