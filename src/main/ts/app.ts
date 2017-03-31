@@ -109,23 +109,41 @@ function initExpandable() {
 function initTimePickers() {
     let $timePickers = $('input[data-time-picker="timestamp"]');
 
-    new Requirement("Flatpickr", "resources/javascript/lib/flatpickr.min.js", () => {
-        //noinspection TypeScriptUnresolvedFunction
-        $timePickers.flatpickr({enableTime: true, enableSeconds: true});
-    });
+    if($timePickers.length) {
+        new Requirement("Flatpickr", "resources/javascript/lib/flatpickr.min.js", () => {
+            //noinspection TypeScriptUnresolvedFunction
+            $timePickers.flatpickr({enableTime: true, enableSeconds: true});
+        });
+    }
+}
+
+function initMobileMenu() {
+    let $mobileMenu = $('.mobile-menu');
+
+    if($mobileMenu.length) {
+        new Requirement("MobileMenu", "resources/javascript/components/mobile-menu.js", () => {
+            new MobileMenu($mobileMenu, $('.standard-menu'));
+
+            $('.user-info .logout-btn').on('click', () => {
+                AppAuth.logoutUser();
+            });
+        });
+    } else {
+        $('.user-info .logout-btn').on('click', () => {
+            AppAuth.logoutUser();
+        });
+    }
 }
 
 function init() {
-    $('.user-info .logout-btn').on('click', () => {
-        AppAuth.logoutUser();
-    });
+    initMobileMenu();
 
     appAuth = new AppAuth();
+
     appAuth.checkForLoggedInuser();
-
     new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager());
-    new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager());
 
+    new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager());
     initExpandable();
     initTimePickers();
 }

@@ -5,6 +5,15 @@ header {
 
   .logo {
     margin: 0 auto 7px;
+
+    a {
+      text-indent: 0;
+      width: auto;
+
+      &:after {
+        display: none;
+      }
+    }
   }
 }
 
@@ -14,10 +23,8 @@ header {
 }
 
 .auth-box {
-  display: inline-block;
   padding: 10px 15px;
-  border: 1px solid #141414;
-  min-width: 350px;
+  max-width: 350px;
 
   .form-title {
     margin-bottom: 10px;
@@ -51,4 +58,12 @@ header {
 
 footer {
   justify-content: center;
+}
+
+@media (min-width: $bp-tablet) {
+  .auth-box {
+    display: inline-block;
+    border: 1px solid #141414;
+    min-width: 350px;
+  }
 }

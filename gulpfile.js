@@ -42,11 +42,15 @@ gulp.task('fonts', function () {
 	]).pipe(gulp.dest('./src/main/webapp/resources/fonts'));
 });
 
+gulp.task('other-resources', function () {
+	return gulp.src(['./src/main/design/images/*']).pipe(gulp.dest('./src/main/webapp/resources/images'))
+});
+
 gulp.task('clean', function () {
 	return gulp.src(['./src/main/webapp/resources/'], { read: false }).pipe(clean());
 });
 
-gulp.task('build', ['styles', 'fonts', 'html']);
+gulp.task('build', ['styles', 'fonts', 'html', 'other-resources']);
 
 //Watch task
 gulp.task('default',['clean'], function() {

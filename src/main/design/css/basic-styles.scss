@@ -26,7 +26,11 @@ header {
   }
 
   .header-right {
+    position: relative;
     flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   .logo a {
@@ -35,6 +39,16 @@ header {
     font-size: 60px;
     color: #0f1f90;
     text-decoration: none;
+
+    @media (max-width: 767px) {
+      text-indent: -279px;
+      overflow: hidden;
+      width: 100px;
+
+      &:after {
+        content: 'BW';
+      }
+    }
   }
 }
 
@@ -53,6 +67,8 @@ form {
     width: 100%;
     color: #fff;
     text-shadow: $basic-text-shadow;
+    border-radius: 2px;
+    overflow: hidden;
   }
 
   label {
@@ -195,6 +211,35 @@ button[disabled] {
   }
 }
 
+.mobile-menu {
+  margin: 0 15px;
+
+  .nav {
+    ul {
+
+    }
+  }
+}
+
+.mobile-nav-ctrl {
+  width: 35px;
+
+  .nav-bar {
+    height: 5px;
+    min-width: 100%;
+    background-color: #0f1f90;
+    border-radius: 2px;
+
+    & + .nav-bar {
+      margin-top: 6px;
+    }
+  }
+}
+
+.standard-menu {
+  display: none;
+}
+
 .main-nav {
   margin-top: 15px;
   padding-right: 15px;
@@ -257,4 +302,14 @@ footer {
   display: flex;
   align-items: center;
   padding-left: 15px;
+}
+
+@media (min-width: $bp-tablet) {
+  .standard-menu {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: none;
+  }
 }
