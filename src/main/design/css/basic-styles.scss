@@ -207,27 +207,30 @@ button[disabled] {
     justify-content: flex-end;
   }
 
-  .mi a {
-    display: block;
-    padding: 10px;
-    color: #0f1f90;
-    font-weight: 600;
-    text-decoration: none;
-    position: relative;
-
-    &:after {
-      content: '';
+  .mi {
+    a {
       display: block;
-      width: 0;
-      height: 2px;
-      background-color: #0f1f90;
-      transition: width 250ms;
-      position: absolute;
-      left: 0;
-      bottom: 0;
+      padding: 10px;
+      color: #0f1f90;
+      font-weight: 600;
+      text-decoration: none;
+      position: relative;
+
+      &:after {
+        content: '';
+        display: block;
+        width: 0;
+        height: 2px;
+        background-color: #0f1f90;
+        transition: width 250ms;
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
     }
 
-    &:hover:after {
+    a:hover:after,
+    &.active a:after {
       width: 100%;
     }
   }

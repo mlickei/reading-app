@@ -11,6 +11,11 @@ var fontAwesome = require('node-font-awesome');
 var clean = require('gulp-clean');
 var preprocess = require('gulp-preprocess');
 
+var buildMenu = function(activeItem) {
+	activeItem = (typeof activeItem === 'undefined' || activeItem === null) ? '' : activeItem;
+	return '<li class="mi' + ((activeItem == 'library') ? ' active' : '') + '"><a class="mi-label" href="books.html">Library</a></li><li class="mi' + ((activeItem == 'entries') ? ' active' : '') + '"><a class="mi-label" href="entries.html">Reading Entries</a></li>';
+};
+
 gulp.task('styles', function() {
 	return gulp.src('./src/main/design/css/**/*.scss')
 		.pipe(plumber())
@@ -27,7 +32,7 @@ gulp.task('styles', function() {
 
 gulp.task('html', function () {
 	gulp.src(['./src/main/design/html/**/*.html', '!./src/main/design/html/**/_*.html'])
-		.pipe(preprocess({context: { NODE_ENV: 'production', DEBUG: true}})) //To set environment variables in-line
+		.pipe(preprocess({context: { NODE_ENV: 'production', DEBUG: true, buildMenu: buildMenu}})) //To set environment variables in-line
 		.pipe(gulp.dest('./src/main/webapp'));
 });
 

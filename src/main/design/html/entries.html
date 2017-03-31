@@ -7,12 +7,14 @@
     <script src="resources/javascript/lib/flatpickr.min.js"></script>
     <!-- @include components/_head-end.html -->
 <body>
-<!-- @include components/_header.html -->
+<!-- @extend components/_header.html -->
+<!-- @exec buildMenu('entries') -->
+<!-- @endextend -->
 <div class="main-content">
     <div class="entry-management">
         <div class="form add-entry-form">
-            <div class="form-title expandable-ctrl" data-expandable-target=".entry-management .form form"><span class="expand-lbl">Add an entry</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn"></span></div>
-            <form class="flex-form">
+            <div class="form-title expandable-ctrl" data-expandable-target=".entry-management .form form"><span class="expand-lbl">Add an entry</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn hidden"></span></div>
+            <form class="flex-form hidden">
                 <div class="fields-wrap">
                     <div class="field">
                         <label for="entry-book">Book</label><select name="book" id="entry-book"></select>

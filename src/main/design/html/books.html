@@ -5,12 +5,14 @@
     <link href="resources/css/books.css" rel="stylesheet"/>
     <!-- @include components/_head-end.html -->
 <body>
-<!-- @include components/_header.html -->
+<!-- @extend components/_header.html -->
+<!-- @exec buildMenu('library') -->
+<!-- @endextend -->
 <div class="main-content">
     <div class="book-management">
         <div class="form add-book-form">
-            <div class="form-title expandable-ctrl" data-expandable-target=".book-management .form form"><span class="expand-lbl">Add a book</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn"></span></div>
-            <form class="flex-form">
+            <div class="form-title expandable-ctrl" data-expandable-target=".book-management .form form"><span class="expand-lbl">Add a book</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn hidden"></span></div>
+            <form class="flex-form hidden">
                 <div class="fields-wrap">
                     <div class="field">
                         <label for="book-title">Title</label><input name="title" id="book-title" type="text"/>
