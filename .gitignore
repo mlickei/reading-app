@@ -52,4 +52,4 @@ gradle-app.setting
 ### NOT NEEDED GENERATED FILES
 src/main/webapp/resources/css
 src/main/webapp/resources/fonts
-#src/main/webapp/**/*.html
+src/main/webapp/**/*.html
