@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- @include components/_head-start.html -->
+    <title>Book Werm | Library</title>
+    <link href="resources/css/books.css" rel="stylesheet"/>
+    <!-- @include components/_head-end.html -->
+<body>
+<!-- @include components/_header.html -->
+<div class="main-content">
+    <div class="book-management">
+        <div class="form add-book-form">
+            <div class="form-title expandable-ctrl" data-expandable-target=".book-management .form form"><span class="expand-lbl">Add a book</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn"></span></div>
+            <form class="flex-form">
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="book-title">Title</label><input name="title" id="book-title" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="book-isbn">ISBN</label><input name="isbn" id="book-isbn" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="book-pages">Pages</label><input name="pages" id="book-pages" type="number"/>
+                    </div>
+                </div>
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="book-author-first">Author First</label><input name="authorFirst" id="book-author-first" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="book-author-last">Author Last</label><input name="authorLast" id="book-author-last" type="text"/>
+                    </div>
+                </div>
+                <div class="fields-wrap actions-container">
+                    <input class="btn" type="submit" name="submit" value="Submit"/>
+                </div>
+            </form>
+        </div>
+        <div class="book-listing">
+            <div class="listing-header">
+                <div class="listing-title"><h3>Public Library</h3></div>
+                <div class="listing-actions"><button class="btn refresh-btn">Refresh</button></div>
+            </div>
+            <div class="books listing"></div>
+        </div>
+    </div>
+</div>
+<!-- @include components/_footer.html -->
+</body>
+</html>

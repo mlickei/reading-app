@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!-- @include components/_head-start.html -->
+    <title>Book Werm | Login</title>
+    <link href="resources/css/login.css" rel="stylesheet"/>
+    <script src="resources/javascript/login.js"></script>
+    <!-- @include components/_head-end.html -->
+<body>
+<header>
+    <div class="logo">
+        <a href="/">Book Werm</a>
+    </div>
+</header>
+<div class="main-content">
+    <div class="auth-box">
+        <div class="login-form">
+            <div class="form-title"><h1>Login</h1></div>
+            <div class="login-form-container">
+                <form method="get">
+                    <div class="field">
+                        <label for="login-username">Username</label><input name="username" id="login-username" type="text" autofocus />
+                    </div>
+                    <div class="field">
+                        <label for="login-password">Password</label><input name="password" id="login-password" type="password"/>
+                    </div>
+                    <input class="btn" type="submit" name="submit" value="Submit"/>
+                </form>
+            </div>
+        </div>
+        <div class="register-form hidden">
+            <div class="form-title"><h1>Register</h1></div>
+            <div class="register-form-container">
+                <form method="post">
+                    <div class="field">
+                        <label for="user-username">Username</label><input name="username" id="user-username" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="user-first-name">First Name</label><input name="firstName" id="user-first-name" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="user-last-name">Last Name</label><input name="lastName" id="user-last-name" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="user-email">Email</label><input name="email" id="user-email" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="user-password">Password</label><input name="pwd" id="user-password" type="password"/>
+                    </div>
+                    <input class="btn" type="submit" name="submit" value="Submit"/>
+                </form>
+            </div>
+        </div>
+        <div class="auth-box-controls">
+            <a class="text-btn register-btn">Register</a>
+            <a class="text-btn login-btn hidden">Login</a>
+        </div>
+    </div>
+</div>
+<!-- @include components/_footer.html -->
+</body>
+</html>
