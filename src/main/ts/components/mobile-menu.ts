@@ -2,6 +2,7 @@ class MobileMenu {
 
     constructor(private $mobileMenu, private $standardMenu) {
         this.buildMenu();
+        this.initEvents();
     }
 
     private buildMenu() {
@@ -13,4 +14,9 @@ class MobileMenu {
         $mobileMenuUL.append($userInfo.clone());
     }
 
+    private initEvents() {
+        this.$mobileMenu.find('.mobile-nav-ctrl').on('click', () => {
+            this.$mobileMenu.toggleClass('active');
+        });
+    }
 }
