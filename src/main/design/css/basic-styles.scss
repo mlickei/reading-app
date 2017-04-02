@@ -21,6 +21,7 @@ header {
   align-items: center;
   padding-left: 15px;
   position: relative;
+  box-shadow: 0 2px 3px 0 rgb(232, 232, 232);
 
   .header-left {
     flex: 1 0 auto;
@@ -228,6 +229,7 @@ button[disabled] {
     max-height: 0;
     overflow: hidden;
     transition: max-height 250ms;
+    background-color: #f9f9f9;
 
     .mi a,
     .user-info .username,
@@ -267,7 +269,6 @@ button[disabled] {
 
     .mobile-nav {
       max-height: 172px;
-      background-color: #f9f9f9;
       box-shadow: 0 2px 3px 0 rgb(232, 232, 232);
     }
   }
@@ -355,6 +356,7 @@ footer {
   display: flex;
   align-items: center;
   padding-left: 15px;
+  box-shadow: 0 -2px 3px 0 rgb(232, 232, 232);
 }
 
 @media (min-width: $bp-tablet) {

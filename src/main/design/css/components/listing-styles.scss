@@ -1,3 +1,5 @@
+@import '../config/base-vars';
+
 .listing-header {
   display: flex;
   align-items: center;
@@ -15,14 +17,13 @@
 .listing {
   .item {
     display: flex;
-    align-items: stretch;
-    padding-left: 15px;
     border: 1px solid rgb(68, 68, 68);
     background-color: #ececec;
     box-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0);
     transition: background-color 200ms linear, box-shadow 200ms linear;
     border-radius: 2px;
     overflow: hidden;
+    flex-wrap: wrap;
 
     &:hover {
       box-shadow: 3px 3px 10px -2px rgba(0, 0, 0, 0.53);
@@ -34,7 +35,7 @@
     }
 
     .item-info {
-      padding: 10px 0;
+      padding: 10px 15px;
     }
 
     .item-info > * + * {
@@ -55,18 +56,41 @@
 
   .actions {
     display: flex;
-    flex-direction: column;
-    margin-left: auto;
+    width: 100%;
     border-left: 1px solid rgb(68, 68, 68);
 
     .btn {
       box-shadow: none;
       flex: 1 0 auto;
-      height: 50%;
     }
 
     .btn + .btn {
       border-top: 1px solid rgb(68, 68, 68);
+    }
+  }
+}
+
+@media(min-width: $bp-tablet) {
+  .listing {
+    .item {
+      align-items: stretch;
+      padding-left: 15px;
+
+      .item-info {
+        width: 100%;
+        padding: 10px 0;
+      }
+    }
+
+    .actions {
+      display: flex;
+      flex-direction: column;
+      width: auto;
+      margin-left: auto;
+
+      .btn {
+        height: 50%;
+      }
     }
   }
 }
