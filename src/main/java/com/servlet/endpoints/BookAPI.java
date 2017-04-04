@@ -1,6 +1,8 @@
 package com.servlet.endpoints;
 
+import com.data.Role;
 import com.data.User;
+import com.data.UserType;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.data.Book;
@@ -30,30 +32,40 @@ public class BookAPI extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String isbn = req.getParameter("isbn");
 		String delete = req.getParameter("delete");
+		User user = (User) req.getSession().getAttribute(SessionAttributes.USER);
+		UserType userType = user.getUserType();
+		List<Role> userRoles = userType.getRoles();
 
 		PrintWriter pw = resp.getWriter();
 		if (delete != null && delete.length() > 0 && Integer.parseInt(delete) == 1) {
-			try {
-				BookFactory.deleteBook(isbn);
-				pw.print("Success");
-			} catch (SQLException e) {
-				e.printStackTrace();
-				pw.print(e.toString());
+			if(userRoles.contains(Role.BOOK_DELETE)) {
+				try {
+					BookFactory.deleteBook(isbn);
+					pw.print("Success");
+				} catch (SQLException e) {
+					e.printStackTrace();
+					pw.print(e.toString());
+				}
+			} else {
+				resp.sendError(401, "You don't have permission to do that!");
 			}
 		} else {
-			String title = req.getParameter("title");
-			int pages = Integer.parseInt(req.getParameter("pages"));
-			String authorFirst = req.getParameter("authorFirst");
-			String authorLast = req.getParameter("authorLast");
-			User user = (User) req.getSession().getAttribute(SessionAttributes.USER);
+			if(userRoles.contains(Role.BOOK_ADD)) {
+				String title = req.getParameter("title");
+				int pages = Integer.parseInt(req.getParameter("pages"));
+				String authorFirst = req.getParameter("authorFirst");
+				String authorLast = req.getParameter("authorLast");
 
-			Book book = new Book(isbn, title, pages, authorFirst, authorLast, new Timestamp(new Date().getTime()), user);
-			try {
-				BookFactory.insertBook(book);
-				pw.print("Success");
-			} catch (SQLException e) {
-				e.printStackTrace();
-				pw.print(e.toString());
+				Book book = new Book(isbn, title, pages, authorFirst, authorLast, new Timestamp(new Date().getTime()), user);
+				try {
+					BookFactory.insertBook(book);
+					pw.print("Success");
+				} catch (SQLException e) {
+					e.printStackTrace();
+					pw.print(e.toString());
+				}
+			} else {
+				resp.sendError(401, "You don't have permission do do that!");
 			}
 		}
 	}

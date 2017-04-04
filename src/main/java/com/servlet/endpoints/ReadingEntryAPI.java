@@ -34,6 +34,7 @@ public class ReadingEntryAPI extends HttpServlet {
 		String delete = req.getParameter("delete");
 
 		PrintWriter pw = resp.getWriter();
+		//TODO add permissions checking, everyone can do it right now.. so mehhhh
 		if (delete != null && delete.length() > 0 && Integer.parseInt(delete) == 1) {
 			int entryId = Integer.parseInt(req.getParameter("id"));
 
