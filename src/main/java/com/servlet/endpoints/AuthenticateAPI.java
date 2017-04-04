@@ -1,6 +1,7 @@
 package com.servlet.endpoints;
 
 import com.data.User;
+import com.data.UserType;
 import com.data.factory.UserFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -37,7 +38,7 @@ public class AuthenticateAPI extends HttpServlet {
 			return;
 		}
 
-		User user = new User(username, email, firstName, lastName);
+		User user = new User(username, email, firstName, lastName, UserType.BASIC_USER);
 		try {
 			UserFactory.insertUser(user, password);
 			User newUser = UserFactory.getUser(username);
@@ -88,6 +89,7 @@ public class AuthenticateAPI extends HttpServlet {
 			if (curUser != null) {
 				JsonObject returnData = new JsonObject();
 				returnData.add("user", gson.toJsonTree(curUser));
+				returnData.add("roles", gson.toJsonTree(curUser.getUserType().getRoles()));
 				pw.print(returnData);
 			} else {
 				resp.sendError(401, "No user signed in.");

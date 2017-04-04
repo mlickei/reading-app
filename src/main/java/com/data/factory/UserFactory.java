@@ -1,6 +1,7 @@
 package com.data.factory;
 
 import com.data.User;
+import com.data.UserType;
 import com.data.driver.DatabaseDriver;
 import com.security.PasswordHasher;
 
@@ -27,7 +28,7 @@ public class UserFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("INSERT INTO app_user (username, firstName, lastName, email, hash, salt) VALUES (?, ?, ?, ?, ?, ?)");
+			statement = conn.prepareStatement("INSERT INTO app_user (username, firstName, lastName, email, hash, salt, userType) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 			statement.setString(1, user.getUsername());
 			statement.setString(2, user.getFirstName());
@@ -35,6 +36,7 @@ public class UserFactory {
 			statement.setString(4, user.getEmail());
 			statement.setString(5, user.getHash());
 			statement.setString(6, user.getSalt());
+			statement.setString(7, user.getUserType().toString());
 
 			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
@@ -161,6 +163,7 @@ public class UserFactory {
 		user.setEmail(rs.getString("email"));
 		user.setSalt(rs.getString("salt"));
 		user.setHash(rs.getString("hash"));
+		user.setUserType(UserType.valueOf(rs.getString("userType")));
 
 		return user;
 	}

@@ -20,16 +20,19 @@ public class User {
 	private String lastName;
 	private String hash;
 	private String salt;
+	@Expose
+	private UserType userType;
 
 	public User() {
 
 	}
 
-	public User(String username, String email, String firstName, String lastName) {
+	public User(String username, String email, String firstName, String lastName, UserType userType) {
 		this.username = username;
 		this.email = email;
 		this.firstName = firstName;
 		this.lastName = lastName;
+		this.userType = userType;
 	}
 
 	public int getId() {
@@ -86,5 +89,13 @@ public class User {
 
 	public void setSalt(String salt) {
 		this.salt = salt;
+	}
+
+	public UserType getUserType() {
+		return userType;
+	}
+
+	public void setUserType(UserType userType) {
+		this.userType = userType;
 	}
 }
