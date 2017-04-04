@@ -8,8 +8,8 @@ class BookManager extends Management {
     private $bookMgt;
     private static BOOK_URL = '/api/book';
 
-    constructor() {
-        super($('.book-management'));
+    constructor(user:User) {
+        super($('.book-management'), user);
         this.$bookMgt = this.$target;
 
         if(this.$bookMgt.length) {
@@ -42,7 +42,7 @@ class BookManager extends Management {
         });
     }
 
-    private static buildBookHTML(book:Book):string {
+    private static buildBookHTML(book:Book, allowDelete, allowUpdate):string {
         return `<div class="book item">
                     <div class="book-info item-info">
                         <div class="book-title"><span class="attr-lbl">Title</span><span class="attr-val">${book.title}</span></div>
@@ -56,15 +56,18 @@ class BookManager extends Management {
                         </div>
                     </div>
                     <div class="actions book-actions">
-                        <button class="btn update-btn" disabled="disabled">Update</button>
-                        <button class="btn delete-btn">Delete</button>
+                        <button class="btn update-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Update</button>
+                        <button class="btn delete-btn" ` + ((!allowDelete) ? `disabled="disabled"` : ``) + ` role="DELETE">Delete</button>
                     </div>
                 </div>`;
     }
 
     private buildBooksListing(books:Book[], $target) {
+        let allowDelete = this.user.hasRole('BOOK_DELETE');
+        let allowUpdate = this.user.hasRole('BOOK_UPDATE');
+
         for (let book of books) {
-            let $newBook = $(BookManager.buildBookHTML(book)).appendTo($target);
+            let $newBook = $(BookManager.buildBookHTML(book, allowDelete, allowUpdate)).appendTo($target);
             $newBook.find('.actions').on('click', '.delete-btn', () => {
                 BookManager.deleteBook(book, () => {
                     this.refreshResults();

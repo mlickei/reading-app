@@ -10,16 +10,32 @@ class Serializable {
     }
 }
 
+class Role {
+    constructor(public name:string) {
+
+    }
+}
+
 class User extends Serializable {
-    constructor(public id:number, public firstName:string, public lastName:string, public username:string, public email:string) {
+    constructor(public id:number, public firstName:string, public lastName:string, public username:string, public email:string, public roles:Role[]) {
         super();
+    }
+
+    public hasRole(roleName:String):boolean {
+        let hasRole:boolean = false;
+
+        for(let role of this.roles) {
+            hasRole = (role.name == roleName || hasRole);
+        }
+
+        return hasRole;
     }
 }
 
 abstract class Management {
     protected $listingActions;
 
-    constructor(protected $target) {
+    constructor(protected $target, protected user:User) {
         this.$listingActions = this.$target.find('.listing-actions');
 
         if(this.$listingActions.length) {
@@ -83,7 +99,13 @@ class AppAuth {
         }).done((data) => {
             data = JSON.parse(data);
             let user = data.user;
-            this.currentUser = new User(user.id, user.firstName, user.lastName, user.username, user.email);
+            let roles = [];
+
+            for(let roleStr of data.roles) {
+                roles.push(new Role(roleStr));
+            }
+
+            this.currentUser = new User(user.id, user.firstName, user.lastName, user.username, user.email, roles);
             AppAuth.updateAccountBox(this.currentUser);
         }).fail(() => {
             window.location.replace('/login.html');
@@ -141,9 +163,9 @@ function init() {
     appAuth = new AppAuth();
 
     appAuth.checkForLoggedInuser();
-    new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager());
+    new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager(appAuth.currentUser));
 
-    new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager());
+    new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager(appAuth.currentUser));
     initExpandable();
     initTimePickers();
 }

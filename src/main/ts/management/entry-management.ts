@@ -10,8 +10,8 @@ class EntryManager extends Management {
     private $entryMgt;
     private static ENTRY_URL = '/api/reading-entry';
 
-    constructor() {
-        super($('.entry-management'));
+    constructor(user:User) {
+        super($('.entry-management'), user);
         this.$entryMgt = this.$target;
 
         new Requirement("BookManagement", "resources/javascript/management/book-management.js", ()=> {
@@ -22,7 +22,7 @@ class EntryManager extends Management {
     }
 
     refreshResults() {
-        EntryManager.getAllEntries((entries: ReadingEntry[]) => {
+        this.getAllEntries((entries: ReadingEntry[]) => {
             this.emptyList();
             this.buildEntriesListing(entries, this.$entryMgt.find('.listing'));
         });
@@ -92,7 +92,7 @@ class EntryManager extends Management {
 
     private setupListing($listing) {
         let $list = $listing.find('.entries');
-        EntryManager.getAllEntries((entries:ReadingEntry[]) => {
+        this.getAllEntries((entries:ReadingEntry[]) => {
             this.buildEntriesListing(entries, $list);
         });
     }
@@ -111,13 +111,13 @@ class EntryManager extends Management {
         }
     }
 
-    public static getAllEntries(callback:(array:ReadingEntry[])=> void) {
+    public getAllEntries(callback:(array:ReadingEntry[])=> void) {
         let entries:ReadingEntry[] = [];
-        $.ajax(this.ENTRY_URL, {
+        $.ajax(EntryManager.ENTRY_URL, {
             type: "GET"
         }).done((data) => {
             for(let entryObj of JSON.parse(data)) {
-                let readingEntry = new ReadingEntry(new Book(entryObj.book.isbn, entryObj.book.title, entryObj.book.pages, entryObj.book.authorFirst, entryObj.book.authorLast), new User(entryObj.user.id, entryObj.user.firstName, entryObj.user.lastName, entryObj.user.username, entryObj.user.email), entryObj.startPage, entryObj.endPage, entryObj.startTime, entryObj.endTime);
+                let readingEntry = new ReadingEntry(new Book(entryObj.book.isbn, entryObj.book.title, entryObj.book.pages, entryObj.book.authorFirst, entryObj.book.authorLast), this.user, entryObj.startPage, entryObj.endPage, entryObj.startTime, entryObj.endTime);
                 readingEntry.id = entryObj.id;
                 entries.push(readingEntry);
             }
