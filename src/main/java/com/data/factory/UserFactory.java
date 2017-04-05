@@ -123,6 +123,30 @@ public class UserFactory {
 		}
 	}
 
+	public static void updateUser(User user) throws SQLException {
+		Connection conn = null;
+		PreparedStatement pst = null;
+
+		try
+		{
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			pst = conn.prepareStatement("UPDATE app_user SET email = ?, firstName = ?, lastName = ? WHERE id = ?");
+			pst.setString(1, user.getEmail());
+			pst.setString(2, user.getFirstName());
+			pst.setString(3, user.getLastName());
+			pst.setInt(4, user.getId());
+
+			pst.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally
+		{
+			DatabaseDriver.closeConnection(null, pst, conn);
+		}
+	}
+
 	public static String[] getHashSaltPair(String userName) throws SQLException {
 		Connection conn = null;
 		PreparedStatement pst = null;

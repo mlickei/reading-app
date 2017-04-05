@@ -22,7 +22,7 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("SELECT * FROM reading_app.book ORDER BY createdOn desc");
+			statement = conn.prepareStatement("SELECT * FROM reading_app.book ORDER BY lastModified desc, createdOn desc");
 			rs = statement.executeQuery();
 
 			while(rs.next()) {
@@ -72,6 +72,31 @@ public class BookFactory {
 		}
 	}
 
+	public static void updateBook(Book book, String prevIsbn) throws SQLException {
+		PreparedStatement statement = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("UPDATE book SET title = ?, authorFirst = ?, authorLast = ?, pages = ?, lastModified = CURRENT_TIMESTAMP WHERE isbn = ?");
+
+//			statement.setString(1, book.getIsbn());
+			statement.setString(1, book.getTitle());
+			statement.setString(2, book.getAuthorFirst());
+			statement.setString(3, book.getAuthorLast());
+			statement.setInt(4, book.getPages());
+			statement.setString(5, prevIsbn);
+
+			statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(null, statement, conn);
+		}
+	}
+
 	public static void deleteBook(String isbn) throws SQLException {
 		PreparedStatement statement = null;
 		Connection conn = null;
@@ -80,7 +105,7 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("DELETE FROM book where isbn = ? ORDER BY createdOn desc");
+			statement = conn.prepareStatement("DELETE FROM book where isbn = ?");
 			statement.setString(1, isbn);
 
 			statement.executeUpdate();
@@ -101,7 +126,7 @@ public class BookFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("SELECT * FROM book where isbn = ? ORDER BY createdOn desc");
+			statement = conn.prepareStatement("SELECT * FROM book where isbn = ? ORDER BY lastModified desc, createdOn desc");
 			statement.setString(1, isbn);
 
 			rs = statement.executeQuery();

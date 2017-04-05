@@ -93,7 +93,7 @@ class AppAuth {
         $('.user-info .username').text(user.username);
     }
 
-    public checkForLoggedInuser() {
+    public checkForLoggedInuser(callback:(user:User)=> void) {
         $.ajax(AUTH_URL, {
             type: "GET"
         }).done((data) => {
@@ -107,8 +107,32 @@ class AppAuth {
 
             this.currentUser = new User(user.id, user.firstName, user.lastName, user.username, user.email, roles);
             AppAuth.updateAccountBox(this.currentUser);
+            callback(this.currentUser);
         }).fail(() => {
             window.location.replace('/login.html');
+            callback(null);
+        });
+    }
+
+    public retrieveLoggedInUser(callback:(user:User)=> void) {
+        let user:User = null;
+
+        $.ajax(AUTH_URL, {
+            type: "GET"
+        }).done((data) => {
+            data = JSON.parse(data);
+            let user = data.user;
+            let roles = [];
+
+            for(let roleStr of data.roles) {
+                roles.push(new Role(roleStr));
+            }
+
+            this.currentUser = new User(user.id, user.firstName, user.lastName, user.username, user.email, roles);
+            callback(this.currentUser);
+        }).fail(() => {
+            alert("Couldn't retrieve a logged in user!");
+            callback(null);
         });
     }
 }
@@ -162,12 +186,24 @@ function init() {
 
     appAuth = new AppAuth();
 
-    appAuth.checkForLoggedInuser();
-    new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager(appAuth.currentUser));
+    //This has asynchronous code running, so it finishes before appAuth has currentUser set....
+    appAuth.checkForLoggedInuser(() => {
 
-    new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager(appAuth.currentUser));
-    initExpandable();
-    initTimePickers();
+        if ($('.book-management').length) {
+            new Requirement("BookManager", "resources/javascript/management/book-management.js", () => new BookManager(appAuth.currentUser));
+        }
+
+        if ($('.entry-management').length) {
+            new Requirement("EntryManager", "resources/javascript/management/entry-management.js", () => new EntryManager(appAuth.currentUser));
+        }
+
+        if ($('.profile-management').length) {
+            new Requirement("ProfileManager", "resources/javascript/management/profile-management.js", () => new ProfileManager(appAuth.currentUser));
+        }
+
+        initExpandable();
+        initTimePickers();
+    });
 }
 
 window.onload = () => {

@@ -3,6 +3,7 @@
     <!-- @include components/_head-start.html -->
     <title>Book Werm | Library</title>
     <link href="resources/css/books.css" rel="stylesheet"/>
+    <script src="resources/javascript/management/book-management.js"></script>
     <!-- @include components/_head-end.html -->
 <body>
 <!-- @extend components/_header.html -->
@@ -31,6 +32,34 @@
                     </div>
                     <div class="field">
                         <label for="book-author-last">Author Last</label><input name="authorLast" id="book-author-last" type="text"/>
+                    </div>
+                </div>
+                <div class="fields-wrap actions-container">
+                    <input class="btn submit-btn" type="submit" name="submit" value="Submit"/>
+                    <input class="btn reset-btn" type="reset" name="reset" value="Reset"/>
+                </div>
+            </form>
+        </div>
+        <div class="form update-book-form hidden">
+            <div class="form-title"><h3>Update Book</h3></div>
+            <form class="flex-form">
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="update-title">Title</label><input name="title" id="update-title" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="update-isbn">ISBN</label><input name="isbn" id="update-isbn" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="update-pages">Pages</label><input name="pages" id="update-pages" type="number"/>
+                    </div>
+                </div>
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="update-author-first">Author First</label><input name="authorFirst" id="update-author-first" type="text"/>
+                    </div>
+                    <div class="field">
+                        <label for="update-author-last">Author Last</label><input name="authorLast" id="update-author-last" type="text"/>
                     </div>
                 </div>
                 <div class="fields-wrap actions-container">

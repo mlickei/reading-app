@@ -28,10 +28,16 @@ import java.util.List;
 @WebServlet("/api/book")
 public class BookAPI extends HttpServlet {
 
+	//TODO instead of using request params, use the CRUD methods to implement updates, deletes, etc.
+
+
+
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String isbn = req.getParameter("isbn");
 		String delete = req.getParameter("delete");
+		String update = req.getParameter("update");
+
 		User user = (User) req.getSession().getAttribute(SessionAttributes.USER);
 		UserType userType = user.getUserType();
 		List<Role> userRoles = userType.getRoles();
@@ -42,6 +48,29 @@ public class BookAPI extends HttpServlet {
 				try {
 					BookFactory.deleteBook(isbn);
 					pw.print("Success");
+				} catch (SQLException e) {
+					e.printStackTrace();
+					pw.print(e.toString());
+				}
+			} else {
+				resp.sendError(401, "You don't have permission to do that!");
+			}
+		} else if(update != null && update.length() > 0 && Integer.parseInt(update) == 1) {
+			if (userRoles.contains(Role.BOOK_UPDATE)) {
+				try {
+					String title = req.getParameter("title");
+					int pages = Integer.parseInt(req.getParameter("pages"));
+					String authorFirst = req.getParameter("authorFirst");
+					String authorLast = req.getParameter("authorLast");
+					String prevIsbn = req.getParameter("previousIsbn");
+
+					Book book = new Book(isbn, title, pages, authorFirst, authorLast, new Timestamp(new Date().getTime()), user);
+					//FIXME change to prevIsbn when implemented
+					BookFactory.updateBook(book, isbn);
+
+					GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+					Gson gson = gsonBuilder.create();
+					pw.append(gson.toJson(book));
 				} catch (SQLException e) {
 					e.printStackTrace();
 					pw.print(e.toString());

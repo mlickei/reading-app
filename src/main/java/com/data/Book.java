@@ -23,6 +23,8 @@ public class Book {
 	private Timestamp createdOn;
 	@Expose
 	private User createdBy;
+	@Expose
+	private Timestamp lastModified;
 
 	public Book() {
 	}
@@ -91,5 +93,9 @@ public class Book {
 
 	public void setCreatedBy(User createdBy) {
 		this.createdBy = createdBy;
+	}
+
+	public Timestamp getLastModified() {
+		return lastModified;
 	}
 }
