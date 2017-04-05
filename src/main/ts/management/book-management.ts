@@ -7,10 +7,15 @@ class Book extends Serializable {
 class BookManager extends Management {
     private $bookMgt;
     private static BOOK_URL = '/api/book';
+    private allowDelete;
+    private allowUpdate;
 
     constructor(user:User) {
         super($('.book-management'), user);
         this.$bookMgt = this.$target;
+
+        this.allowDelete = this.user.hasRole('BOOK_DELETE');
+        this.allowUpdate = this.user.hasRole('BOOK_UPDATE');
 
         if(this.$bookMgt.length) {
             this.init();
@@ -22,6 +27,8 @@ class BookManager extends Management {
             this.emptyList();
             this.buildBooksListing(books, this.$bookMgt.find('.listing'));
         });
+
+        this.updateAvailableActions();
     }
 
     private setupInsertForm($form) {
@@ -63,11 +70,8 @@ class BookManager extends Management {
     }
 
     private buildBooksListing(books:Book[], $target) {
-        let allowDelete = this.user.hasRole('BOOK_DELETE');
-        let allowUpdate = this.user.hasRole('BOOK_UPDATE');
-
         for (let book of books) {
-            let $newBook = $(BookManager.buildBookHTML(book, allowDelete, allowUpdate)).appendTo($target);
+            let $newBook = $(BookManager.buildBookHTML(book, this.allowDelete, this.allowUpdate)).appendTo($target);
             $newBook.find('.actions').on('click', '.delete-btn', () => {
                 BookManager.deleteBook(book, () => {
                     this.refreshResults();
@@ -81,6 +85,11 @@ class BookManager extends Management {
         BookManager.getAllBooks((books:Book[]) => {
             this.buildBooksListing(books, $list);
         });
+    }
+
+    private updateAvailableActions() {
+        this.$bookMgt.find('.btn.update-btn').attr('disabled', (this.allowUpdate ? 'disabled': ''));
+        this.$bookMgt.find('.btn.delete-btn').attr('disabled', (this.allowDelete ? 'disabled': ''));
     }
 
     public init() {
