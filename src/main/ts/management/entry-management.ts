@@ -9,10 +9,17 @@ class ReadingEntry extends Serializable {
 class EntryManager extends Management {
     private $entryMgt;
     private static ENTRY_URL = '/api/reading-entry';
+    private allowUpdate: boolean;
+    private allowDelete: boolean;
+    private allowAdd: boolean;
 
     constructor(user:User) {
         super($('.entry-management'), user);
         this.$entryMgt = this.$target;
+
+        this.allowDelete = this.user.hasRole('ENTRIES_DELETE');
+        this.allowUpdate = this.user.hasRole('ENTRIES_UPDATE');
+        this.allowAdd = this.user.hasRole('ENTRIES_ADD');
 
         new Requirement("BookManagement", "resources/javascript/management/book-management.js", ()=> {
             if(this.$entryMgt.length) {
@@ -43,6 +50,11 @@ class EntryManager extends Management {
     }
 
     private setupInsertForm($form, books:Book[]) {
+        if(!this.allowAdd) {
+            this.$entryMgt.find('.form').addClass('hidden');
+            //TODO make it so that they can request for a book to be added.
+        }
+
         const $bookSel = $form.find('select[name="book"]');
         for(let book of books) {
             $bookSel.append(EntryManager.buildBookOpt(book));
@@ -61,10 +73,12 @@ class EntryManager extends Management {
             EntryManager.insertBook(newBook, () => {
                 this.refreshResults();
             });
+
+            $form.find('.btn.reset-btn').click();
         });
     }
 
-    private static buildEntryHTML(entry:ReadingEntry):string {
+    private static buildEntryHTML(entry:ReadingEntry, allowUpdate, allowDelete):string {
         return `<div class="entry item">
                     <div class="entry-info item-info">
                         <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
@@ -73,15 +87,15 @@ class EntryManager extends Management {
                         <div class="end-time"><span class="attr-lbl">End Time</span><span class="attr-val">${entry.endTime}</span></div>
                     </div>
                     <div class="actions entry-actions">
-                        <button class="btn update-btn" disabled="disabled">Update</button>
-                        <button class="btn delete-btn">Delete</button>
+                        <button class="btn update-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Update</button>
+                        <button class="btn delete-btn" ` + ((!allowDelete) ? `disabled="disabled"` : ``) + ` role="DELETE">Delete</button>
                     </div>
                 </div>`;
     }
 
     private buildEntriesListing(entries:ReadingEntry[], $target) {
         for(let entry of entries) {
-            let $entry = $(EntryManager.buildEntryHTML(entry)).appendTo($target);
+            let $entry = $(EntryManager.buildEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
             $entry.find('.actions').on('click', '.delete-btn', () => {
                 EntryManager.deleteEntry(entry, () => {
                     this.refreshResults();

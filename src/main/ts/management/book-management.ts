@@ -7,8 +7,9 @@ class Book extends Serializable {
 class BookManager extends Management {
     private $bookMgt;
     private static BOOK_URL = '/api/book';
-    private allowDelete;
-    private allowUpdate;
+    private allowDelete:boolean;
+    private allowUpdate:boolean;
+    private allowAdd:boolean;
 
     constructor(user:User) {
         super($('.book-management'), user);
@@ -16,6 +17,7 @@ class BookManager extends Management {
 
         this.allowDelete = this.user.hasRole('BOOK_DELETE');
         this.allowUpdate = this.user.hasRole('BOOK_UPDATE');
+        this.allowAdd = this.user.hasRole('BOOK_ADD');
 
         if(this.$bookMgt.length) {
             this.init();
@@ -32,6 +34,11 @@ class BookManager extends Management {
     }
 
     private setupInsertForm($form) {
+        if(!this.allowAdd) {
+            this.$bookMgt.find('.form').addClass('hidden');
+            //TODO make it so that they can request for a book to be added.
+        }
+
         $form.on('submit', (evt) => {
             evt.preventDefault();
 
@@ -45,7 +52,8 @@ class BookManager extends Management {
             BookManager.insertBook(newBook, () => {
                 this.refreshResults();
             });
-            //TODO EMPTY FORM OF WHAT WAS LAST ENTERED
+
+            $form.find('.btn.reset-btn').click();
         });
     }
 
