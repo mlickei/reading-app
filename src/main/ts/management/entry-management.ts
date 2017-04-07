@@ -119,7 +119,7 @@ class EntryManager extends Management {
     public init() {
         const $entryMgtForm = this.$entryMgt.find('.add-entry-form form');
         if($entryMgtForm.length) {
-            BookManager.getAllBooks((books:Book[]) => {
+            BookManager.getBooks({}, (books:Book[]) => {
                 this.setupInsertForm($entryMgtForm, books);
             });
         }

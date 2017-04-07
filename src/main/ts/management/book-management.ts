@@ -28,7 +28,7 @@ class BookManager extends Management {
     }
 
     refreshResults() {
-        BookManager.getAllBooks((books: Book[]) => {
+        BookManager.getBooks(this.filters, (books: Book[]) => {
             this.emptyList();
             this.buildBooksListing(books, this.$bookMgt.find('.listing'), this.updatePopup);
         });
@@ -133,7 +133,7 @@ class BookManager extends Management {
         let $list = $listing.find('.books');
         this.updatePopup = new Popup(this.$updateForm, {});
 
-        BookManager.getAllBooks((books:Book[]) => {
+        BookManager.getBooks({}, (books:Book[]) => {
             this.buildBooksListing(books, $list, this.updatePopup);
         });
     }
@@ -157,10 +157,11 @@ class BookManager extends Management {
         }
     }
 
-    public static getAllBooks(callback:(array:Book[])=> void) {
+    public static getBooks(searchConstraints, callback:(array:Book[])=> void) {
         let books:Book[] = [];
         $.ajax(this.BOOK_URL, {
-            type: "GET"
+            type: "GET",
+            data: searchConstraints
         }).done((data) => {
             for(let bookObj of JSON.parse(data)) {
                 books.push(new Book(bookObj.isbn, bookObj.title, bookObj.pages, bookObj.authorFirst, bookObj.authorLast));

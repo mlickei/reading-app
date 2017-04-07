@@ -3,6 +3,7 @@ package com.servlet.endpoints;
 import com.data.Role;
 import com.data.User;
 import com.data.UserType;
+import com.data.query.BookQueryBuilder;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.data.Book;
@@ -102,19 +103,43 @@ public class BookAPI extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String isbn = req.getParameter("isbn");
+		String title = req.getParameter("title");
+		String authorFirst = req.getParameter("authorFirst");
+		String authorLast = req.getParameter("authorLast");
+
+		BookQueryBuilder bookQueryBuilder = new BookQueryBuilder();
+
+		if (isbn != null && isbn.length() > 0) {
+			bookQueryBuilder.addConstraint("isbn", "=", isbn);
+		}
+
+		if (title != null && title.length() > 0) {
+			bookQueryBuilder.addConstraint("title", "like", '%'+title+'%');
+		}
+
+		if (authorFirst != null && authorFirst.length() > 0) {
+			bookQueryBuilder.addConstraint("authorFirst", "like", '%'+authorFirst+'%');
+		}
+
+		if (authorLast != null && authorLast.length() > 0) {
+			bookQueryBuilder.addConstraint("authorLast", "like", '%'+authorLast+'%');
+		}
+
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		Gson gson = gsonBuilder.create();
 
 		PrintWriter pw = resp.getWriter();
 		List<Book> books = new ArrayList<>();
 		try {
-			if (isbn == null || isbn.length() <= 0) {
-				books.addAll(BookFactory.getBooks());
-				pw.append(gson.toJson(books));
-			} else {
-				Book book = BookFactory.getBook(isbn);
-				pw.append(gson.toJson(book));
-			}
+//			if (isbn == null || isbn.length() <= 0) {
+//				books.addAll(BookFactory.getBooks());
+//				pw.append(gson.toJson(books));
+//			} else {
+//				Book book = BookFactory.getBook(isbn);
+//				pw.append(gson.toJson(book));
+//			}
+			books.addAll(bookQueryBuilder.getResults());
+			pw.append(gson.toJson(books));
 		} catch (SQLException e) {
 			e.printStackTrace();
 			pw.print(e.toString());

@@ -76,6 +76,10 @@ form {
     }
   }
 
+  input[type="reset"] {
+    width: 100%;
+  }
+
   label {
     display: block;
     margin-bottom: 4px;

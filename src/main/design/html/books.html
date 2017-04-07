@@ -71,7 +71,26 @@
         <div class="book-listing">
             <div class="listing-header">
                 <div class="listing-title"><h3>Public Library</h3></div>
-                <div class="listing-actions"><button class="btn refresh-btn">Refresh</button></div>
+                <div class="listing-actions">
+                    <div class="expandable-ctrl filters-expandable-ctrl" data-expandable-target=".book-management .search-filters-container">
+                        <span class="expand-lbl">Filters</span>
+                        <span class="span-btn expand-btn filter-btn"></span>
+                        <span class="span-btn collapse-btn hidden filter-btn"></span>
+                    </div>
+                    <button class="btn refresh-btn">Refresh</button>
+                </div>
+            </div>
+            <div class="search-filters-container hidden">
+                <form class="search-filters">
+                    <div class="field filter"><label class="filter-label" for="book-title-filter">Title</label><input id="book-title-filter" name="title" class="filter-val" /></div>
+                    <div class="field filter"><label class="filter-label" for="book-author-first-filter">Author First</label><input id="book-author-first-filter" name="authorFirst" class="filter-val" /></div>
+                    <div class="field filter"><label class="filter-label" for="book-author-last-filter">Author Last</label><input id="book-author-last-filter" name="authorLast" class="filter-val" /></div>
+                    <div class="field filter"><label class="filter-label" for="book-isbn-filter">ISBN</label><input id="book-isbn-filter" name="isbn" class="filter-val" /></div>
+                    <div class="search-actions actions-container">
+                        <input class="btn search-btn" type="submit" name="submit" value="Search"/>
+                        <input class="btn reset-btn" type="reset" name="reset" value="Reset"/>
+                    </div>
+                </form>
             </div>
             <div class="books listing"></div>
         </div>
