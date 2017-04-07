@@ -11,6 +11,7 @@ class BookManager extends Management {
     private allowDelete:boolean;
     private allowUpdate:boolean;
     private allowAdd:boolean;
+    private updatePopup:Popup;
 
     constructor(user:User) {
         super($('.book-management'), user);
@@ -29,7 +30,7 @@ class BookManager extends Management {
     refreshResults() {
         BookManager.getAllBooks((books: Book[]) => {
             this.emptyList();
-            this.buildBooksListing(books, this.$bookMgt.find('.listing'));
+            this.buildBooksListing(books, this.$bookMgt.find('.listing'), this.updatePopup);
         });
 
         this.updateAvailableActions();
@@ -92,39 +93,48 @@ class BookManager extends Management {
                 </div>`;
     }
 
-    private showUpdateBookForm(book:Book) {
-        BookManager.fillInFormValues(this.$updateForm, book);
+    private showUpdateBookForm($updateForm, book:Book, popup:Popup) {
+        BookManager.fillInFormValues($updateForm, book);
 
-        this.$updateForm.removeClass('hidden').find('form').removeClass('hidden');
-        this.$updateForm.on('submit', (evt) => {
+        $updateForm.removeClass('hidden').find('form').removeClass('hidden');
+        $updateForm.on('submit', (evt) => {
             evt.preventDefault();
-            let book = BookManager.buildBookFromForm(this.$updateForm);
+            let book = BookManager.buildBookFromForm($updateForm);
             BookManager.updateBook(book, (book: Book) => {
                 if(book !== null) {
                     this.refreshResults();
-                    this.$updateForm.addClass('hidden');
+                    $updateForm.addClass('hidden');
                 }
             });
+            popup.close();
         });
     }
 
-    private buildBooksListing(books:Book[], $target) {
+    private buildBooksListing(books:Book[], $target, popup:Popup) {
         for (let book of books) {
             let $newBook = $(BookManager.buildBookHTML(book, this.allowDelete, this.allowUpdate)).appendTo($target);
+
             $newBook.find('.actions').on('click', '.delete-btn', () => {
-                BookManager.deleteBook(book, () => {
-                    this.refreshResults();
-                });
+                let doDelete:boolean = confirm("Are you sure you want to delete " + book.title + "?");
+
+                if(doDelete) {
+                    BookManager.deleteBook(book, () => {
+                        this.refreshResults();
+                    });
+                }
             }).on('click', '.update-btn', () => {
-                this.showUpdateBookForm(book);
+                let $popupForm = popup.open();
+                this.showUpdateBookForm($popupForm, book, popup);
             });
         }
     }
 
     private setupListing($listing) {
         let $list = $listing.find('.books');
+        this.updatePopup = new Popup(this.$updateForm, {});
+
         BookManager.getAllBooks((books:Book[]) => {
-            this.buildBooksListing(books, $list);
+            this.buildBooksListing(books, $list, this.updatePopup);
         });
     }
 
@@ -141,7 +151,9 @@ class BookManager extends Management {
 
         const $bookListing = this.$bookMgt.find('.book-listing');
         if($bookListing.length) {
-            return this.setupListing($bookListing);
+            new Requirement('Popup', 'resources/javascript/components/popup.js', () => {
+                return this.setupListing($bookListing);
+            });
         }
     }
 

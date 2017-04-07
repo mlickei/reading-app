@@ -70,6 +70,16 @@
   }
 }
 
+.update-book-form {
+  .form-title h3 {
+    margin-top: 0;
+  }
+}
+
+.popup .update-book-form {
+  padding: 10px 0;
+}
+
 @media(min-width: $bp-tablet) {
   .listing {
     .item {

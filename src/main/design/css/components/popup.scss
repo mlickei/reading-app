@@ -1,0 +1,54 @@
+@import "../config/base-import";
+
+.popup-hidden {
+  display: none;
+}
+
+.popup-content-hidden {
+  display: none;
+}
+
+.popup {
+  position: fixed;
+  top: 200px;
+  left: 5%;
+  right: 5%;
+  background-color: #fff;
+  padding: 10px;
+  box-shadow: $basic-box-shadow;
+  border-radius: 3px;
+  max-width: 720px;
+  margin: 0 auto;
+  z-index: 999;
+
+  .popup-actions {
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 2;
+
+    .popup-close-btn {
+      padding: 0;
+      margin: 5px;
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+      text-shadow: $basic-text-shadow;
+      border-radius: 3px;
+
+      &:before {
+        content: "\f00d";
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+        padding: 8px;
+        @include fa-icon();
+      }
+    }
+  }
+
+  .popup-content {
+    position: relative;
+    z-index: 1;
+  }
+}
