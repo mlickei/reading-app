@@ -97,9 +97,14 @@ class EntryManager extends Management {
         for(let entry of entries) {
             let $entry = $(EntryManager.buildEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
             $entry.find('.actions').on('click', '.delete-btn', () => {
-                EntryManager.deleteEntry(entry, () => {
-                    this.refreshResults();
-                });
+                //TODO find a way to make this specific
+                let doDelete:boolean = confirm(`Are you sure you want to delete the entry for ${entry.startTime}?`);
+
+                if(doDelete) {
+                    EntryManager.deleteEntry(entry, () => {
+                        this.refreshResults();
+                    });
+                }
             });
         }
     }
