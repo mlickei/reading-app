@@ -96,6 +96,10 @@ abstract class Management {
     abstract refreshResults();
 }
 
+abstract class Widget {
+
+}
+
 class Requirement {
     constructor(private className:string, private libSrc:string, private callback:()=> void) {
         if(typeof window[className] === 'undefined') {
