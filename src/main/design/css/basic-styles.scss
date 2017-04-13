@@ -63,6 +63,11 @@ form {
     margin-bottom: 10px;
   }
 
+  .text-area-field {
+    width: 100%;
+    max-width: 350px;
+  }
+
   input[type="submit"] {
     background-color: #0f4390;
     display: block;
@@ -84,6 +89,12 @@ form {
   label {
     display: block;
     margin-bottom: 4px;
+  }
+
+  textarea {
+    min-width: calc(100% - 4px);
+    max-width: 350px;
+    min-height: 100px;
   }
 }
 

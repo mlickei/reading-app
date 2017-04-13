@@ -1,7 +1,7 @@
 class ReadingEntry extends Serializable {
     public id:number;
 
-    constructor(public book:Book, public user:User, public startPage:number, public endPage:number, public startTime:string, public endTime:string) {
+    constructor(public book:Book, public user:User, public startPage:number, public endPage:number, public startTime:string, public endTime:string, public notes:string) {
         super();
     }
 }
@@ -68,9 +68,10 @@ class EntryManager extends Management {
             let endPage: number = $form.find('input[name="endPage"]').val();
             let startTime: string = $form.find('input[name="startTime"]').val();
             let endTime: string = $form.find('input[name="endTime"]').val();
+            let notes: string = $form.find('textarea[name="notes"]').val();
 
-            let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), appAuth.currentUser, startPage, endPage, startTime, endTime);
-            EntryManager.insertBook(newBook, () => {
+            let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), appAuth.currentUser, startPage, endPage, startTime, endTime, notes);
+            EntryManager.insertEntry(newBook, () => {
                 this.refreshResults();
             });
 
@@ -136,7 +137,7 @@ class EntryManager extends Management {
             type: "GET"
         }).done((data) => {
             for(let entryObj of JSON.parse(data)) {
-                let readingEntry = new ReadingEntry(new Book(entryObj.book.isbn, entryObj.book.title, entryObj.book.pages, entryObj.book.authorFirst, entryObj.book.authorLast), this.user, entryObj.startPage, entryObj.endPage, entryObj.startTime, entryObj.endTime);
+                let readingEntry = new ReadingEntry(new Book(entryObj.book.isbn, entryObj.book.title, entryObj.book.pages, entryObj.book.authorFirst, entryObj.book.authorLast), this.user, entryObj.startPage, entryObj.endPage, entryObj.startTime, entryObj.endTime, entryObj.notes);
                 readingEntry.id = entryObj.id;
                 entries.push(readingEntry);
             }
@@ -151,7 +152,7 @@ class EntryManager extends Management {
         $.ajax(this.ENTRY_URL, {
             type: "GET"
         }).done((data) => {
-            let entry = new ReadingEntry(null, null, null, null, null, null);
+            let entry = new ReadingEntry(null, null, null, null, null, null, null);
             entry.fromJSON(data);
             return entry;
         }).fail(() => {
@@ -161,7 +162,7 @@ class EntryManager extends Management {
         return null;
     }
 
-    public static insertBook(newEntry:ReadingEntry, doneCallback:() => void) {
+    public static insertEntry(newEntry:ReadingEntry, doneCallback:() => void) {
         $.ajax(this.ENTRY_URL, {
             type: "POST",
             data: JSON.parse(JSON.stringify(newEntry))

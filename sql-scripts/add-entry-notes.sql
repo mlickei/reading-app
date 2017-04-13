@@ -1,0 +1,1 @@
+ALTER TABLE reading_entry ADD COLUMN notes VARCHAR(256); 

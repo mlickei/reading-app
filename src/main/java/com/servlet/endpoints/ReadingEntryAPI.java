@@ -52,6 +52,7 @@ public class ReadingEntryAPI extends HttpServlet {
 			int endPg = Integer.parseInt(req.getParameter("endPage"));
 			String startTimeStr = req.getParameter("startTime");
 			String endTimeStr = req.getParameter("endTime");
+			String notes = req.getParameter("notes");
 
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 			Timestamp startTime = null;
@@ -66,7 +67,7 @@ public class ReadingEntryAPI extends HttpServlet {
 			}
 
 			try {
-				ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, endPg, startTime, endTime);
+				ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, endPg, startTime, endTime, notes);
 				ReadingEntryFactory.insertReadingEntry(entry);
 				pw.print("Success");
 			} catch (SQLException e) {

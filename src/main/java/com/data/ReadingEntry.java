@@ -23,17 +23,20 @@ public class ReadingEntry {
 	private Timestamp startTime;
 	@Expose
 	private Timestamp endTime;
+	@Expose
+	private String notes;
 
 	public ReadingEntry() {
 	}
 
-	public ReadingEntry(Book book, User user, int startPage, int endPage, Timestamp startTime, Timestamp endTime) {
+	public ReadingEntry(Book book, User user, int startPage, int endPage, Timestamp startTime, Timestamp endTime, String notes) {
 		this.book = book;
 		this.user = user;
 		this.startPage = startPage;
 		this.endPage = endPage;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.notes = notes;
 	}
 
 	public int getId() {
@@ -90,5 +93,13 @@ public class ReadingEntry {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public String getNotes() {
+		return notes;
+	}
+
+	public void setNotes(String notes) {
+		this.notes = notes;
 	}
 }

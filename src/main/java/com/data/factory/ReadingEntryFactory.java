@@ -40,6 +40,7 @@ public class ReadingEntryFactory {
 				readingEntry.setEndPage(rs.getInt("endPage"));
 				readingEntry.setStartTime(rs.getTimestamp("startTime"));
 				readingEntry.setEndTime(rs.getTimestamp("endTime"));
+				readingEntry.setNotes(rs.getString("notes"));
 
 				readingEntries.add(readingEntry);
 			}
@@ -60,7 +61,7 @@ public class ReadingEntryFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("INSERT INTO reading_entry (isbn, userId, startTime, endTime, startPage, endPage) VALUES (?, ?, ?, ?, ?, ?)");
+			statement = conn.prepareStatement("INSERT INTO reading_entry (isbn, userId, startTime, endTime, startPage, endPage, notes) VALUES (?, ?, ?, ?, ?, ?, ?)");
 
 			statement.setString(1, readingEntry.getBook().getIsbn());
 			statement.setInt(2, readingEntry.getUser().getId());
@@ -68,6 +69,7 @@ public class ReadingEntryFactory {
 			statement.setTimestamp(4, readingEntry.getEndTime());
 			statement.setInt(5, readingEntry.getStartPage());
 			statement.setInt(6, readingEntry.getEndPage());
+			statement.setString(7, readingEntry.getNotes());
 
 			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
