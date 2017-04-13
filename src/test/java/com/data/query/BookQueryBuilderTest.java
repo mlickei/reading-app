@@ -19,7 +19,7 @@ public class BookQueryBuilderTest {
 	public void addConstraint() throws Exception {
 		BookQueryBuilder bqb = new BookQueryBuilder();
 		bqb.addConstraint("prop", "=", "test");
-		assertEquals(BookQueryBuilder.BASE_SELECT + " prop = ?" + BookQueryBuilder.BASE_ORDER_BY, bqb.getQueryStr());
+		assertEquals(BookQueryBuilder.BASE_SELECT + "where prop = ?" + BookQueryBuilder.BASE_ORDER_BY, bqb.getQueryStr());
 	}
 
 
