@@ -1,0 +1,34 @@
+@import "./config/base-import";
+
+.profile-management {
+
+  .profile-form,
+  .password-update-form {
+    text-align: center;
+
+    input[type="submit"] {
+      margin: 0 auto;
+    }
+  }
+
+  .password-update-form {
+    margin-top: 40px;
+  }
+}
+
+@media(min-width: $bp-tablet) {
+  .profile-management {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    .profile-form,
+    .password-update-form {
+      flex: 1 1 50%;
+    }
+
+    .password-update-form {
+      margin-top: 0;
+    }
+  }
+}

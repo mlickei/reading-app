@@ -2,6 +2,11 @@ package com.servlet.endpoints;
 
 import com.data.User;
 import com.data.factory.UserFactory;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.security.BasicAuthenticator;
 import com.servlet.SessionAttributes;
 
 import javax.servlet.ServletException;
@@ -11,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 /**
@@ -25,6 +31,7 @@ public class ProfileAPI extends HttpServlet {
 		String email = req.getParameter("email");
 		String firstName = req.getParameter("firstName");
 		String lastName = req.getParameter("lastName");
+		String password = req.getParameter("password");
 		HttpSession session = req.getSession();
 		User sessionUser = (User) session.getAttribute(SessionAttributes.USER);
 
@@ -46,17 +53,21 @@ public class ProfileAPI extends HttpServlet {
 				hasUpdates = true;
 			}
 
+			PrintWriter printWriter = resp.getWriter();
 			if(hasUpdates) {
 				try {
 					UserFactory.updateUser(sessionUser);
 					session.setAttribute(SessionAttributes.USER, sessionUser);
-					resp.getWriter().print("Success");
+					printWriter.print("Success");
 				} catch (SQLException e) {
 					e.printStackTrace();
-					resp.getWriter().print(e.toString());
+					printWriter.print(e.toString());
 				}
+			} else if(password != null && password.length() > 0) {
+				boolean updatedPassword = BasicAuthenticator.updateUserPassword(sessionUser, password);
+				printWriter.print("{\"success\":" + updatedPassword + "}");
 			} else {
-				resp.getWriter().print("No updates to profile!");
+				printWriter.print("No updates to profile!");
 			}
 		} else {
 			resp.sendError(401, "Unable to verify session user with updating user.");

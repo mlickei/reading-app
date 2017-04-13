@@ -17,19 +17,35 @@ class ProfileManager extends Management {
     private init() {
         this.updateInputsWithUserInfo(this.user);
 
-        const $form = this.$profManagement.find('form');
-        $form.on('submit', (evt) => {
+        const $profileForm = this.$profManagement.find('.profile-form form');
+        $profileForm.on('submit', (evt) => {
             evt.preventDefault();
 
-            let username = $form.find('input[name="username"]').val();
-            let email = $form.find('input[name="email"]').val();
-            let firstName = $form.find('input[name="firstName"]').val();
-            let lastName = $form.find('input[name="lastName"]').val();
+            // let username = $profileForm.find('input[name="username"]').val();
+            let email = $profileForm.find('input[name="email"]').val();
+            let firstName = $profileForm.find('input[name="firstName"]').val();
+            let lastName = $profileForm.find('input[name="lastName"]').val();
 
-            ProfileManager.updateUserInfo(new User(this.user.id, firstName, lastName, username, email, []), () => {
+            ProfileManager.updateUserInfo(new User(this.user.id, firstName, lastName, this.user.username, email, []), () => {
                 this.refreshResults();
             });
         });
+
+        const $passwordForm = this.$profManagement.find('.password-update-form form');
+        $passwordForm.on('submit', (evt) => {
+            evt.preventDefault();
+
+            let newPassword = $passwordForm.find('input[name="password"]').val();
+            let confirmPassword = $passwordForm.find('input[name="confirm-pwd"]').val();
+
+            if(newPassword === confirmPassword) {
+                this.updateUserPassword(this.user, newPassword, () => {
+                    this.refreshResults();
+                });
+            } else {
+                alert("Your confirmation password doesn't match the one you entered.");
+            }
+        })
     }
 
     public updateInputsWithUserInfo(user:User) {
@@ -39,6 +55,11 @@ class ProfileManager extends Management {
 
             $input.val(user[valName]);
         })
+    }
+
+    public resetPasswordForm() {
+        const $passwordForm = this.$profManagement.find('.password-update-form form');
+        $passwordForm.find('input[type="password"]').val('');
     }
 
     refreshResults() {
@@ -56,8 +77,29 @@ class ProfileManager extends Management {
             alert("Successfully updated your profile.");
             callback();
         }).fail(() => {
+            alert("Failed to update your profile (ʘᗩʘ’)");
+            callback();
+        });
+    }
+
+    private updateUserPassword(user:User, newPassword:String, callback:() => void) {
+        $.ajax(ProfileManager.USER_URL, {
+            type: "POST",
+            data: {
+                password: newPassword,
+                username: user.username
+            }
+        }).done((data) => {
+            if(JSON.parse(data).success) {
+                alert("Successfully updated your password.");
+                this.resetPasswordForm();
+            } else {
+                alert("Already using that password! ʕ ͠° ʖ̫ °͠ ʔ");
+            }
+            callback();
+        }).fail(() => {
             //TODO make random donger retrieval
-            alert("Failed to update your profile (-_-｡)");
+            alert("Failed to update your profile ┌༼ – _ – ༽┐");
             callback();
         });
     }

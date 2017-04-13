@@ -173,20 +173,6 @@ class BookManager extends Management {
         });
     }
 
-    public static getBook(isbn:string):Book {
-        $.ajax(this.BOOK_URL, {
-            type: "GET"
-        }).done((data) => {
-            let book = new Book(null, null, null, null, null);
-            book.fromJSON(data);
-            return book;
-        }).fail(() => {
-            alert("Failed to retrieve book ʕ ಡ ﹏ ಡ ʔ");
-        });
-
-        return null;
-    }
-
     public static insertBook(newBook:Book, doneCallback:() => void) {
         $.ajax(this.BOOK_URL, {
             type: "POST",

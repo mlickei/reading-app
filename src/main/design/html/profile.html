@@ -12,13 +12,13 @@
 <div class="main-content">
     <div class="profile-management">
         <div class="profile-form">
-            <div class="form-title"><h1>Update Profile Info</h1></div>
+            <div class="form-title"><h2>Update Profile Info</h2></div>
             <div class="register-form-container">
                 <form method="post">
-                    <div class="field">
-                        <!-- TODO handle username changes -->
-                        <label for="username">Username</label><input disabled="disabled" name="username" id="username" type="text"/>
-                    </div>
+                    <!--<div class="field">-->
+                        <!--&lt;!&ndash; TODO handle username changes &ndash;&gt;-->
+                        <!--<label for="username">Username</label><input disabled="disabled" name="username" id="username" type="text"/>-->
+                    <!--</div>-->
                     <div class="field">
                         <label for="firstName">First Name</label><input name="firstName" id="firstName" type="text"/>
                     </div>
@@ -28,11 +28,23 @@
                     <div class="field">
                         <label for="email">Email</label><input name="email" id="email" type="text"/>
                     </div>
-                    <!-- TODO Handle passwords later -->
-                    <!--<div class="field">-->
-                        <!--<label for="password">Password</label><input name="pwd" id="password" type="password"/>-->
-                    <!--</div>-->
                     <input class="btn update-btn" type="submit" name="submit" value="Update Profile"/>
+                </form>
+            </div>
+        </div>
+        <div class="password-update-form">
+            <div class="form-title"><h2>Update Password</h2></div>
+            <div class="register-form-container">
+                <form method="POST">
+                    <div class="field">
+                        <div class="field">
+                            <label for="password">New Password</label><input name="password" id="password" type="password"/>
+                        </div>
+                        <div class="field">
+                            <label for="confirm-password">Confirm Password</label><input name="confirm-pwd" id="confirm-password" type="password"/>
+                        </div>
+                        <input class="btn update-btn" type="submit" name="submit" value="Update Password"/>
+                    </div>
                 </form>
             </div>
         </div>

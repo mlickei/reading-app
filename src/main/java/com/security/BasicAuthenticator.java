@@ -51,4 +51,24 @@ public class BasicAuthenticator
 
 		return userHash.equals(inHash);
 	}
+
+	public static boolean updateUserPassword(User user, String newPassword) {
+		boolean success = false;
+
+		PasswordHasher hasher = new PasswordHasher();
+		hasher.hashPassword(newPassword);
+
+		if(!BasicAuthenticator.authenticateUser(user.getUsername(), newPassword)) {
+			user.setSalt(hasher.getSalt());
+			user.setHash(hasher.getHash());
+			try {
+				UserFactory.updateUserPassword(user.getId(), user.getHash(), user.getSalt());
+				success = true;
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return success;
+	}
 }

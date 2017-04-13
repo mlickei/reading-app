@@ -6,6 +6,7 @@ html {
   background-color: #f9f9f9;
   font-family: $ui-font, sans-serif;
   font-weight: 400;
+  color: $color-almost-black;
 }
 
 html, body {
@@ -222,6 +223,19 @@ button[disabled] {
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    .username-link {
+      text-decoration: none;
+      color: $color-almost-black;
+    }
+
+    .username {
+      &:before {
+        content: "\f007";
+        @include fa-icon();
+        margin-right: 10px;
+      }
+    }
   }
 
   .logout-btn {
