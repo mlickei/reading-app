@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -106,6 +108,7 @@ public class BookAPI extends HttpServlet {
 		String title = req.getParameter("title");
 		String authorFirst = req.getParameter("authorFirst");
 		String authorLast = req.getParameter("authorLast");
+		String createdOn = req.getParameter("createdOn");
 
 		BookQueryBuilder bookQueryBuilder = new BookQueryBuilder();
 
@@ -125,19 +128,22 @@ public class BookAPI extends HttpServlet {
 			bookQueryBuilder.addConstraint("authorLast", "like", '%'+authorLast+'%');
 		}
 
+		if (createdOn != null && createdOn.length() > 0) {
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+
+			try {
+				bookQueryBuilder.addConstraint("createdOn", "<=", sdf.parse(createdOn));
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+		}
+
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		Gson gson = gsonBuilder.create();
 
 		PrintWriter pw = resp.getWriter();
 		List<Book> books = new ArrayList<>();
 		try {
-//			if (isbn == null || isbn.length() <= 0) {
-//				books.addAll(BookFactory.getBooks());
-//				pw.append(gson.toJson(books));
-//			} else {
-//				Book book = BookFactory.getBook(isbn);
-//				pw.append(gson.toJson(book));
-//			}
 			books.addAll(bookQueryBuilder.getResults());
 			pw.append(gson.toJson(books));
 		} catch (SQLException e) {
