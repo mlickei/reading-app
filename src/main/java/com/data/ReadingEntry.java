@@ -1,6 +1,7 @@
 package com.data;
 
 import com.google.gson.annotations.Expose;
+import com.sun.org.apache.regexp.internal.RE;
 
 import java.sql.Timestamp;
 
@@ -29,14 +30,11 @@ public class ReadingEntry {
 	public ReadingEntry() {
 	}
 
-	public ReadingEntry(Book book, User user, int startPage, int endPage, Timestamp startTime, Timestamp endTime, String notes) {
+	public ReadingEntry(Book book, User user, int startPage, Timestamp startTime) {
 		this.book = book;
 		this.user = user;
 		this.startPage = startPage;
-		this.endPage = endPage;
 		this.startTime = startTime;
-		this.endTime = endTime;
-		this.notes = notes;
 	}
 
 	public int getId() {

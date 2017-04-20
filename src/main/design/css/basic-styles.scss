@@ -58,6 +58,10 @@ header {
   margin-bottom: 10px;
 }
 
+.form + .form {
+  margin-top: 15px;
+}
+
 form {
   .field {
     margin-bottom: 10px;

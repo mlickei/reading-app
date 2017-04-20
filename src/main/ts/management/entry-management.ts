@@ -10,6 +10,10 @@ export class ReadingEntry extends Serializable {
     constructor(public book: Book, public user: User, public startPage: number, public endPage: number, public startTime: string, public endTime: string, public notes: string) {
         super();
     }
+
+    public isFinished(): boolean {
+        return this.endPage < 0;
+    }
 }
 
 export class EntryManager extends Management {
@@ -28,11 +32,9 @@ export class EntryManager extends Management {
         this.allowUpdate = this.user.hasRole('ENTRIES_UPDATE');
         this.allowAdd = this.user.hasRole('ENTRIES_ADD');
 
-        // new Requirement("BookManagement", "resources/javascript/management/book-management.js", ()=> {
         if (this.$entryMgt.length) {
             this.init();
         }
-        // });
     }
 
     refreshResults() {
@@ -60,8 +62,7 @@ export class EntryManager extends Management {
         let appAuth: AppAuth = new AppAuth();
 
         if (!this.allowAdd) {
-            this.$entryMgt.find('.form').addClass('hidden');
-            //TODO make it so that they can request for a book to be added.
+            this.$entryMgt.find('.add-entry-form').addClass('hidden');
         }
 
         const $bookSel = $form.find('select[name="book"]');
@@ -81,6 +82,36 @@ export class EntryManager extends Management {
 
             appAuth.retrieveLoggedInUser((curUser: User) => {
                 let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), curUser, startPage, endPage, startTime, endTime, notes);
+                EntryManager.insertEntry(newBook, () => {
+                    this.refreshResults();
+                });
+            });
+
+            $form.find('.btn.reset-btn').click();
+        });
+    }
+
+    private setupStartNewForm($form, books: Book[]) {
+        let appAuth: AppAuth = new AppAuth();
+
+        if (!this.allowAdd) {
+            this.$entryMgt.find('.start-entry-form').addClass('hidden');
+        }
+
+        const $bookSel = $form.find('select[name="book"]');
+        for (let book of books) {
+            $bookSel.append(EntryManager.buildBookOpt(book));
+        }
+
+        $form.on('submit', (evt) => {
+            evt.preventDefault();
+
+            let bookId: string = $bookSel.val();
+            let startPage: number = $form.find('input[name="startPage"]').val();
+            let startTime: string = $form.find('input[name="startTime"]').val();
+
+            appAuth.retrieveLoggedInUser((curUser: User) => {
+                let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), curUser, startPage, null, startTime, null, null);
                 EntryManager.insertEntry(newBook, () => {
                     this.refreshResults();
                 });
@@ -130,9 +161,12 @@ export class EntryManager extends Management {
 
     public init() {
         const $entryMgtForm = this.$entryMgt.find('.add-entry-form form');
+        const $newEntryMgtForm = this.$entryMgt.find('.start-entry-form form');
+
         if ($entryMgtForm.length) {
             BookManager.getBooks({}, (books: Book[]) => {
                 this.setupInsertForm($entryMgtForm, books);
+                this.setupStartNewForm($newEntryMgtForm, books);
             });
         }
 

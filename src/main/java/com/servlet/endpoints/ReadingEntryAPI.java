@@ -49,7 +49,7 @@ public class ReadingEntryAPI extends HttpServlet {
 			String isbn = req.getParameter("book[isbn]");
 			int userId = Integer.parseInt(req.getParameter("user[id]"));
 			int startPg = Integer.parseInt(req.getParameter("startPage"));
-			int endPg = Integer.parseInt(req.getParameter("endPage"));
+			String endPg = req.getParameter("endPage");
 			String startTimeStr = req.getParameter("startTime");
 			String endTimeStr = req.getParameter("endTime");
 			String notes = req.getParameter("notes");
@@ -60,14 +60,27 @@ public class ReadingEntryAPI extends HttpServlet {
 
 			try {
 				startTime = new Timestamp(sdf.parse(startTimeStr).getTime());
-				endTime = new Timestamp(sdf.parse(endTimeStr).getTime());
+
+				if(endTimeStr != null && endTimeStr.length() > 0) {
+					endTime = new Timestamp(sdf.parse(endTimeStr).getTime());
+				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 				pw.print(e.toString());
 			}
 
 			try {
-				ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, endPg, startTime, endTime, notes);
+				ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, startTime);
+
+				if(endPg != null && endPg.length() > 0) {
+					entry.setEndPage(Integer.parseInt(endPg));
+				} else {
+					entry.setEndPage(-1);
+				}
+
+				entry.setNotes(notes);
+				entry.setEndTime(endTime);
+
 				ReadingEntryFactory.insertReadingEntry(entry);
 				pw.print("Success");
 			} catch (SQLException e) {
