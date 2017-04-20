@@ -1,8 +1,6 @@
 # Reading App
 Allows you to track book reading progress and reading speed over time.
 
-http://donatello-bruchetta.dynamic-dns.net:8888/login.html
-
 ## How to run
 1. Run `gradle build` to make sure depencies are compiled and project is setup correctly.
 2. Run `gradle clean` to clean out the /build/ directory.
