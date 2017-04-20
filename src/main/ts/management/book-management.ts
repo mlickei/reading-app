@@ -157,9 +157,7 @@ export class BookManager extends Management {
 
         const $bookListing = this.$bookMgt.find('.book-listing');
         if ($bookListing.length) {
-            // new Requirement('Popup', 'resources/javascript/components/popup.js', () => {
             return this.setupListing($bookListing);
-            // });
         }
     }
 

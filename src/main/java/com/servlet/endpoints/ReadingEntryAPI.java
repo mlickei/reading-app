@@ -32,6 +32,7 @@ public class ReadingEntryAPI extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String delete = req.getParameter("delete");
+		String update = req.getParameter("update");
 
 		PrintWriter pw = resp.getWriter();
 		//TODO add permissions checking, everyone can do it right now.. so mehhhh
@@ -41,6 +42,52 @@ public class ReadingEntryAPI extends HttpServlet {
 			try {
 				ReadingEntryFactory.deleteReadingEntry(entryId);
 				pw.print("Success");
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+		} else if(update != null && update.length() > 0 && Integer.parseInt(update) == 1) {
+			String isbn = req.getParameter("book[isbn]");
+			int userId = Integer.parseInt(req.getParameter("user[id]"));
+			int startPg = Integer.parseInt(req.getParameter("startPage"));
+			String endPg = req.getParameter("endPage");
+			String startTimeStr = req.getParameter("startTime");
+			String endTimeStr = req.getParameter("endTime");
+			String notes = req.getParameter("notes");
+			int entryId = Integer.parseInt(req.getParameter("id"));
+
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Timestamp startTime = null;
+			Timestamp endTime = null;
+
+			try {
+				startTime = new Timestamp(sdf.parse(startTimeStr).getTime());
+
+				if(endTimeStr != null && endTimeStr.length() > 0) {
+					endTime = new Timestamp(sdf.parse(endTimeStr).getTime());
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+
+			try {
+				ReadingEntry entry = new ReadingEntry(BookFactory.getBook(isbn), UserFactory.getUser(userId), startPg, startTime);
+
+				if(endPg != null && endPg.length() > 0) {
+					entry.setEndPage(Integer.parseInt(endPg));
+				} else {
+					entry.setEndPage(-1);
+				}
+
+				entry.setNotes(notes);
+				entry.setEndTime(endTime);
+
+				ReadingEntryFactory.updateReadingEntry(entry, entryId);
+
+				GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+				Gson gson = gsonBuilder.create();
+				pw.append(gson.toJson(entry));
 			} catch (SQLException e) {
 				e.printStackTrace();
 				pw.print(e.toString());

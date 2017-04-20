@@ -1,7 +1,6 @@
 package com.data;
 
 import com.google.gson.annotations.Expose;
-import com.sun.org.apache.regexp.internal.RE;
 
 import java.sql.Timestamp;
 

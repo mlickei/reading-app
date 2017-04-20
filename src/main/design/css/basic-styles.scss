@@ -210,6 +210,21 @@ form {
   }
 }
 
+.finish-btn {
+  background-color: #34b738;
+  color: #fff;
+
+  &:hover {
+    background-color: #48c54d;
+  }
+
+  &:after {
+    content: "\f00c";
+    @include fa-icon();
+    margin-left: 7px;
+  }
+}
+
 .expand-btn {
   &:after {
     content: "\f0fe";

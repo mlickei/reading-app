@@ -3,6 +3,8 @@ import {User} from "../user/user";
 import {Book, BookManager} from "./book-management";
 import {Management} from "./management";
 import {AppAuth} from "../user/auth";
+import {Popup} from "../components/popup";
+import moment = require('moment');
 
 export class ReadingEntry extends Serializable {
     public id: number;
@@ -12,21 +14,24 @@ export class ReadingEntry extends Serializable {
     }
 
     public isFinished(): boolean {
-        return this.endPage < 0;
+        return this.endPage > 0;
     }
 }
 
 export class EntryManager extends Management {
 
     private $entryMgt;
+    private $updateForm;
     private static ENTRY_URL = '/api/reading-entry';
     private allowUpdate: boolean;
     private allowDelete: boolean;
     private allowAdd: boolean;
+    private updatePopup: Popup;
 
     constructor(user: User) {
         super($('.entry-management'), user);
         this.$entryMgt = this.$target;
+        this.$updateForm = this.$entryMgt.find('.update-entry-form');
 
         this.allowDelete = this.user.hasRole('ENTRIES_DELETE');
         this.allowUpdate = this.user.hasRole('ENTRIES_UPDATE');
@@ -40,7 +45,7 @@ export class EntryManager extends Management {
     refreshResults() {
         this.getAllEntries((entries: ReadingEntry[]) => {
             this.emptyList();
-            this.buildEntriesListing(entries, this.$entryMgt.find('.listing'));
+            this.buildEntriesListing(entries, this.$entryMgt.find('.listing'), this.updatePopup);
         });
     }
 
@@ -54,8 +59,8 @@ export class EntryManager extends Management {
         return null;
     }
 
-    private static buildBookOpt(book: Book): string {
-        return `<option value="${book.isbn}"><i>${book.title}</i> ${book.authorLast}, ${book.authorFirst} - ${book.isbn}</option>`;
+    private static buildBookOpt(book: Book, selected): string {
+        return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast}, ${book.authorFirst} - ${book.isbn}</option>`;
     }
 
     private setupInsertForm($form, books: Book[]) {
@@ -67,7 +72,7 @@ export class EntryManager extends Management {
 
         const $bookSel = $form.find('select[name="book"]');
         for (let book of books) {
-            $bookSel.append(EntryManager.buildBookOpt(book));
+            $bookSel.append(EntryManager.buildBookOpt(book, false));
         }
 
         $form.on('submit', (evt) => {
@@ -100,7 +105,7 @@ export class EntryManager extends Management {
 
         const $bookSel = $form.find('select[name="book"]');
         for (let book of books) {
-            $bookSel.append(EntryManager.buildBookOpt(book));
+            $bookSel.append(EntryManager.buildBookOpt(book, false));
         }
 
         $form.on('submit', (evt) => {
@@ -121,7 +126,74 @@ export class EntryManager extends Management {
         });
     }
 
-    private static buildEntryHTML(entry: ReadingEntry, allowUpdate, allowDelete): string {
+    private static fillInFormValues($targetForm, entry: ReadingEntry) {
+        $targetForm.find('input:not(.btn), select').each((idx, input) => {
+            let $input = $(input),
+                valName = $input.attr('name'),
+                type = $input.data('time-picker');
+
+            let value = entry[valName];
+
+            if(type === "timestamp") {
+                if(valName === "endTime") {
+                    value = moment().format("MMM D,YYYY h:mm:ss A");
+                }
+
+                $input.val(value);
+                $input.flatpickr({enableTime: true, enableSeconds: true, defaultDate: value, dateFormat: "M d, Y h:i:S K"});
+            } else {
+                if (valName === 'book') {
+                    $input.data('default',entry.book.isbn);
+                } else {
+                    $input.val(value);
+                }
+            }
+        });
+    }
+
+    private static buildEntryFromForm($form, books : Book[], callback : (entry:ReadingEntry) => void) {
+        let appAuth: AppAuth = new AppAuth();
+
+        let bookId:string = $form.find('select[name="book"]').val();
+        let startPage: number = $form.find('input[name="startPage"]').val();
+        let endPage: number = $form.find('input[name="endPage"]').val();
+        let startTime: string = $form.find('input[name="startTime"]').val();
+        let endTime: string = $form.find('input[name="endTime"]').val();
+        let notes: string = $form.find('textarea[name="notes"]').val();
+
+        appAuth.retrieveLoggedInUser((curUser: User) => {
+            callback(new ReadingEntry(EntryManager.findBook(books, bookId), curUser, startPage, endPage, startTime, endTime, notes));
+        });
+    }
+
+    private showUpdateEntryForm($updateForm, entry: ReadingEntry, popup: Popup) {
+        EntryManager.fillInFormValues($updateForm, entry);
+
+        BookManager.getBooks({}, (books: Book[]) => {
+            const $bookSel = $updateForm.find('select[name="book"]'),
+                  selected = $bookSel.data('default');
+            for (let book of books) {
+                $bookSel.append(EntryManager.buildBookOpt(book, (selected === book.isbn)));
+            }
+
+            $updateForm.removeClass('hidden').find('form').removeClass('hidden');
+            $updateForm.on('submit', (evt) => {
+                evt.preventDefault();
+                EntryManager.buildEntryFromForm($updateForm, books, (buildEntry) => {
+                    buildEntry.id = entry.id;
+                    EntryManager.updateEntry(buildEntry, (entry: ReadingEntry) => {
+                        if (entry !== null) {
+                            this.refreshResults();
+                            $updateForm.addClass('hidden');
+                        }
+                    });
+                });
+                popup.close();
+            });
+        });
+    }
+
+    private static buildFinishedEntryHTML(entry: ReadingEntry, allowUpdate, allowDelete): string {
         return `<div class="entry item">
                     <div class="entry-info item-info">
                         <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
@@ -136,9 +208,30 @@ export class EntryManager extends Management {
                 </div>`;
     }
 
-    private buildEntriesListing(entries: ReadingEntry[], $target) {
+    private static buildStartedEntryHTML(entry: ReadingEntry, allowUpdate, allowDelete): string {
+        return `<div class="entry item">
+                    <div class="entry-info item-info">
+                        <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
+                        <div class="pages-read"><span class="attr-lbl">Start Page</span><span class="attr-val">${entry.startPage}</span></div>
+                        <div class="start-time"><span class="attr-lbl">Start Time</span><span class="attr-val">${entry.startTime}</span></div>
+                    </div>
+                    <div class="actions entry-actions">
+                        <button class="btn finish-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Finish</button>
+                        <button class="btn delete-btn" ` + ((!allowDelete) ? `disabled="disabled"` : ``) + ` role="DELETE">Delete</button>
+                    </div>
+                </div>`;
+    }
+
+    private buildEntriesListing(entries: ReadingEntry[], $target, popup:Popup) {
         for (let entry of entries) {
-            let $entry = $(EntryManager.buildEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
+            let $entry;
+
+            if(entry.isFinished()) {
+                $entry = $(EntryManager.buildFinishedEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
+            } else {
+                $entry = $(EntryManager.buildStartedEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
+            }
+
             $entry.find('.actions').on('click', '.delete-btn', () => {
                 //TODO find a way to make this specific
                 let doDelete: boolean = confirm(`Are you sure you want to delete the entry for ${entry.startTime}?`);
@@ -148,14 +241,19 @@ export class EntryManager extends Management {
                         this.refreshResults();
                     });
                 }
+            }).on('click', '.update-btn, .finish-btn', () => {
+                let $popupForm = popup.open();
+                this.showUpdateEntryForm($popupForm, entry, popup);
             });
         }
     }
 
     private setupListing($listing) {
         let $list = $listing.find('.entries');
+        this.updatePopup = new Popup(this.$updateForm, {});
+
         this.getAllEntries((entries: ReadingEntry[]) => {
-            this.buildEntriesListing(entries, $list);
+            this.buildEntriesListing(entries, $list, this.updatePopup);
         });
     }
 
@@ -218,6 +316,30 @@ export class EntryManager extends Management {
             //TODO make random donger retrieval
             alert("Failed to create entry (-_-｡)");
             doneCallback();
+        });
+    }
+
+    public static updateEntry(entry: ReadingEntry, doneCallback: (entry:ReadingEntry) => void) {
+        let sendData = JSON.parse(JSON.stringify(entry));
+
+        //Do date formatting
+        sendData.startTime = moment(sendData.startTime, "MMM D,YYYY h:mm:ss A").format("YYYY-MM-DD HH:mm:ss");
+        sendData.endTime = moment(sendData.endTime, "MMM D,YYYY h:mm:ss A").format("YYYY-MM-DD HH:mm:ss");
+
+        sendData = $.extend(true, sendData, {update: 1, id:entry.id});
+
+        $.ajax(this.ENTRY_URL, {
+            type: "POST",
+            data: sendData
+        }).done((data) => {
+            alert("Successfully added entry!");
+            let entry = new ReadingEntry(null, null, null, null, null, null, null);
+            entry.fromJSON(data);
+            doneCallback(entry);
+        }).fail(() => {
+            //TODO make random donger retrieval
+            alert("Failed to create entry (-_-｡)");
+            doneCallback(null);
         });
     }
 

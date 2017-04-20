@@ -17,15 +17,15 @@
             <form class="flex-form hidden">
                 <div class="fields-wrap">
                     <div class="field">
-                        <label for="entry-book">Book</label><select name="book" id="entry-book"></select>
+                        <label for="start-entry-book">Book</label><select name="book" id="start-entry-book"></select>
                     </div>
                 </div>
                 <div class="fields-wrap">
                     <div class="field time-field">
-                        <label for="entry-start-time">Start Time</label><input name="startTime" id="entry-start-time" type="text" data-time-picker="timestamp" />
+                        <label for="start-entry-start-time">Start Time</label><input name="startTime" id="start-entry-start-time" type="text" data-time-picker="timestamp" />
                     </div>
                     <div class="field">
-                        <label for="entry-start-page">Start Page</label><input name="startPage" id="entry-start-page" type="number"/>
+                        <label for="start-entry-start-page">Start Page</label><input name="startPage" id="start-entry-start-page" type="number"/>
                     </div>
                 </div>
                 <div class="fields-wrap actions-container">
@@ -61,6 +61,41 @@
                 <div class="fields-wrap">
                     <div class="field text-area-field">
                         <label for="entry-notes">Notes</label><textarea name="notes" id="entry-notes" maxlength="256"></textarea>
+                    </div>
+                </div>
+                <div class="fields-wrap actions-container">
+                    <input class="btn submit-btn" type="submit" name="submit" value="Submit"/>
+                    <input class="btn reset-btn" type="reset" name="reset" value="Reset"/>
+                </div>
+            </form>
+        </div>
+        <div class="form update-entry-form hidden">
+            <div class="form-title"><h3>Update/Finish Entry</h3></div>
+            <form class="flex-form">
+                <div class="fields-wrap">
+                    <div class="field">
+                        <label for="update-entry-book">Book</label><select name="book" id="update-entry-book"></select>
+                    </div>
+                </div>
+                <div class="fields-wrap">
+                    <div class="field time-field">
+                        <label for="update-entry-start-time">Start Time</label><input name="startTime" id="update-entry-start-time" type="text" data-time-picker="timestamp" />
+                    </div>
+                    <div class="field">
+                        <label for="update-entry-start-page">Start Page</label><input name="startPage" id="update-entry-start-page" type="number"/>
+                    </div>
+                </div>
+                <div class="fields-wrap">
+                    <div class="field time-field">
+                        <label for="update-entry-end-time">End Time</label><input name="endTime" id="update-entry-end-time" type="text" data-time-picker="timestamp" />
+                    </div>
+                    <div class="field">
+                        <label for="update-entry-end-page">End Page</label><input name="endPage" id="update-entry-end-page" type="number"/>
+                    </div>
+                </div>
+                <div class="fields-wrap">
+                    <div class="field text-area-field">
+                        <label for="update-entry-notes">Notes</label><textarea name="notes" id="update-entry-notes" maxlength="256"></textarea>
                     </div>
                 </div>
                 <div class="fields-wrap actions-container">

@@ -26,7 +26,7 @@ public class ReadingEntryFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("SELECT * FROM reading_entry where userId = ?");
+			statement = conn.prepareStatement("SELECT * FROM reading_entry where userId = ? ORDER BY createdOn desc, lastModified desc");
 			statement.setInt(1, user.getId());
 			rs = statement.executeQuery();
 
@@ -70,6 +70,33 @@ public class ReadingEntryFactory {
 			statement.setInt(5, readingEntry.getStartPage());
 			statement.setInt(6, readingEntry.getEndPage());
 			statement.setString(7, readingEntry.getNotes());
+
+			statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(null, statement, conn);
+		}
+	}
+
+	public static void updateReadingEntry(ReadingEntry readingEntry, int entryId) throws SQLException {
+		PreparedStatement statement = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("UPDATE reading_entry SET isbn = ?, userId = ?, startTime = ?, endTime = ?, startPage = ?, endPage = ?, notes = ? WHERE id = ?");
+
+			statement.setString(1, readingEntry.getBook().getIsbn());
+			statement.setInt(2, readingEntry.getUser().getId());
+			statement.setTimestamp(3, readingEntry.getStartTime());
+			statement.setTimestamp(4, readingEntry.getEndTime());
+			statement.setInt(5, readingEntry.getStartPage());
+			statement.setInt(6, readingEntry.getEndPage());
+			statement.setString(7, readingEntry.getNotes());
+			statement.setInt(8, entryId);
 
 			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
