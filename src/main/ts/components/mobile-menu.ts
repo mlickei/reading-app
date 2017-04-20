@@ -1,4 +1,4 @@
-class MobileMenu {
+export class MobileMenu {
 
     constructor(private $mobileMenu, private $standardMenu) {
         this.buildMenu();

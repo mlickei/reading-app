@@ -61,7 +61,7 @@ compileTypeScript {
     dependsOn "npmInstall"
     source = [file('src/main/ts')]
     target = "es5"
-    module = "commonjs"
+    module = "amd"
     moduleResolution = "node"
     isolatedModules = false
     declaration = false
@@ -69,14 +69,18 @@ compileTypeScript {
     noLib = false
     noImplicitAny = false
     noImplicitUseStrict = false
+    projectFile = file('tsconfig.json')
 }
 
 war {
     into("resources/javascript") {
-        from compileTypeScript.outputs
+        from ([compileTypeScript.outputs, "src/main/javascript"])
     }
     into("resources/javascript/lib") {
-        from (["node_modules/jquery/dist/jquery.min.js","node_modules/flatpickr/dist/flatpickr.min.js"])
+        from (["node_modules/jquery/dist/jquery.min.js",
+               "node_modules/flatpickr/dist/flatpickr.min.js",
+               "node_modules/moment/min/moment.min.js",
+               "node_modules/requirejs/require.js"])
     }
 }
 

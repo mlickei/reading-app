@@ -1,4 +1,4 @@
-class Authenticator {
+export class Authenticator {
     $mainContent = $('.main-content');
     $loginForm = this.$mainContent.find('.login-form form');
     $registerForm = this.$mainContent.find('.register-form form');
@@ -66,9 +66,3 @@ class Authenticator {
         });
     }
 }
-
-//FIXME Add user creation
-
-window.onload = () => {
-    let auth = new Authenticator();
-};

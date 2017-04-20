@@ -1,4 +1,8 @@
-class ProfileManager extends Management {
+import {Management} from "./management";
+import {AppAuth} from "../user/auth";
+import {User} from "../user/user";
+
+export class ProfileManager extends Management {
 
     private static USER_URL: string = "/api/profile";
     private $profManagement;

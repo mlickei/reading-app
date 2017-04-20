@@ -1,4 +1,4 @@
-class Popup {
+export class Popup {
     private defaultOpts = {
         clone: {
             withDataAndEvents: true,

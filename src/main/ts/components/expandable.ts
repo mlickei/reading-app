@@ -1,4 +1,4 @@
-class Expandable {
+export class Expandable {
     private $expandBtn;
     private $collapseBtn;
 

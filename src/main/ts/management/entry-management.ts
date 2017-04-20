@@ -1,19 +1,26 @@
-class ReadingEntry extends Serializable {
-    public id:number;
+import {Serializable} from "../serializable";
+import {User} from "../user/user";
+import {Book, BookManager} from "./book-management";
+import {Management} from "./management";
+import {AppAuth} from "../user/auth";
 
-    constructor(public book:Book, public user:User, public startPage:number, public endPage:number, public startTime:string, public endTime:string, public notes:string) {
+export class ReadingEntry extends Serializable {
+    public id: number;
+
+    constructor(public book: Book, public user: User, public startPage: number, public endPage: number, public startTime: string, public endTime: string, public notes: string) {
         super();
     }
 }
 
-class EntryManager extends Management {
+export class EntryManager extends Management {
+
     private $entryMgt;
     private static ENTRY_URL = '/api/reading-entry';
     private allowUpdate: boolean;
     private allowDelete: boolean;
     private allowAdd: boolean;
 
-    constructor(user:User) {
+    constructor(user: User) {
         super($('.entry-management'), user);
         this.$entryMgt = this.$target;
 
@@ -21,11 +28,11 @@ class EntryManager extends Management {
         this.allowUpdate = this.user.hasRole('ENTRIES_UPDATE');
         this.allowAdd = this.user.hasRole('ENTRIES_ADD');
 
-        new Requirement("BookManagement", "resources/javascript/management/book-management.js", ()=> {
-            if(this.$entryMgt.length) {
-                this.init();
-            }
-        });
+        // new Requirement("BookManagement", "resources/javascript/management/book-management.js", ()=> {
+        if (this.$entryMgt.length) {
+            this.init();
+        }
+        // });
     }
 
     refreshResults() {
@@ -35,9 +42,9 @@ class EntryManager extends Management {
         });
     }
 
-    private static findBook(books:Book[], sISBN:string):Book {
-        for(let sB of books) {
-            if(sB.isbn === sISBN) {
+    private static findBook(books: Book[], sISBN: string): Book {
+        for (let sB of books) {
+            if (sB.isbn === sISBN) {
                 return sB;
             }
         }
@@ -45,18 +52,20 @@ class EntryManager extends Management {
         return null;
     }
 
-    private static buildBookOpt(book:Book):string {
+    private static buildBookOpt(book: Book): string {
         return `<option value="${book.isbn}"><i>${book.title}</i> ${book.authorLast}, ${book.authorFirst} - ${book.isbn}</option>`;
     }
 
-    private setupInsertForm($form, books:Book[]) {
-        if(!this.allowAdd) {
+    private setupInsertForm($form, books: Book[]) {
+        let appAuth: AppAuth = new AppAuth();
+
+        if (!this.allowAdd) {
             this.$entryMgt.find('.form').addClass('hidden');
             //TODO make it so that they can request for a book to be added.
         }
 
         const $bookSel = $form.find('select[name="book"]');
-        for(let book of books) {
+        for (let book of books) {
             $bookSel.append(EntryManager.buildBookOpt(book));
         }
 
@@ -70,16 +79,18 @@ class EntryManager extends Management {
             let endTime: string = $form.find('input[name="endTime"]').val();
             let notes: string = $form.find('textarea[name="notes"]').val();
 
-            let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), appAuth.currentUser, startPage, endPage, startTime, endTime, notes);
-            EntryManager.insertEntry(newBook, () => {
-                this.refreshResults();
+            appAuth.retrieveLoggedInUser((curUser: User) => {
+                let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), curUser, startPage, endPage, startTime, endTime, notes);
+                EntryManager.insertEntry(newBook, () => {
+                    this.refreshResults();
+                });
             });
 
             $form.find('.btn.reset-btn').click();
         });
     }
 
-    private static buildEntryHTML(entry:ReadingEntry, allowUpdate, allowDelete):string {
+    private static buildEntryHTML(entry: ReadingEntry, allowUpdate, allowDelete): string {
         return `<div class="entry item">
                     <div class="entry-info item-info">
                         <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
@@ -94,14 +105,14 @@ class EntryManager extends Management {
                 </div>`;
     }
 
-    private buildEntriesListing(entries:ReadingEntry[], $target) {
-        for(let entry of entries) {
+    private buildEntriesListing(entries: ReadingEntry[], $target) {
+        for (let entry of entries) {
             let $entry = $(EntryManager.buildEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
             $entry.find('.actions').on('click', '.delete-btn', () => {
                 //TODO find a way to make this specific
-                let doDelete:boolean = confirm(`Are you sure you want to delete the entry for ${entry.startTime}?`);
+                let doDelete: boolean = confirm(`Are you sure you want to delete the entry for ${entry.startTime}?`);
 
-                if(doDelete) {
+                if (doDelete) {
                     EntryManager.deleteEntry(entry, () => {
                         this.refreshResults();
                     });
@@ -112,31 +123,31 @@ class EntryManager extends Management {
 
     private setupListing($listing) {
         let $list = $listing.find('.entries');
-        this.getAllEntries((entries:ReadingEntry[]) => {
+        this.getAllEntries((entries: ReadingEntry[]) => {
             this.buildEntriesListing(entries, $list);
         });
     }
 
     public init() {
         const $entryMgtForm = this.$entryMgt.find('.add-entry-form form');
-        if($entryMgtForm.length) {
-            BookManager.getBooks({}, (books:Book[]) => {
+        if ($entryMgtForm.length) {
+            BookManager.getBooks({}, (books: Book[]) => {
                 this.setupInsertForm($entryMgtForm, books);
             });
         }
 
         const $entryListing = this.$entryMgt.find('.entry-listing');
-        if($entryListing.length) {
+        if ($entryListing.length) {
             this.setupListing($entryListing);
         }
     }
 
-    public getAllEntries(callback:(array:ReadingEntry[])=> void) {
-        let entries:ReadingEntry[] = [];
+    public getAllEntries(callback: (array: ReadingEntry[]) => void) {
+        let entries: ReadingEntry[] = [];
         $.ajax(EntryManager.ENTRY_URL, {
             type: "GET"
         }).done((data) => {
-            for(let entryObj of JSON.parse(data)) {
+            for (let entryObj of JSON.parse(data)) {
                 let readingEntry = new ReadingEntry(new Book(entryObj.book.isbn, entryObj.book.title, entryObj.book.pages, entryObj.book.authorFirst, entryObj.book.authorLast), this.user, entryObj.startPage, entryObj.endPage, entryObj.startTime, entryObj.endTime, entryObj.notes);
                 readingEntry.id = entryObj.id;
                 entries.push(readingEntry);
@@ -148,7 +159,7 @@ class EntryManager extends Management {
         });
     }
 
-    public static getEntry(id:string):ReadingEntry {
+    public static getEntry(id: string): ReadingEntry {
         $.ajax(this.ENTRY_URL, {
             type: "GET"
         }).done((data) => {
@@ -162,7 +173,7 @@ class EntryManager extends Management {
         return null;
     }
 
-    public static insertEntry(newEntry:ReadingEntry, doneCallback:() => void) {
+    public static insertEntry(newEntry: ReadingEntry, doneCallback: () => void) {
         $.ajax(this.ENTRY_URL, {
             type: "POST",
             data: JSON.parse(JSON.stringify(newEntry))
@@ -176,7 +187,7 @@ class EntryManager extends Management {
         });
     }
 
-    public static deleteEntry(entry:ReadingEntry, doneCallback:() => void) {
+    public static deleteEntry(entry: ReadingEntry, doneCallback: () => void) {
         $.ajax(this.ENTRY_URL, {
             type: "POST",
             data: {

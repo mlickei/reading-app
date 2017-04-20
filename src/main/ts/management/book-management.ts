@@ -1,19 +1,25 @@
-class Book extends Serializable {
-    constructor(public isbn:string, public title:string, public pages:number, public authorFirst:string, public authorLast:string) {
+import {Serializable} from "../serializable";
+import {Management} from "./management";
+import {User} from "../user/user";
+import {Popup} from "../components/popup";
+
+export class Book extends Serializable {
+    constructor(public isbn: string, public title: string, public pages: number, public authorFirst: string, public authorLast: string) {
         super();
     }
 }
 
-class BookManager extends Management {
+export class BookManager extends Management {
+
     private $bookMgt;
     private $updateForm;
     private static BOOK_URL = '/api/book';
-    private allowDelete:boolean;
-    private allowUpdate:boolean;
-    private allowAdd:boolean;
-    private updatePopup:Popup;
+    private allowDelete: boolean;
+    private allowUpdate: boolean;
+    private allowAdd: boolean;
+    private updatePopup: Popup;
 
-    constructor(user:User) {
+    constructor(user: User) {
         super($('.book-management'), user);
         this.$bookMgt = this.$target;
         this.$updateForm = this.$bookMgt.find('.update-book-form');
@@ -22,7 +28,7 @@ class BookManager extends Management {
         this.allowUpdate = this.user.hasRole('BOOK_UPDATE');
         this.allowAdd = this.user.hasRole('BOOK_ADD');
 
-        if(this.$bookMgt.length) {
+        if (this.$bookMgt.length) {
             this.init();
         }
     }
@@ -36,7 +42,7 @@ class BookManager extends Management {
         this.updateAvailableActions();
     }
 
-    private static buildBookFromForm($form):Book {
+    private static buildBookFromForm($form): Book {
         let title: string = $form.find('input[name="title"]').val();
         let isbn: string = $form.find('input[name="isbn"]').val();
         let pages: number = $form.find('input[name="pages"]').val();
@@ -46,7 +52,7 @@ class BookManager extends Management {
         return new Book(isbn, title, pages, authorFirst, authorLast);
     }
 
-    private static fillInFormValues($targetForm, book:Book) {
+    private static fillInFormValues($targetForm, book: Book) {
         $targetForm.find('input:not(.btn)').each((idx, input) => {
             let $input = $(input),
                 valName = $input.attr('name');
@@ -56,7 +62,7 @@ class BookManager extends Management {
     }
 
     private setupInsertForm($form) {
-        if(!this.allowAdd) {
+        if (!this.allowAdd) {
             this.$bookMgt.find('.form.add-book-form').addClass('hidden');
             //TODO make it so that they can request for a book to be added.
         }
@@ -73,7 +79,7 @@ class BookManager extends Management {
         });
     }
 
-    private static buildBookHTML(book:Book, allowDelete, allowUpdate):string {
+    private static buildBookHTML(book: Book, allowDelete, allowUpdate): string {
         return `<div class="book item">
                     <div class="book-info item-info">
                         <div class="book-title"><span class="attr-lbl">Title</span><span class="attr-val">${book.title}</span></div>
@@ -93,7 +99,7 @@ class BookManager extends Management {
                 </div>`;
     }
 
-    private showUpdateBookForm($updateForm, book:Book, popup:Popup) {
+    private showUpdateBookForm($updateForm, book: Book, popup: Popup) {
         BookManager.fillInFormValues($updateForm, book);
 
         $updateForm.removeClass('hidden').find('form').removeClass('hidden');
@@ -101,7 +107,7 @@ class BookManager extends Management {
             evt.preventDefault();
             let book = BookManager.buildBookFromForm($updateForm);
             BookManager.updateBook(book, (book: Book) => {
-                if(book !== null) {
+                if (book !== null) {
                     this.refreshResults();
                     $updateForm.addClass('hidden');
                 }
@@ -110,14 +116,14 @@ class BookManager extends Management {
         });
     }
 
-    private buildBooksListing(books:Book[], $target, popup:Popup) {
+    private buildBooksListing(books: Book[], $target, popup: Popup) {
         for (let book of books) {
             let $newBook = $(BookManager.buildBookHTML(book, this.allowDelete, this.allowUpdate)).appendTo($target);
 
             $newBook.find('.actions').on('click', '.delete-btn', () => {
-                let doDelete:boolean = confirm("Are you sure you want to delete " + book.title + "?");
+                let doDelete: boolean = confirm("Are you sure you want to delete " + book.title + "?");
 
-                if(doDelete) {
+                if (doDelete) {
                     BookManager.deleteBook(book, () => {
                         this.refreshResults();
                     });
@@ -133,37 +139,37 @@ class BookManager extends Management {
         let $list = $listing.find('.books');
         this.updatePopup = new Popup(this.$updateForm, {});
 
-        BookManager.getBooks({}, (books:Book[]) => {
+        BookManager.getBooks({}, (books: Book[]) => {
             this.buildBooksListing(books, $list, this.updatePopup);
         });
     }
 
     private updateAvailableActions() {
-        this.$bookMgt.find('.btn.update-btn').attr('disabled', (this.allowUpdate ? 'disabled': ''));
-        this.$bookMgt.find('.btn.delete-btn').attr('disabled', (this.allowDelete ? 'disabled': ''));
+        this.$bookMgt.find('.btn.update-btn').attr('disabled', (this.allowUpdate ? 'disabled' : ''));
+        this.$bookMgt.find('.btn.delete-btn').attr('disabled', (this.allowDelete ? 'disabled' : ''));
     }
 
     public init() {
         const $bookMgtForm = this.$bookMgt.find('.add-book-form form');
-        if($bookMgtForm.length) {
+        if ($bookMgtForm.length) {
             this.setupInsertForm($bookMgtForm);
         }
 
         const $bookListing = this.$bookMgt.find('.book-listing');
-        if($bookListing.length) {
-            new Requirement('Popup', 'resources/javascript/components/popup.js', () => {
-                return this.setupListing($bookListing);
-            });
+        if ($bookListing.length) {
+            // new Requirement('Popup', 'resources/javascript/components/popup.js', () => {
+            return this.setupListing($bookListing);
+            // });
         }
     }
 
-    public static getBooks(searchConstraints, callback:(array:Book[])=> void) {
-        let books:Book[] = [];
+    public static getBooks(searchConstraints, callback: (array: Book[]) => void) {
+        let books: Book[] = [];
         $.ajax(this.BOOK_URL, {
             type: "GET",
             data: searchConstraints
         }).done((data) => {
-            for(let bookObj of JSON.parse(data)) {
+            for (let bookObj of JSON.parse(data)) {
                 books.push(new Book(bookObj.isbn, bookObj.title, bookObj.pages, bookObj.authorFirst, bookObj.authorLast));
             }
             callback(books);
@@ -173,7 +179,7 @@ class BookManager extends Management {
         });
     }
 
-    public static insertBook(newBook:Book, doneCallback:() => void) {
+    public static insertBook(newBook: Book, doneCallback: () => void) {
         $.ajax(this.BOOK_URL, {
             type: "POST",
             data: JSON.parse(JSON.stringify(newBook))
@@ -187,7 +193,7 @@ class BookManager extends Management {
         });
     }
 
-    public static updateBook(book:Book, callback:(book:Book) => void) {
+    public static updateBook(book: Book, callback: (book: Book) => void) {
         let sendData = JSON.parse(JSON.stringify(book));
         sendData = $.extend(true, sendData, {update: 1});
 
@@ -207,7 +213,7 @@ class BookManager extends Management {
         });
     }
 
-    public static deleteBook(book:Book, doneCallback:() => void) {
+    public static deleteBook(book: Book, doneCallback: () => void) {
         $.ajax(this.BOOK_URL, {
             type: "POST",
             data: {
@@ -222,5 +228,4 @@ class BookManager extends Management {
             doneCallback();
         });
     }
-
 }

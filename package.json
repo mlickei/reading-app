@@ -15,6 +15,7 @@
   "homepage": "",
   "devDependencies": {
     "@types/jquery": "^2.0.41",
+    "@types/node": "^6.0.69",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^2.3.1",
     "gulp-bower": "0.0.13",
@@ -29,6 +30,8 @@
     "@types/jquery": "^2.0.41",
     "flatpickr": "^2.4.7",
     "gulp-preprocess": "^2.0.0",
+    "moment": "^2.18.1",
+    "requirejs": "^2.3.3",
     "typescript": "^2.2"
   }
 }
