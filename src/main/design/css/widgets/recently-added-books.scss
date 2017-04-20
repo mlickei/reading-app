@@ -1,0 +1,33 @@
+@import "../config/base-import";
+@import "./widget";
+
+.recently-added-widget {
+  max-width: 35%;
+  margin: 0 0 0 auto;
+
+  .recently-added-books {
+    padding: 0;
+    margin: 0;
+
+    .book {
+      padding: 5px;
+    }
+
+    .book-title {
+      font-style: italic;
+    }
+
+    .book-title,
+    .book-isbn,
+    .book-author {
+      display: block;
+    }
+
+    .book-info > * {
+      & + * {
+        margin-top: 8px;
+      }
+    }
+
+  }
+}

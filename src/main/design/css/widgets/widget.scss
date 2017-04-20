@@ -1,0 +1,13 @@
+@import "../config/base-import";
+
+.widget {
+  margin: 5px;
+
+  .widget-title {
+    padding: 8px 5px;
+
+    h3 {
+      margin: 0;
+    }
+  }
+}
