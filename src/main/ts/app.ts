@@ -50,67 +50,44 @@ function init() {
     initMobileMenu();
 
     let appAuth = new AppAuth();
-    let currentUser:User = null;
 
-    if ($('.book-management').length) {
-        if(currentUser == null) {
-            appAuth.retrieveLoggedInUser((user:User) => {
-                currentUser = user;
+    if(!$('.auth-box').length) {
+
+        appAuth.checkForLoggedInUser((user:User) => {
+            if ($('.book-management').length) {
                 require(['resources/javascript/management/book-management'], (bm) => {
                     new bm.BookManager(user);
                 });
-            });
-        } else {
-            require(['resources/javascript/management/book-management'], (bm) => {
-                new bm.BookManager(currentUser);
-            });
-        }
-    }
+            }
 
-    if ($('.entry-management').length) {
-        if(currentUser == null) {
-            appAuth.retrieveLoggedInUser((user:User) => {
-                currentUser = user;
+            if ($('.entry-management').length) {
                 require(["resources/javascript/management/entry-management"], (em) => {
                     new em.EntryManager(user);
                 });
-            });
-        } else {
-            require(["resources/javascript/management/entry-management"], (em) => {
-                new em.EntryManager(currentUser);
-            });
-        }
-    }
+            }
 
-    if ($('.profile-management').length) {
-        if(currentUser == null) {
-            appAuth.retrieveLoggedInUser((user:User) => {
-                currentUser = user;
+            if ($('.profile-management').length) {
                 require(['resources/javascript/management/profile-management'], (pm) => {
                     new pm.ProfileManager(user);
                 });
-            });
-        } else {
-            require(['resources/javascript/management/profile-management'], (pm) => {
-                new pm.ProfileManager(currentUser);
+            }
+
+            if ($('.recently-added-books').length) {
+                require(['resources/javascript/widgets/recently-added-books'], (rab) => {
+                    new rab.RecentlyAddedBooks();
+                });
+            }
+
+            initExpandable();
+            initTimePickers();
+        });
+    } else {
+        if ($('.login-form').length) {
+            require(['resources/javascript/login'], (login) => {
+                new login.Authenticator();
             });
         }
     }
-
-    if ($('.recently-added-books').length) {
-        require(['resources/javascript/widgets/recently-added-books'], (rab) => {
-            new rab.RecentlyAddedBooks();
-        });
-    }
-
-    if ($('.login-form').length) {
-        require(['resources/javascript/login'], (login) => {
-            new login.Authenticator();
-        });
-    }
-
-    initExpandable();
-    initTimePickers();
 }
 
 window.onload = () => {

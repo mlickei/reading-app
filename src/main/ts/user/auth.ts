@@ -22,7 +22,7 @@ export class AppAuth {
         $('.user-info .username').text(user.username);
     }
 
-    public checkForLoggedInuser(callback:(user:User)=> void) {
+    public checkForLoggedInUser(callback:(user:User)=> void) {
         $.ajax(AUTH_URL, {
             type: "GET"
         }).done((data) => {

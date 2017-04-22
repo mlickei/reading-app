@@ -16,15 +16,15 @@
             <div class="form-title expandable-ctrl" data-expandable-target=".entry-management .start-entry-form form"><span class="expand-lbl">Start a new entry</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn hidden"></span></div>
             <form class="flex-form hidden">
                 <div class="fields-wrap">
-                    <div class="field">
+                    <div class="field required">
                         <label for="start-entry-book">Book</label><select name="book" id="start-entry-book"></select>
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field">
+                    <div class="field time-field required" data-max-time="NOW">
                         <label for="start-entry-start-time">Start Time</label><input name="startTime" id="start-entry-start-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field">
+                    <div class="field required" data-min="1">
                         <label for="start-entry-start-page">Start Page</label><input name="startPage" id="start-entry-start-page" type="number"/>
                     </div>
                 </div>
@@ -38,23 +38,23 @@
             <div class="form-title expandable-ctrl" data-expandable-target=".entry-management .add-entry-form form"><span class="expand-lbl">Add an entry</span><span class="span-btn expand-btn"></span><span class="span-btn collapse-btn hidden"></span></div>
             <form class="flex-form hidden">
                 <div class="fields-wrap">
-                    <div class="field">
+                    <div class="field required">
                         <label for="entry-book">Book</label><select name="book" id="entry-book"></select>
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field">
+                    <div class="field time-field required" data-max-time="NOW" data-max-time-field="endTime">
                         <label for="entry-start-time">Start Time</label><input name="startTime" id="entry-start-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field">
+                    <div class="field required" data-min="1" data-max-field="endPage">
                         <label for="entry-start-page">Start Page</label><input name="startPage" id="entry-start-page" type="number"/>
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field">
+                    <div class="field time-field required" data-min-time-field="startTime" data-max-time="NOW">
                         <label for="entry-end-time">End Time</label><input name="endTime" id="entry-end-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field">
+                    <div class="field required" data-min-field="startPage" data-min="1">
                         <label for="entry-end-page">End Page</label><input name="endPage" id="entry-end-page" type="number"/>
                     </div>
                 </div>
@@ -73,23 +73,23 @@
             <div class="form-title"><h3>Update/Finish Entry</h3></div>
             <form class="flex-form">
                 <div class="fields-wrap">
-                    <div class="field">
+                    <div class="field required">
                         <label for="update-entry-book">Book</label><select name="book" id="update-entry-book"></select>
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field">
+                    <div class="field time-field required" data-max-time="NOW" data-max-time-field="endTime">
                         <label for="update-entry-start-time">Start Time</label><input name="startTime" id="update-entry-start-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field">
+                    <div class="field required" data-min="1" data-max-field="endPage">
                         <label for="update-entry-start-page">Start Page</label><input name="startPage" id="update-entry-start-page" type="number"/>
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field">
+                    <div class="field time-field required" data-min-time-field="startTime" data-max-time="NOW">
                         <label for="update-entry-end-time">End Time</label><input name="endTime" id="update-entry-end-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field">
+                    <div class="field required" data-min-field="startPage" data-min="1">
                         <label for="update-entry-end-page">End Page</label><input name="endPage" id="update-entry-end-page" type="number"/>
                     </div>
                 </div>
