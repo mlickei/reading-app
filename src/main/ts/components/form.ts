@@ -28,7 +28,7 @@ export class Validator {
         let isValid = true,
             value = this.$input.val();
 
-        if(this.required) {
+        if(this.required && (value === null || value === 'undefined' || value === '')) {
             isValid = false;
         }
 
@@ -45,11 +45,13 @@ export class Form {
 
     }
 
-    public validateForm() {
+    public validateForm():boolean {
         let isValid:boolean = true;
 
         for(let validator of this.validators) {
             isValid = isValid && validator.validate();
         }
+
+        return isValid
     }
 }

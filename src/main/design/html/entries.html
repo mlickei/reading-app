@@ -43,18 +43,18 @@
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field required" data-max-time="NOW" data-max-time-field="endTime">
+                    <div class="field time-field required validate" data-max-time="NOW" data-max-time-field="endTime">
                         <label for="entry-start-time">Start Time</label><input name="startTime" id="entry-start-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field required" data-min="1" data-max-field="endPage">
+                    <div class="field required validate" data-min="1" data-max-field="endPage">
                         <label for="entry-start-page">Start Page</label><input name="startPage" id="entry-start-page" type="number"/>
                     </div>
                 </div>
                 <div class="fields-wrap">
-                    <div class="field time-field required" data-min-time-field="startTime" data-max-time="NOW">
+                    <div class="field time-field required validate" data-min-time-field="startTime" data-max-time="NOW">
                         <label for="entry-end-time">End Time</label><input name="endTime" id="entry-end-time" type="text" data-time-picker="timestamp" />
                     </div>
-                    <div class="field required" data-min-field="startPage" data-min="1">
+                    <div class="field required validate" data-min-field="startPage" data-min="1">
                         <!-- TODO Show help message saying, "This is the page you finished reading" -->
                         <label for="entry-end-page">End Page</label><input name="endPage" id="entry-end-page" type="number"/>
                     </div>

@@ -4,7 +4,9 @@ import {Book, BookManager} from "./book-management";
 import {Management} from "./management";
 import {AppAuth} from "../user/auth";
 import {Popup} from "../components/popup";
+import {Form, Validator} from "../components/form";
 import moment = require('moment');
+import Moment = moment.Moment;
 
 export class ReadingEntry extends Serializable {
     public id: number;
@@ -16,6 +18,10 @@ export class ReadingEntry extends Serializable {
     public isFinished(): boolean {
         return this.endPage > 0;
     }
+}
+
+function isDefined(val):boolean {
+    return (val !== undefined);
 }
 
 export class EntryManager extends Management {
@@ -63,6 +69,105 @@ export class EntryManager extends Management {
         return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast}, ${book.authorFirst} - ${book.isbn}</option>`;
     }
 
+    private setupForm($form):Validator[] {
+        let validators:Validator[] = [];
+        const TIME_FORMAT = "YYYY-MM-DD hh:mm:ss";
+
+        $form.find('.field').each((idx, field) => {
+            let $field = $(field),
+                isRequired = $field.hasClass('required'),
+                requiresValidation = $field.hasClass('validate'),
+                $input = $field.find('input,textarea,select');
+
+            if (isRequired || requiresValidation) {
+                let validator = new Validator($field, $input, isRequired, "Please enter a valid value.", (val) => {
+                    let isValid = true;
+
+                    if(requiresValidation) {
+                        let isTimeField = $field.hasClass('time-field'),
+                            maxTime = $field.data('max-time'),
+                            maxTimeField = $field.data('max-time-field'),
+                            maxTimeFieldVal = $form.find(`[name="${maxTimeField}"]`).val(),
+                            minTime = $field.data('min-time'),
+                            minTimeField = $field.data('min-time-field'),
+                            minTimeFieldVal = $form.find(`[name="${minTimeField}"]`).val(),
+                            max = $field.data('max'),
+                            maxField = $field.data('max-field'),
+                            maxFieldVal = $form.find(`[name="${maxField}"]`).val(),
+                            min = $field.data('min'),
+                            minField = $field.data('min-field'),
+                            minFieldVal = $form.find(`[name="${minField}"]`).val();
+
+                        if(isTimeField) {
+                            let maxTimeVal,
+                                minTimeVal;
+
+                            if(maxTime === 'NOW') {
+                                maxTimeVal = moment();
+                            } else {
+                                maxTimeVal = moment(maxTime, TIME_FORMAT);
+                            }
+
+                            if(minTime === 'NOW') {
+                                minTimeVal = moment();
+                            } else {
+                                minTimeVal = moment(minTime, TIME_FORMAT);
+                            }
+
+                            let maxTimeFieldValParsed = moment(maxTimeFieldVal, TIME_FORMAT);
+                            let minTimeFieldValParsed = moment(minTimeFieldVal, TIME_FORMAT);
+                            let parsedVal = moment(val, TIME_FORMAT);
+
+                            if(isDefined(maxTimeFieldVal) && maxTimeFieldVal !== '' && maxTimeFieldVal !== null) {
+                                isValid = isValid && parsedVal.isBefore(maxTimeFieldValParsed);
+                            }
+
+                            if(isDefined(maxTime)) {
+                                isValid = isValid && parsedVal.isBefore(maxTimeVal);
+                            }
+
+                            if(isDefined(minTimeFieldVal) && minTimeFieldVal !== '' && minTimeFieldVal !== null) {
+                                isValid = isValid && parsedVal.isAfter(minTimeFieldValParsed);
+                            }
+
+                            if(isDefined(minTime)) {
+                                isValid = isValid && parsedVal.isAfter(minTimeVal);
+                            }
+                        } else {
+                            let parsedVal = parseFloat(val),
+                                parsedMax = parseFloat(max),
+                                parsedMaxField = parseFloat(maxFieldVal),
+                                parsedMin = parseFloat(min),
+                                parsedMinField = parseFloat(minFieldVal);
+
+                            if(isDefined(max)) {
+                                isValid = isValid && parsedVal <= parsedMax;
+                            }
+
+                            if(isDefined(maxFieldVal) && maxFieldVal !== '' && maxFieldVal !== null) {
+                                isValid = isValid && parsedVal <= parsedMaxField;
+                            }
+
+                            if(isDefined(min)) {
+                                isValid = isValid && parsedVal >= parsedMin;
+                            }
+
+                            if(isDefined(minFieldVal) && minFieldVal !== '' && minFieldVal !== null) {
+                                isValid = isValid && parsedVal >= parsedMinField;
+                            }
+                        }
+                    }
+
+                    return isValid;
+                });
+
+                validators.push(validator);
+            }
+        });
+
+        return validators;
+    }
+
     private setupInsertForm($form, books: Book[]) {
         let appAuth: AppAuth = new AppAuth();
 
@@ -75,24 +180,31 @@ export class EntryManager extends Management {
             $bookSel.append(EntryManager.buildBookOpt(book, false));
         }
 
+        let formObj:Form = new Form($form, this.setupForm($form));
+
         $form.on('submit', (evt) => {
             evt.preventDefault();
 
-            let bookId: string = $bookSel.val();
-            let startPage: number = $form.find('input[name="startPage"]').val();
-            let endPage: number = $form.find('input[name="endPage"]').val();
-            let startTime: string = $form.find('input[name="startTime"]').val();
-            let endTime: string = $form.find('input[name="endTime"]').val();
-            let notes: string = $form.find('textarea[name="notes"]').val();
+            let validForm = formObj.validateForm();
+            if(validForm) {
+                let bookId: string = $bookSel.val();
+                let startPage: number = $form.find('input[name="startPage"]').val();
+                let endPage: number = $form.find('input[name="endPage"]').val();
+                let startTime: string = $form.find('input[name="startTime"]').val();
+                let endTime: string = $form.find('input[name="endTime"]').val();
+                let notes: string = $form.find('textarea[name="notes"]').val();
 
-            appAuth.retrieveLoggedInUser((curUser: User) => {
-                let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), curUser, startPage, endPage, startTime, endTime, notes);
-                EntryManager.insertEntry(newBook, () => {
-                    this.refreshResults();
+                appAuth.retrieveLoggedInUser((curUser: User) => {
+                    let newBook: ReadingEntry = new ReadingEntry(EntryManager.findBook(books, bookId), curUser, startPage, endPage, startTime, endTime, notes);
+                    EntryManager.insertEntry(newBook, () => {
+                        this.refreshResults();
+                    });
                 });
-            });
 
-            $form.find('.btn.reset-btn').click();
+                $form.find('.btn.reset-btn').click();
+            } else {
+                alert("SOMETHINGS WRONG");
+            }
         });
     }
 
@@ -134,16 +246,21 @@ export class EntryManager extends Management {
 
             let value = entry[valName];
 
-            if(type === "timestamp") {
-                if(valName === "endTime") {
+            if (type === "timestamp") {
+                if (valName === "endTime") {
                     value = moment().format("MMM D,YYYY h:mm:ss A");
                 }
 
                 $input.val(value);
-                $input.flatpickr({enableTime: true, enableSeconds: true, defaultDate: value, dateFormat: "M d, Y h:i:S K"});
+                $input.flatpickr({
+                    enableTime: true,
+                    enableSeconds: true,
+                    defaultDate: value,
+                    dateFormat: "M d, Y h:i:S K"
+                });
             } else {
                 if (valName === 'book') {
-                    $input.data('default',entry.book.isbn);
+                    $input.data('default', entry.book.isbn);
                 } else {
                     $input.val(value);
                 }
@@ -151,10 +268,10 @@ export class EntryManager extends Management {
         });
     }
 
-    private static buildEntryFromForm($form, books : Book[], callback : (entry:ReadingEntry) => void) {
+    private static buildEntryFromForm($form, books: Book[], callback: (entry: ReadingEntry) => void) {
         let appAuth: AppAuth = new AppAuth();
 
-        let bookId:string = $form.find('select[name="book"]').val();
+        let bookId: string = $form.find('select[name="book"]').val();
         let startPage: number = $form.find('input[name="startPage"]').val();
         let endPage: number = $form.find('input[name="endPage"]').val();
         let startTime: string = $form.find('input[name="startTime"]').val();
@@ -171,7 +288,7 @@ export class EntryManager extends Management {
 
         BookManager.getBooks({}, (books: Book[]) => {
             const $bookSel = $updateForm.find('select[name="book"]'),
-                  selected = $bookSel.data('default');
+                selected = $bookSel.data('default');
             for (let book of books) {
                 $bookSel.append(EntryManager.buildBookOpt(book, (selected === book.isbn)));
             }
@@ -222,11 +339,11 @@ export class EntryManager extends Management {
                 </div>`;
     }
 
-    private buildEntriesListing(entries: ReadingEntry[], $target, popup:Popup) {
+    private buildEntriesListing(entries: ReadingEntry[], $target, popup: Popup) {
         for (let entry of entries) {
             let $entry;
 
-            if(entry.isFinished()) {
+            if (entry.isFinished()) {
                 $entry = $(EntryManager.buildFinishedEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
             } else {
                 $entry = $(EntryManager.buildStartedEntryHTML(entry, this.allowUpdate, this.allowDelete)).appendTo($target);
@@ -319,14 +436,14 @@ export class EntryManager extends Management {
         });
     }
 
-    public static updateEntry(entry: ReadingEntry, doneCallback: (entry:ReadingEntry) => void) {
+    public static updateEntry(entry: ReadingEntry, doneCallback: (entry: ReadingEntry) => void) {
         let sendData = JSON.parse(JSON.stringify(entry));
 
         //Do date formatting
         sendData.startTime = moment(sendData.startTime, "MMM D,YYYY h:mm:ss A").format("YYYY-MM-DD HH:mm:ss");
         sendData.endTime = moment(sendData.endTime, "MMM D,YYYY h:mm:ss A").format("YYYY-MM-DD HH:mm:ss");
 
-        sendData = $.extend(true, sendData, {update: 1, id:entry.id});
+        sendData = $.extend(true, sendData, {update: 1, id: entry.id});
 
         $.ajax(this.ENTRY_URL, {
             type: "POST",
