@@ -32,7 +32,7 @@ export class Validator {
             isValid = false;
         }
 
-        isValid = isValid && this.validateFunction(value);
+        isValid = this.validateFunction(value) && isValid;
 
         this.updateValidationMessage(isValid);
         return isValid;
@@ -49,7 +49,7 @@ export class Form {
         let isValid:boolean = true;
 
         for(let validator of this.validators) {
-            isValid = isValid && validator.validate();
+            isValid = validator.validate() && isValid;
         }
 
         return isValid
