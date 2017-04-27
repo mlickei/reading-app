@@ -248,7 +248,7 @@ export class EntryManager extends Management {
             let value = entry[valName];
 
             if (type === "timestamp") {
-                if (valName === "endTime") {
+                if (valName === "endTime" && (entry.endTime === null || entry.endTime === undefined)) {
                     value = moment().format(EntryManager.SRC_TIME_FORMAT);
                 }
 
@@ -474,10 +474,10 @@ export class EntryManager extends Management {
                 delete: 1
             }
         }).done(() => {
-            alert("Deleted book!");
+            alert("Deleted entry!");
             doneCallback();
         }).fail(() => {
-            alert("Failed to delete book ( ✖ _ ✖ )");
+            alert("Failed to delete entry ( ✖ _ ✖ )");
             doneCallback();
         });
     }
