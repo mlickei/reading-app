@@ -8,9 +8,28 @@
   display: none;
 }
 
+.popup-overlay-wrapper {
+  height: 10%;
+  overflow: hidden;
+  z-index: 2;
+  position: relative;
+
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 999;
+    background-color: rgba(37, 37, 37, 0.7);
+  }
+}
+
 .popup {
-  position: fixed;
-  top: 200px;
+  position: absolute;
+  //top: 200px;
+  top: 5%;
   left: 5%;
   right: 5%;
   background-color: #fff;
@@ -18,7 +37,7 @@
   box-shadow: $basic-box-shadow;
   border-radius: 3px;
   max-width: 720px;
-  margin: 0 auto;
+  margin: 0 auto 5%;
   z-index: 999;
 
   .popup-actions {

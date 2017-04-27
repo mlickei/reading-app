@@ -294,6 +294,8 @@ export class EntryManager extends Management {
             }
 
             $updateForm.removeClass('hidden').find('form').removeClass('hidden');
+            popup.setOverlayWrapperHeight();
+
             $updateForm.on('submit', (evt) => {
                 evt.preventDefault();
                 EntryManager.buildEntryFromForm($updateForm, books, (buildEntry) => {

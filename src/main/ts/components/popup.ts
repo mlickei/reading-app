@@ -8,6 +8,8 @@ export class Popup {
     };
     private finalOpts;
     private $popupHtml;
+    private lastPopupHeight = -1;
+    private $overlayWrapper;
 
     constructor(private $target, private options) {
         this.finalOpts = $.extend(true, this.defaultOpts, options);
@@ -33,6 +35,9 @@ export class Popup {
     public close = () => {
         this.$target.removeClass('popup-content-hidden');
         this.$popupHtml.addClass('popup-hidden').find('.popup-content').empty();
+        $('body .popup-overlay-wrapper > *').unwrap();
+
+        $(window).off('resize');
     };
 
     public open() {
@@ -43,6 +48,32 @@ export class Popup {
         this.$popupHtml.find('.popup-content').append($targetClone);
         this.$popupHtml.find('.popup-close-btn').on('click', this.close);
 
+        this.$overlayWrapper = $('body > *:not(.popup)').wrapAll('<div class="popup-overlay-wrapper"></div>').parent();
+
+        $(window).on('resize', () => {
+            this.setOverlayWrapperHeight();
+        });
+
+        this.setOverlayWrapperHeight();
+
         return $targetClone;
+    }
+
+    private calculateOverlayWrapperHeight() {
+        let popupHeight = this.$popupHtml.outerHeight(),
+            top = this.$popupHtml.position().top,
+            bottom = this.$popupHtml.css('margin-bottom');
+
+        return popupHeight + top + Math.abs(parseFloat(bottom));
+    }
+
+    public setOverlayWrapperHeight() {
+        let newHeight = this.calculateOverlayWrapperHeight();
+        if (newHeight < $('body,html').outerHeight()) {
+            newHeight = '100%';
+        }
+
+        this.$overlayWrapper.css('height', newHeight);
+        this.lastPopupHeight = this.$popupHtml.outerHeight();
     }
 }
