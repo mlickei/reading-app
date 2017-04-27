@@ -322,7 +322,7 @@ export class EntryManager extends Management {
                         <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
                         <div class="pages-read"><span class="attr-lbl">Pages</span><span class="attr-val">${(entry.endPage - entry.startPage) + 1}</span></div>
                         <div class="start-time"><span class="attr-lbl">Start Time</span><span class="attr-val">${entry.startTime}</span></div>
-                        <div class="reading-duration"><span class="attr-lbl">Reading Duration</span><span class="attr-val">${duration.asMinutes()} min</span></div>
+                        <div class="reading-duration"><span class="attr-lbl">Reading Duration</span><span class="attr-val">${Math.round(duration.asMinutes())} min</span></div>
                     </div>
                     <div class="actions entry-actions">
                         <button class="btn update-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Update</button>
