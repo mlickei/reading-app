@@ -103,6 +103,7 @@ export class BookManager extends Management {
         BookManager.fillInFormValues($updateForm, book);
 
         $updateForm.removeClass('hidden').find('form').removeClass('hidden');
+        popup.setOverlayWrapperHeight();
         $updateForm.on('submit', (evt) => {
             evt.preventDefault();
             let book = BookManager.buildBookFromForm($updateForm);
