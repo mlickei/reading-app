@@ -2,6 +2,8 @@
 
 header {
   padding-top: 15px;
+  padding-right: 15px;
+  width: calc(100% - 30px);
 
   .logo {
     margin: 0 auto 7px;
@@ -9,6 +11,7 @@ header {
     a {
       text-indent: 0;
       width: auto;
+      text-align: center;
 
       &:after {
         display: none;
@@ -20,6 +23,7 @@ header {
 .main-content {
   text-align: center;
   background-color: #f9f9f9;
+  margin-top: 163px;
 }
 
 .auth-box {
@@ -38,12 +42,6 @@ header {
   form {
     display: inline-block;
   }
-
-  .field {
-
-    label {
-    }
-  }
 }
 
 .auth-box-controls {
@@ -61,7 +59,17 @@ footer {
   justify-content: center;
 }
 
+@media(min-width: 410px) {
+  .main-content {
+    margin-top: 95px;
+  }
+}
+
 @media (min-width: $bp-tablet) {
+  .main-content {
+    margin-top: 0;
+  }
+
   .auth-box {
     display: inline-block;
     border: 1px solid #141414;

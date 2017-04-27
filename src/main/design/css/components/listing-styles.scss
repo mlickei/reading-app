@@ -96,8 +96,12 @@
       max-width: none;
     }
 
-    .btn + .btn {
+    .btn {
       border-top: 1px solid rgb(68, 68, 68);
+
+      & + .btn {
+        border-left: 1px solid rgb(68, 68, 68);
+      }
     }
   }
 }
@@ -160,6 +164,12 @@
 
       .btn {
         height: 50%;
+        border-top: none;
+
+        & + .btn {
+          border-left: none;
+          border-top: 1px solid rgb(68, 68, 68);
+        }
       }
     }
   }

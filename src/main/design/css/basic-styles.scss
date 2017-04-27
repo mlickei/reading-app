@@ -22,7 +22,7 @@ header {
   align-items: center;
   padding-left: 15px;
   position: relative;
-  box-shadow: 0 2px 3px 0 rgb(232, 232, 232);
+  box-shadow: 0 2px 3px 0 rgba(72, 72, 72, 0.19);
 
   .header-left {
     flex: 1 0 auto;
@@ -427,6 +427,23 @@ footer {
   box-shadow: 0 -2px 3px 0 rgb(232, 232, 232);
 }
 
+.no-wrap {
+  white-space: nowrap;
+}
+
+@media(max-width: $bp-tablet - 1) {
+  header {
+    position: fixed;
+    width: calc(100% - 15px);
+    top: 0;
+    background-color: #f9f9f9;
+  }
+
+  .main-content {
+    margin-top: 72px;
+  }
+}
+
 @media (min-width: $bp-tablet) {
   .standard-menu {
     display: block;
@@ -434,6 +451,10 @@ footer {
 
   .mobile-menu {
     display: none;
+  }
+
+  .main-content {
+    margin-top: 0;
   }
 
   .flex-form {
