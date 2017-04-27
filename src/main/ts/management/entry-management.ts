@@ -28,11 +28,12 @@ export class EntryManager extends Management {
 
     private $entryMgt;
     private $updateForm;
-    private static ENTRY_URL = '/api/reading-entry';
     private allowUpdate: boolean;
     private allowDelete: boolean;
     private allowAdd: boolean;
     private updatePopup: Popup;
+    private static ENTRY_URL = '/api/reading-entry';
+    private static SRC_TIME_FORMAT = "MMM D,YYYY h:mm:ss A";
 
     constructor(user: User) {
         super($('.entry-management'), user);
@@ -248,7 +249,7 @@ export class EntryManager extends Management {
 
             if (type === "timestamp") {
                 if (valName === "endTime") {
-                    value = moment().format("MMM D,YYYY h:mm:ss A");
+                    value = moment().format(EntryManager.SRC_TIME_FORMAT);
                 }
 
                 $input.val(value);
@@ -313,12 +314,15 @@ export class EntryManager extends Management {
     }
 
     private static buildFinishedEntryHTML(entry: ReadingEntry, allowUpdate, allowDelete): string {
+        let readingDuration = moment(entry.endTime, EntryManager.SRC_TIME_FORMAT).diff(moment(entry.startTime, EntryManager.SRC_TIME_FORMAT)),
+            duration = moment.duration(readingDuration);
+
         return `<div class="entry item">
                     <div class="entry-info item-info">
                         <div class="entry-book-title"><span class="attr-lbl">Name</span><span class="attr-val">${entry.book.title}</span></div>
                         <div class="pages-read"><span class="attr-lbl">Pages</span><span class="attr-val">${(entry.endPage - entry.startPage) + 1}</span></div>
                         <div class="start-time"><span class="attr-lbl">Start Time</span><span class="attr-val">${entry.startTime}</span></div>
-                        <div class="end-time"><span class="attr-lbl">End Time</span><span class="attr-val">${entry.endTime}</span></div>
+                        <div class="reading-duration"><span class="attr-lbl">Reading Duration</span><span class="attr-val">${duration.asMinutes()} min</span></div>
                     </div>
                     <div class="actions entry-actions">
                         <button class="btn update-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Update</button>
@@ -442,8 +446,8 @@ export class EntryManager extends Management {
         let sendData = JSON.parse(JSON.stringify(entry));
 
         //Do date formatting
-        sendData.startTime = moment(sendData.startTime, "MMM D,YYYY h:mm:ss A").format("YYYY-MM-DD HH:mm:ss");
-        sendData.endTime = moment(sendData.endTime, "MMM D,YYYY h:mm:ss A").format("YYYY-MM-DD HH:mm:ss");
+        sendData.startTime = moment(sendData.startTime, EntryManager.SRC_TIME_FORMAT).format("YYYY-MM-DD HH:mm:ss");
+        sendData.endTime = moment(sendData.endTime, EntryManager.SRC_TIME_FORMAT).format("YYYY-MM-DD HH:mm:ss");
 
         sendData = $.extend(true, sendData, {update: 1, id: entry.id});
 
