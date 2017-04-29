@@ -2,11 +2,10 @@
 @import "./widget";
 
 .recently-added-widget {
-  max-width: 35%;
   margin: 0 0 0 auto;
 
   .recently-added-books {
-    padding: 0;
+    padding: 0 0 0 21px;
     margin: 0;
 
     .book {
@@ -29,5 +28,11 @@
       }
     }
 
+  }
+}
+
+@media(min-width: $bp-tablet) {
+  .recently-added-widget {
+    max-width: 35%;
   }
 }

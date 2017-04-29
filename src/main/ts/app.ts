@@ -23,7 +23,7 @@ function initTimePickers() {
     if($timePickers.length) {
         require(['flatpickr'], function(fp) {
             //noinspection TypeScriptUnresolvedFunction
-            $timePickers.flatpickr({enableTime: true, enableSeconds: true});
+            $timePickers.flatpickr({enableTime: true, enableSeconds: true, disableMobile:true});
         });
     }
 }

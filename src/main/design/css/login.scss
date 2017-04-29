@@ -1,6 +1,7 @@
 @import "config/base-import";
 
 header {
+  position: relative;
   padding-top: 15px;
   padding-right: 15px;
   width: calc(100% - 30px);
@@ -21,9 +22,9 @@ header {
 }
 
 .main-content {
+  margin-top: 0;
   text-align: center;
   background-color: #f9f9f9;
-  margin-top: 163px;
 }
 
 .auth-box {
@@ -57,12 +58,6 @@ header {
 
 footer {
   justify-content: center;
-}
-
-@media(min-width: 410px) {
-  .main-content {
-    margin-top: 95px;
-  }
 }
 
 @media (min-width: $bp-tablet) {
