@@ -12,9 +12,9 @@ import java.util.List;
 public enum UserType {
 
 	ADMIN("Admin", Arrays.asList(Role.values())),
-	BASIC_USER("Basic User", Arrays.asList(Role.ENTRIES_ADD, Role.ENTRIES_DELETE, Role.ENTRIES_UPDATE)),
-	LIBRARIAN("Librarian", Arrays.asList(Role.ENTRIES_ADD, Role.ENTRIES_DELETE, Role.ENTRIES_UPDATE, Role.BOOK_UPDATE, Role.BOOK_ADD)),
-	CURATOR("Curator", Arrays.asList(Role.ENTRIES_ADD, Role.ENTRIES_DELETE, Role.ENTRIES_UPDATE, Role.BOOK_UPDATE, Role.BOOK_ADD, Role.BOOK_DELETE));
+	BASIC_USER("Basic User", Arrays.asList(Role.ENTRIES_ADD, Role.ENTRIES_DELETE, Role.ENTRIES_UPDATE, Role.READING_LIST_ADD, Role.READING_LIST_UPDATE, Role.READING_LIST_DELETE)),
+	LIBRARIAN("Librarian", Arrays.asList(Role.ENTRIES_ADD, Role.ENTRIES_DELETE, Role.ENTRIES_UPDATE, Role.BOOK_UPDATE, Role.BOOK_ADD, Role.READING_LIST_ADD, Role.READING_LIST_UPDATE, Role.READING_LIST_DELETE)),
+	CURATOR("Curator", Arrays.asList(Role.ENTRIES_ADD, Role.ENTRIES_DELETE, Role.ENTRIES_UPDATE, Role.BOOK_UPDATE, Role.BOOK_ADD, Role.BOOK_DELETE, Role.READING_LIST_ADD, Role.READING_LIST_UPDATE, Role.READING_LIST_DELETE));
 
 	List<Role> roles = new ArrayList<>();
 	@Expose

@@ -72,6 +72,12 @@ function init() {
                 });
             }
 
+            if ($('.reading-list-management').length) {
+                require(['resources/javascript/management/reading-list-management'], (rlm) => {
+                    new rlm.ReadingListManager(user);
+                });
+            }
+
             if ($('.recently-added-books').length) {
                 require(['resources/javascript/widgets/recently-added-books'], (rab) => {
                     new rab.RecentlyAddedBooks();

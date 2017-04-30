@@ -140,7 +140,7 @@ public class ReadingEntryAPI extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		List<ReadingEntry> readingEntries = new ArrayList<>();
-		User user = (User) req.getSession().getAttribute(SessionAttributes.USER);
+		User user = (User) req.getSession(false).getAttribute(SessionAttributes.USER);
 
 		try {
 			readingEntries.addAll(ReadingEntryFactory.getReadingEntries(user));

@@ -13,7 +13,10 @@ public enum Role {
 	ENTRIES_DELETE("Delete Entries"),
 	ENTRIES_ADD("Add Entries"),
 	ENTRIES_UPDATE("Update Entries"),
-	MANAGE_USERS("Manage Users");
+	MANAGE_USERS("Manage Users"),
+	READING_LIST_ADD("Add Reading Lists"),
+	READING_LIST_UPDATE("Update Reading Lists"),
+	READING_LIST_DELETE("Delete Reading Lists");
 
 	@Expose
 	private String displayName = "";
