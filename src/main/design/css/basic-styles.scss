@@ -52,6 +52,10 @@ header {
       }
     }
   }
+
+  .username-link {
+    text-decoration: none;
+  }
 }
 
 .form-title {
@@ -255,7 +259,6 @@ button[disabled] {
     justify-content: flex-end;
 
     .username-link {
-      text-decoration: none;
       color: $color-almost-black;
     }
 

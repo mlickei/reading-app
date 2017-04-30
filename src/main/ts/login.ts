@@ -42,7 +42,7 @@ export class Authenticator {
             if(typeof data.redirectURL !== 'undefined' && data.redirectURL !== null && data.redirectURL.length) {
                 window.location.replace(data.redirectURL);
             } else {
-                window.location.replace('/');
+                window.location.replace('/dashboard.html');
             }
         }).fail(()=>{
             alert("Failed to log in. Wrong username or password.");
@@ -54,12 +54,12 @@ export class Authenticator {
             type: "POST",
             data: data
         }).done((data)=>{
-            alert("⊂(▀¯▀⊂) Succesfully Registered! ⊂(▀¯▀⊂)");
+            alert("⊂(▀¯▀⊂) Successfully Registered! ⊂(▀¯▀⊂)");
 
             if(typeof data.redirectURL !== 'undefined' && data.redirectURL !== null && data.redirectURL.length) {
                 window.location.replace(data.redirectURL);
             } else {
-                window.location.replace('/');
+                window.location.replace('/dashboard.html');
             }
         }).fail(()=>{
             alert("Failed to create account. ╰(ಥдಥ)ノ");

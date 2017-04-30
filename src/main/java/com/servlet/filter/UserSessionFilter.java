@@ -22,6 +22,8 @@ public class UserSessionFilter implements Filter {
 	static {
 		filterMap.put("/login.html", true);
 		filterMap.put("/api/auth", true);
+		filterMap.put("/index.html", true);
+		filterMap.put("/", true);
 	}
 
 	@Override
