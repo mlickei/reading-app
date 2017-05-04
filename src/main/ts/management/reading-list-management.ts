@@ -2,7 +2,7 @@ import {Serializable} from "../serializable";
 import {Management} from "./management";
 import {User} from "../user/user";
 import {Popup} from "../components/popup";
-import {Book} from "./book-management";
+import {Book, BookManager} from "./book-management";
 
 export class ReadingList extends Serializable {
     constructor(public id:number, public name:String, public books:Book[]) {
@@ -46,16 +46,45 @@ export class ReadingListManager extends Management {
         this.$mgt.find('.btn.delete-btn').attr('disabled', (this.allowDelete ? 'disabled' : ''));
     }
 
+    private static getBookListingItemHtml(book:Book) {
+        return `<div class="reading-entry-book-info book-info">
+                    <div class="book-title">${book.title}</div>
+                    <div class="book-isbn">${book.isbn}</div>
+                </div>`;
+    }
+
     private static buildReadingListBookHTML(book:Book, allowUpdate:boolean) {
         return `<div class="reading-entry-book book">
-                    <div class="reading-entry-book-info book-info">
-                        <div class="book-title">${book.title}</div>
-                        <div class="book-isbn">${book.isbn}</div>
-                    </div>
+                    ${ReadingListManager.getBookListingItemHtml(book)}
                     <div class="reading-list-book-actions actions">
                         <button class="btn update-btn reading-list-remove-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Remove Book</button>
                     </div>
                 </div>`;
+    }
+
+    private static buildBookOpt(book: Book, selected): string {
+        return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast} - ${book.isbn}</option>`;
+    }
+
+    private addBookForm($target, readingList:ReadingList) {
+        BookManager.getBooks({
+            readingList: {
+                inList: false,
+                id: readingList.id
+            }
+        }, (books: Book[]) => {
+            let booksStr = '';
+
+            for(let book of books) {
+                booksStr = booksStr + ReadingListManager.buildBookOpt(book, false);
+            }
+
+            $target.prepend(`<div class="reading-list-add-book-options">
+                        <select class="reading-list-add-book-select">
+                            ${booksStr}
+                        </select>
+                    </div>`);
+        });
     }
 
     private static buildReadingListHTML(readingList: ReadingList, allowDelete, allowUpdate): string {
@@ -71,6 +100,8 @@ export class ReadingListManager extends Management {
                     </div>
                     <div class="reading-list-books">
                         ${books}
+                    </div>
+                    <div class="add-book-container">
                         <div class="reading-list-books-actions actions">
                             <button class="btn update-btn reading-list-add-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Add Book</button>
                         </div>
@@ -84,9 +115,12 @@ export class ReadingListManager extends Management {
 
     private buildReadingListListing(readingLists: ReadingList[], $target, popup: Popup) {
         for (let readingList of readingLists) {
-            let $newBook = $(ReadingListManager.buildReadingListHTML(readingList, this.allowDelete, this.allowUpdate)).appendTo($target);
+            let $readingListHtml = $(ReadingListManager.buildReadingListHTML(readingList, this.allowDelete, this.allowUpdate)).appendTo($target),
+                $bookList = $readingListHtml.find('.reading-list-books');
 
-            $newBook.find('.actions').on('click', '.delete-btn', () => {
+            this.addBookForm($readingListHtml.find('.add-book-container'), readingList);
+
+            $readingListHtml.find('.actions').on('click', '.delete-btn', () => {
                 let doDelete: boolean = confirm("Are you sure you want to delete " + readingList.name + "?");
 
                 if (doDelete) {
@@ -94,9 +128,19 @@ export class ReadingListManager extends Management {
                         this.refreshResults();
                     });
                 }
-            }).on('click', '.update-btn', () => {
+            }).on('click', '.update-btn:not(.reading-list-add-book-btn)', () => {
                 // let $popupForm = popup.open();
                 // this.showUpdateBookForm($popupForm, readingList, popup);
+            }).on('click', '.reading-list-add-book-btn', () => {
+                let $bookSelect = $readingListHtml.find('.reading-list-add-book-select'),
+                    bookVal = $bookSelect.val();
+
+                readingList.books.push(bookVal);
+                ReadingListManager.addBookToReadingList(readingList, bookVal, (newReadingList, book) => {
+                    readingList = newReadingList;
+                    $bookSelect.remove('option:selected');
+                    $bookList.append(ReadingListManager.getBookListingItemHtml(book));
+                });
             });
         }
     }
@@ -186,6 +230,31 @@ export class ReadingListManager extends Management {
             doneCallback();
         });
     }
+
+    public static addBookToReadingList(readingList: ReadingList, isbn: String, callback: (newReadingList: ReadingList, book: Book) => void) {
+        $.ajax(this.URL, {
+            type: "POST",
+            data: {
+                id: readingList.id,
+                isbn: isbn,
+                addBook: 1
+            }
+        }).done((data) => {
+            let jsonData = JSON.parse(data);
+
+            let newReadingList = new ReadingList(null, null, null);
+            newReadingList.fromJSONObj(jsonData.readingList);
+
+            let book = new Book(null, null, null, null, null);
+            book.fromJSONObj(jsonData.book);
+            alert("Successfully added " + book.title + " to " + newReadingList.name);
+            callback(newReadingList, book);
+        }).fail(() => {
+            alert("Failed to create the reading list ༼⁰o⁰；༽");
+            callback(null, null);
+        });
+    }
+
 
     public static updateReadingList(readingList: ReadingList, callback: (newReadingList: ReadingList) => void) {
         let sendData = JSON.parse(JSON.stringify(readingList));

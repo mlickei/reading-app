@@ -5,4 +5,10 @@ export class Serializable {
             this[propName] = jsonObj[propName];
         }
     }
+
+    fromJSONObj(jsonObj) {
+        for (let propName in jsonObj) {
+            this[propName] = jsonObj[propName];
+        }
+    }
 }

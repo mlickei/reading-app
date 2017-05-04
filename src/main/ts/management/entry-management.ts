@@ -67,7 +67,7 @@ export class EntryManager extends Management {
     }
 
     private static buildBookOpt(book: Book, selected): string {
-        return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast}, ${book.authorFirst} - ${book.isbn}</option>`;
+        return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast} - ${book.isbn}</option>`;
     }
 
     private setupForm($form):Validator[] {

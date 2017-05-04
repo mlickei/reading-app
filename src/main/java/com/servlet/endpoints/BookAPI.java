@@ -4,11 +4,15 @@ import com.data.Role;
 import com.data.User;
 import com.data.UserType;
 import com.data.query.BookQueryBuilder;
+import com.data.query.constraints.Constraint;
+import com.data.query.constraints.ExistsConstraint;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.data.Book;
 import com.data.factory.BookFactory;
+import com.google.gson.JsonObject;
 import com.servlet.SessionAttributes;
+import util.StringUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -109,33 +113,43 @@ public class BookAPI extends HttpServlet {
 		String authorFirst = req.getParameter("authorFirst");
 		String authorLast = req.getParameter("authorLast");
 		String createdOn = req.getParameter("createdOn");
+		String bookInList = req.getParameter("readingList[inList]");
+		String readingListId = req.getParameter("readingList[id]");
 
 		BookQueryBuilder bookQueryBuilder = new BookQueryBuilder();
+		Gson gsonParser = new GsonBuilder().create();
 
-		if (isbn != null && isbn.length() > 0) {
-			bookQueryBuilder.addConstraint("isbn", "=", isbn);
+		if (!StringUtil.isEmpty(isbn)) {
+			bookQueryBuilder.addConstraint(new Constraint("book.isbn", "=", isbn));
 		}
 
-		if (title != null && title.length() > 0) {
-			bookQueryBuilder.addConstraint("title", "like", '%'+title+'%');
+		if (!StringUtil.isEmpty(title)) {
+			bookQueryBuilder.addConstraint(new Constraint("book.title", "like", '%'+title+'%'));
 		}
 
-		if (authorFirst != null && authorFirst.length() > 0) {
-			bookQueryBuilder.addConstraint("authorFirst", "like", '%'+authorFirst+'%');
+		if (!StringUtil.isEmpty(authorFirst)) {
+			bookQueryBuilder.addConstraint(new Constraint("book.authorFirst", "like", '%'+authorFirst+'%'));
 		}
 
-		if (authorLast != null && authorLast.length() > 0) {
-			bookQueryBuilder.addConstraint("authorLast", "like", '%'+authorLast+'%');
+		if (!StringUtil.isEmpty(authorLast)) {
+			bookQueryBuilder.addConstraint(new Constraint("book.authorLast", "like", '%'+authorLast+'%'));
 		}
 
-		if (createdOn != null && createdOn.length() > 0) {
+		if (!StringUtil.isEmpty(createdOn)) {
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
 			try {
-				bookQueryBuilder.addConstraint("createdOn", "<=", sdf.parse(createdOn));
+				bookQueryBuilder.addConstraint(new Constraint("book.createdOn", "<=", sdf.parse(createdOn)));
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
+		}
+
+		if(!StringUtil.isEmpty(readingListId) && !StringUtil.isEmpty(bookInList)) {
+			bookQueryBuilder.enableDebug(true);
+			bookQueryBuilder.setSelectStr("SELECT distinct book.* FROM book");
+			bookQueryBuilder.addConstraint(new ExistsConstraint("select NULL from reading_list_book as rlb inner join reading_list as rl on rl.id = rlb.readingListId where rl.id = ? AND rlb.isbn = book.isbn", readingListId, Boolean.parseBoolean(bookInList)));
+
 		}
 
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();

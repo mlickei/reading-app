@@ -1,11 +1,15 @@
 package com.servlet.endpoints;
 
+import com.data.Book;
 import com.data.ReadingList;
 import com.data.User;
+import com.data.factory.BookFactory;
 import com.data.factory.ReadingListFactory;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.servlet.SessionAttributes;
+import util.StringUtil;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,9 +33,12 @@ public class ReadingListAPI extends HttpServlet {
 		PrintWriter pw = resp.getWriter();
 		String delete = req.getParameter("delete");
 		String update = req.getParameter("update");
+		String addBook = req.getParameter("addBook");
 		User user = (User) req.getSession(false).getAttribute(SessionAttributes.USER);
+		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
+		Gson gson = gsonBuilder.create();
 
-		if(delete != null && delete.length() > 0 && Integer.parseInt(delete) == 1) {
+		if(!StringUtil.isNull(delete) && Integer.parseInt(delete) == 1) {
 			int listId = Integer.parseInt(req.getParameter("id"));
 
 //			try {
@@ -41,7 +48,7 @@ public class ReadingListAPI extends HttpServlet {
 //				e.printStackTrace();
 //				pw.print(e.toString());
 //			}
-		} else if(update != null && update.length() > 0 && Integer.parseInt(update) == 1) {
+		} else if(!StringUtil.isNull(update) && Integer.parseInt(update) == 1) {
 			String name = req.getParameter("name");
 //
 //			ReadingList readingList = new ReadingList();
@@ -56,7 +63,25 @@ public class ReadingListAPI extends HttpServlet {
 //				e.printStackTrace();
 //				pw.print(e.toString());
 //			}
-		} else {
+		} else if(!StringUtil.isNull(addBook) && Integer.parseInt(addBook) == 1) {
+			int listId = Integer.parseInt(req.getParameter("id"));
+			String bookIsbn = req.getParameter("isbn");
+
+			try {
+				ReadingListFactory.insertReadingListBook(listId, bookIsbn);
+				Book book = BookFactory.getBook(bookIsbn);
+				ReadingList rl = ReadingListFactory.getReadingList(listId);
+
+				JsonObject json = new JsonObject();
+				json.add("book", gson.toJsonTree(book));
+				json.add("readingList", gson.toJsonTree(rl));
+
+				pw.print(json.toString());
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+		}else {
 			String name = req.getParameter("name");
 
 			ReadingList readingList = new ReadingList();
@@ -65,8 +90,6 @@ public class ReadingListAPI extends HttpServlet {
 
 			try {
 				ReadingListFactory.insertReadingList(readingList);
-				GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
-				Gson gson = gsonBuilder.create();
 				pw.append(gson.toJson(readingList));
 			} catch (SQLException e) {
 				e.printStackTrace();

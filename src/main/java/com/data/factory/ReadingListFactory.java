@@ -102,7 +102,7 @@ public class ReadingListFactory {
 					readingList.setId(keys.getInt(1));
 					List<Book> books = readingList.getBooks();
 					for(int idx = 0; idx < books.size(); idx ++) {
-						insertReadingListBook(readingList, books.get(idx), idx);
+						insertReadingListBook(readingList, books.get(idx), Integer.toString(idx));
 					}
 				}
 			}
@@ -113,7 +113,23 @@ public class ReadingListFactory {
 		}
 	}
 
+	public static void insertReadingListBook(ReadingList readingList, Book book) throws SQLException {
+		insertReadingListBook(readingList, book, readingList.getBooks().size());
+	}
+
 	public static void insertReadingListBook(ReadingList readingList, Book book, int order) throws SQLException {
+		insertReadingListBook(readingList, book, Integer.toString(order));
+	}
+
+	public static void insertReadingListBook(ReadingList readingList, Book book, String order) throws SQLException {
+		insertReadingListBook(readingList.getId(), book.getIsbn(), order);
+	}
+
+	public static void insertReadingListBook(int readingListId, String bookIsbn, int order) throws SQLException {
+		insertReadingListBook(readingListId, bookIsbn, Integer.toString(order));
+	}
+
+	public static void insertReadingListBook(int readingListId, String bookIsbn, String order) throws SQLException {
 		PreparedStatement statement = null;
 		Connection conn = null;
 
@@ -123,9 +139,9 @@ public class ReadingListFactory {
 			assert conn != null;
 			statement = conn.prepareStatement("INSERT INTO reading_list_book (isbn, readingListId, ordr) VALUES (?, ?, ?)");
 
-			statement.setString(1, book.getIsbn());
-			statement.setInt(2, readingList.getId());
-			statement.setInt(3, order);
+			statement.setString(1, bookIsbn);
+			statement.setInt(2, readingListId);
+			statement.setString(3, order);
 
 			statement.executeUpdate();
 		} catch (ClassNotFoundException e) {
@@ -135,4 +151,54 @@ public class ReadingListFactory {
 		}
 	}
 
+	public static void insertReadingListBook(int readingListId, String bookIsbn) throws SQLException {
+		PreparedStatement statement = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("INSERT INTO reading_list_book (isbn, readingListId, ordr) VALUES (?, ?, (SELECT COUNT(*) FROM reading_list_book as rlb WHERE rlb.readingListId = ?))");
+
+			statement.setString(1, bookIsbn);
+			statement.setInt(2, readingListId);
+			statement.setInt(3, readingListId);
+
+			statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(null, statement, conn);
+		}
+	}
+
+	public static ReadingList getReadingList(int id) throws SQLException {
+		ReadingList readingList = null;
+		PreparedStatement statement = null;
+		ResultSet rs = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("SELECT * FROM reading_list where id = ? ORDER BY createdOn desc, lastModified desc");
+			statement.setInt(1, id);
+			rs = statement.executeQuery();
+
+			if(rs.next()) {
+				readingList = new ReadingList();
+				readingList.setId(rs.getInt("id"));
+				readingList.setName(rs.getString("name"));
+				readingList.setBooks(getReadingListBooks(readingList));
+			}
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(rs, statement, conn);
+		}
+
+		return readingList;
+	}
 }
