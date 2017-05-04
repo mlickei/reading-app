@@ -1,7 +1,6 @@
-package util;
+package com.util;
 
 import org.junit.Test;
-import org.omg.PortableInterceptor.SUCCESSFUL;
 
 import static org.junit.Assert.*;
 

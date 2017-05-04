@@ -3,7 +3,7 @@ package com.data.query;
 import com.data.Book;
 import com.data.driver.DatabaseDriver;
 import com.data.query.constraints.IConstraint;
-import util.StringUtil;
+import com.util.StringUtil;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
