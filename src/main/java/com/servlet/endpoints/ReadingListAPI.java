@@ -30,10 +30,14 @@ public class ReadingListAPI extends HttpServlet {
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		PrintWriter pw = resp.getWriter();
 		String delete = req.getParameter("delete");
 		String update = req.getParameter("update");
 		String addBook = req.getParameter("addBook");
+		String removeBook = req.getParameter("removeBook");
+
+		System.out.print(removeBook);
+
+		PrintWriter pw = resp.getWriter();
 		User user = (User) req.getSession(false).getAttribute(SessionAttributes.USER);
 		GsonBuilder gsonBuilder = new GsonBuilder().excludeFieldsWithoutExposeAnnotation();
 		Gson gson = gsonBuilder.create();
@@ -81,7 +85,24 @@ public class ReadingListAPI extends HttpServlet {
 				e.printStackTrace();
 				pw.print(e.toString());
 			}
-		}else {
+		} else if(!StringUtil.isEmpty(removeBook) && Integer.parseInt(removeBook) == 1) {
+			int listId = Integer.parseInt(req.getParameter("id"));
+			String bookIsbn = req.getParameter("isbn");
+
+			try {
+				ReadingListFactory.removeReadingListBook(listId, bookIsbn);
+
+				ReadingList rl = ReadingListFactory.getReadingList(listId);
+
+				JsonObject json = new JsonObject();
+				json.add("readingList", gson.toJsonTree(rl));
+
+				pw.print(json.toString());
+			} catch (SQLException e) {
+				e.printStackTrace();
+				pw.print(e.toString());
+			}
+		} else {
 			String name = req.getParameter("name");
 
 			ReadingList readingList = new ReadingList();

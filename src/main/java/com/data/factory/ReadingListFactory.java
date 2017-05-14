@@ -173,6 +173,27 @@ public class ReadingListFactory {
 		}
 	}
 
+	public static void removeReadingListBook(int readingListId, String bookIsbn) throws SQLException {
+		PreparedStatement statement = null;
+		Connection conn = null;
+
+		try {
+			conn = DatabaseDriver.getConnection();
+
+			assert conn != null;
+			statement = conn.prepareStatement("DELETE FROM reading_list_book WHERE readingListId = ? AND isbn = ? LIMIT 1");
+
+			statement.setInt(1, readingListId);
+			statement.setString(2, bookIsbn);
+
+			statement.executeUpdate();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			DatabaseDriver.closeConnection(null, statement, conn);
+		}
+	}
+
 	public static ReadingList getReadingList(int id) throws SQLException {
 		ReadingList readingList = null;
 		PreparedStatement statement = null;

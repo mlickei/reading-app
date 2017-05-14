@@ -57,7 +57,7 @@ export class ReadingListManager extends Management {
         return `<div class="reading-entry-book book">
                     ${ReadingListManager.getBookListingItemHtml(book)}
                     <div class="reading-list-book-actions actions">
-                        <button class="btn update-btn reading-list-remove-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Remove Book</button>
+                        <button data-book-isbn="${book.isbn}" class="btn remove-btn reading-list-remove-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Remove Book</button>
                     </div>
                 </div>`;
     }
@@ -103,7 +103,7 @@ export class ReadingListManager extends Management {
                     </div>
                     <div class="add-book-container">
                         <div class="reading-list-books-actions actions">
-                            <button class="btn update-btn reading-list-add-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Add Book</button>
+                            <button class="btn add-btn reading-list-add-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Add Book</button>
                         </div>
                     </div>
                     <div class="actions reading-list-actions">
@@ -140,6 +140,13 @@ export class ReadingListManager extends Management {
                     readingList = newReadingList;
                     $bookSelect.remove('option:selected');
                     $bookList.append(ReadingListManager.getBookListingItemHtml(book));
+                });
+            }).on('click', '.reading-list-remove-book-btn', (evt) => {
+                let $btn = $(evt.target),
+                    isbn = $btn.data('book-isbn');
+
+                ReadingListManager.removeBookFromReadingList(readingList, isbn, () => {
+
                 });
             });
         }
@@ -215,6 +222,28 @@ export class ReadingListManager extends Management {
         }).fail(() => {
             alert("Failed to retrieve reading lists ( * ಥ ⌂ ಥ * )");
             callback(readingLists);
+        });
+    }
+
+    public static removeBookFromReadingList(readingList: ReadingList, isbn: String, callback: (newReadingList: ReadingList) => void) {
+        $.ajax(this.URL, {
+            type: "POST",
+            data: {
+                id: readingList.id,
+                isbn: isbn,
+                removeBook: 1
+            }
+        }).done((data) => {
+            let jsonData = JSON.parse(data);
+
+            let newReadingList = new ReadingList(null, null, null);
+            newReadingList.fromJSONObj(jsonData.readingList);
+
+            alert("Successfully removed " + newReadingList.name + " from " + newReadingList.name);
+            callback(newReadingList);
+        }).fail(() => {
+            alert("Failed to create the reading list ༼⁰o⁰；༽");
+            callback(null);
         });
     }
 
