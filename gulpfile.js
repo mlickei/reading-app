@@ -14,7 +14,7 @@ var preprocess = require('gulp-preprocess');
 var buildMenu = function(activeItem) {
 	activeItem = (typeof activeItem === 'undefined' || activeItem === null) ? '' : activeItem;
 	return '<li class="mi' + ((activeItem == 'library') ? ' active' : '') + '"><a class="mi-label" href="books.html">Library</a></li>' +
-		// '<li class="mi' + ((activeItem == 'bookcase') ? ' active' : '') + '"><a class="mi-label" href="bookcase.html">Bookcase</a></li>' +
+		'<li class="mi' + ((activeItem == 'bookcase') ? ' active' : '') + '"><a class="mi-label" href="bookcase.html">Bookcase</a></li>' +
 		'<li class="mi' + ((activeItem == 'entries') ? ' active' : '') + '"><a class="mi-label" href="entries.html">Reading Entries</a></li>';
 };
 

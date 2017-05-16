@@ -181,7 +181,7 @@ public class ReadingListFactory {
 			conn = DatabaseDriver.getConnection();
 
 			assert conn != null;
-			statement = conn.prepareStatement("DELETE FROM reading_list_book WHERE readingListId = ? AND isbn = ? LIMIT 1");
+			statement = conn.prepareStatement("CALL remove_reading_list_book(?, ?)");
 
 			statement.setInt(1, readingListId);
 			statement.setString(2, bookIsbn);
