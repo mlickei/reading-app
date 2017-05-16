@@ -127,6 +127,8 @@ form {
 .text-btn {
   cursor: pointer;
   padding: 10px 15px;
+  background: transparent;
+  border: none;
 }
 
 .btn {
@@ -176,6 +178,54 @@ form {
 
   &:hover {
     background-color: #e2e2e2;
+  }
+}
+
+.remove-btn {
+  &.btn {
+    background-color: #f95545;
+    color: #fff;
+
+    &:hover {
+      background-color: #f96154;
+    }
+
+    &:after {
+      margin-left: 7px;
+    }
+  }
+
+  &.text-btn {
+    color: #f95545;
+    padding: 3px 6px;
+
+    &:hover {
+      color: #f96154;
+    }
+
+    &:after {
+      text-shadow: $basic-text-shadow;
+    }
+  }
+
+  &:after {
+    content: "\f00d";
+    @include fa-icon();
+  }
+}
+
+.add-btn {
+  background-color: #2360b9;
+  color: #fff;
+
+  &:hover {
+    background-color: #346ab9;
+  }
+
+  &:after {
+    content: "\f067";
+    @include fa-icon();
+    margin-left: 7px;
   }
 }
 

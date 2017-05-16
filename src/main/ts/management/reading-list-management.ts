@@ -2,6 +2,7 @@ import {Serializable} from "../serializable";
 import {Management} from "./management";
 import {User} from "../user/user";
 import {Popup} from "../components/popup";
+import {Expandable} from "../components/expandable";
 import {Book, BookManager} from "./book-management";
 
 export class ReadingList extends Serializable {
@@ -49,15 +50,15 @@ export class ReadingListManager extends Management {
     private static getBookListingItemHtml(book:Book) {
         return `<div class="reading-entry-book-info book-info">
                     <div class="book-title">${book.title}</div>
-                    <div class="book-isbn">${book.isbn}</div>
+                    <div class="book-isbn">ISBN: ${book.isbn}</div>
                 </div>`;
     }
 
     private static buildReadingListBookHTML(book:Book, allowUpdate:boolean) {
-        return `<div class="reading-entry-book book">
+        return `<div class="reading-list-book book">
                     ${ReadingListManager.getBookListingItemHtml(book)}
                     <div class="reading-list-book-actions actions">
-                        <button data-book-isbn="${book.isbn}" class="btn remove-btn reading-list-remove-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Remove Book</button>
+                        <button data-book-isbn="${book.isbn}" class="text-btn remove-btn reading-list-remove-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE"></button>
                     </div>
                 </div>`;
     }
@@ -94,16 +95,23 @@ export class ReadingListManager extends Management {
             books = books + ReadingListManager.buildReadingListBookHTML(book, allowUpdate);
         }
 
-        return `<div class="reading-list item">
-                    <div class="reading-list-info item-info">
-                        <div class="reading-list-name"><span class="attr-lbl">Name</span><span class="attr-val">${readingList.name}</span></div>
+        return `<div id="reading-list-${readingList.id}" class="reading-list item">
+                    <div class="reading-list-info item-info expandable-ctrl" data-expandable-target="#reading-list-${readingList.id} .reading-list-books-mgt">
+                        <div class="reading-list-name expand-lbl">
+                            <span class="attr-lbl">Name</span>
+                            <span class="attr-val">${readingList.name}</span>
+                            <span class="span-btn expand-btn"></span>
+                            <span class="span-btn collapse-btn hidden"></span>
+                        </div>
                     </div>
-                    <div class="reading-list-books">
-                        ${books}
-                    </div>
-                    <div class="add-book-container">
-                        <div class="reading-list-books-actions actions">
-                            <button class="btn add-btn reading-list-add-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Add Book</button>
+                    <div class="reading-list-books-mgt">
+                        <div class="reading-list-books">
+                            ${books}
+                        </div>
+                        <div class="add-book-container">
+                            <div class="reading-list-books-actions actions">
+                                <button class="btn add-btn reading-list-add-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE">Add Book</button>
+                            </div>
                         </div>
                     </div>
                     <div class="actions reading-list-actions">
@@ -116,9 +124,11 @@ export class ReadingListManager extends Management {
     private buildReadingListListing(readingLists: ReadingList[], $target, popup: Popup) {
         for (let readingList of readingLists) {
             let $readingListHtml = $(ReadingListManager.buildReadingListHTML(readingList, this.allowDelete, this.allowUpdate)).appendTo($target),
-                $bookList = $readingListHtml.find('.reading-list-books');
+                $bookList = $readingListHtml.find('.reading-list-books'),
+                $readingListExandable = $readingListHtml.find('.expandable-ctrl');
 
             this.addBookForm($readingListHtml.find('.add-book-container'), readingList);
+            new Expandable($readingListExandable, $($readingListExandable.data('expandable-target')));
 
             $readingListHtml.find('.actions').on('click', '.delete-btn', () => {
                 let doDelete: boolean = confirm("Are you sure you want to delete " + readingList.name + "?");

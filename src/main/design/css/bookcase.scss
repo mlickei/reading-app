@@ -1,0 +1,55 @@
+@import "config/base-import";
+@import "components/expandable";
+
+.reading-lists {
+  margin-top: 25px;
+}
+
+.reading-list {
+
+  & + & {
+    margin-top: 25px;
+  }
+
+  .reading-list-actions {
+    margin-top: 15px;
+  }
+}
+
+.reading-list-books {
+  margin-top: 10px;
+
+  .reading-list-book {
+    padding: 15px 0;
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    align-content: center;
+
+    & + .reading-list-book {
+      border-top: 2px solid $color-almost-black;
+    }
+
+    .book-title {
+      font-style: italic;
+    }
+
+    .book-isbn {
+      margin-top: 3px;
+    }
+
+    .reading-list-remove-book-btn {
+      font-size: 22px;
+      padding: 3px 7px;
+    }
+  }
+
+  .reading-list-add-book-options select {
+    width: 100%;
+  }
+
+  .reading-list-books-actions .add-btn {
+    width: 100%;
+    max-width: none;
+  }
+}
