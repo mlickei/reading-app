@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@types/jquery": "^2.0.41",
-    "flatpickr": "^2.4.7",
+    "flatpickr": "2.5.9",
     "gulp-preprocess": "^2.0.0",
     "moment": "^2.18.1",
     "requirejs": "^2.3.3",
