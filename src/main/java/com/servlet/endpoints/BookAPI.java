@@ -145,7 +145,6 @@ public class BookAPI extends HttpServlet {
 		}
 
 		if(!StringUtil.isEmpty(readingListId) && !StringUtil.isEmpty(bookInList)) {
-			bookQueryBuilder.enableDebug(true);
 			bookQueryBuilder.setSelectStr("SELECT distinct book.* FROM book");
 			bookQueryBuilder.addConstraint(new ExistsConstraint("select NULL from reading_list_book as rlb inner join reading_list as rl on rl.id = rlb.readingListId where rl.id = ? AND rlb.isbn = book.isbn", readingListId, Boolean.parseBoolean(bookInList)));
 

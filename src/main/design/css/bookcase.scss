@@ -14,6 +14,23 @@
   .reading-list-actions {
     margin-top: 15px;
   }
+
+  .reading-list-books-mgt {
+    max-width: 420px;
+  }
+
+  .reading-list-add-book-options select {
+    width: 100%;
+    max-width: 210px;
+  }
+
+  .reading-list-books-actions {
+    margin-top: 10px;
+
+    .add-btn {
+      width: 100%;
+    }
+  }
 }
 
 .reading-list-books {
@@ -42,14 +59,5 @@
       font-size: 22px;
       padding: 3px 7px;
     }
-  }
-
-  .reading-list-add-book-options select {
-    width: 100%;
-  }
-
-  .reading-list-books-actions .add-btn {
-    width: 100%;
-    max-width: none;
   }
 }
