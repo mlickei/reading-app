@@ -55,7 +55,7 @@ export class ReadingListManager extends Management {
     }
 
     private static buildReadingListBookHTML(book:Book, allowUpdate:boolean) {
-        return `<div class="reading-list-book book">
+        return `<div class="reading-list-book book" data-isbn="${book.isbn}">
                     ${ReadingListManager.getBookListingItemHtml(book)}
                     <div class="reading-list-book-actions actions">
                         <button data-book-isbn="${book.isbn}" class="text-btn remove-btn reading-list-remove-book-btn" ` + ((!allowUpdate) ? `disabled="disabled"` : ``) + ` role="UPDATE"></button>
@@ -67,6 +67,28 @@ export class ReadingListManager extends Management {
         return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast} - ${book.isbn}</option>`;
     }
 
+    private static buildBookOptions(books: Book[]):string {
+        let booksStr = '';
+
+        for(let book of books) {
+            booksStr = booksStr + ReadingListManager.buildBookOpt(book, false);
+        }
+
+        return booksStr;
+    }
+
+    private static updateReadingListBookSel($bookSelect, readingList:ReadingList) {
+        BookManager.getBooks({
+            readingList: {
+                inList: false,
+                id: readingList.id
+            }
+        }, (books: Book[]) => {
+            $bookSelect.empty();
+            $bookSelect.append(ReadingListManager.buildBookOptions(books));
+        });
+    }
+
     private addBookForm($target, readingList:ReadingList) {
         BookManager.getBooks({
             readingList: {
@@ -74,15 +96,9 @@ export class ReadingListManager extends Management {
                 id: readingList.id
             }
         }, (books: Book[]) => {
-            let booksStr = '';
-
-            for(let book of books) {
-                booksStr = booksStr + ReadingListManager.buildBookOpt(book, false);
-            }
-
             $target.prepend(`<div class="reading-list-add-book-options">
                         <select class="reading-list-add-book-select">
-                            ${booksStr}
+                            ${ReadingListManager.buildBookOptions(books)}
                         </select>
                     </div>`);
         });
@@ -99,7 +115,7 @@ export class ReadingListManager extends Management {
                     <div class="reading-list-info item-info expandable-ctrl" data-expandable-target="#reading-list-${readingList.id} .reading-list-books-mgt">
                         <div class="reading-list-name expand-lbl">
                             <span class="attr-lbl">Name</span>
-                            <span class="attr-val">${readingList.name}</span>
+                            <span class="attr-val">${readingList.name} <span class="reading-list-book-count">(${readingList.books.length})</span></span>
                             <span class="span-btn expand-btn"></span>
                             <span class="span-btn collapse-btn hidden"></span>
                         </div>
@@ -125,12 +141,13 @@ export class ReadingListManager extends Management {
         for (let readingList of readingLists) {
             let $readingListHtml = $(ReadingListManager.buildReadingListHTML(readingList, this.allowDelete, this.allowUpdate)).appendTo($target),
                 $bookList = $readingListHtml.find('.reading-list-books'),
+                $bookCount = $readingListHtml.find('.reading-list-book-count'),
                 $readingListExandable = $readingListHtml.find('.expandable-ctrl');
 
             this.addBookForm($readingListHtml.find('.add-book-container'), readingList);
             new Expandable($readingListExandable, $($readingListExandable.data('expandable-target')));
 
-            $readingListHtml.find('.actions').on('click', '.delete-btn', () => {
+            $readingListHtml.on('click', '.delete-btn', () => {
                 let doDelete: boolean = confirm("Are you sure you want to delete " + readingList.name + "?");
 
                 if (doDelete) {
@@ -148,15 +165,22 @@ export class ReadingListManager extends Management {
                 readingList.books.push(bookVal);
                 ReadingListManager.addBookToReadingList(readingList, bookVal, (newReadingList, book) => {
                     readingList = newReadingList;
-                    $bookSelect.remove('option:selected');
-                    $bookList.append(ReadingListManager.getBookListingItemHtml(book));
+
+                    ReadingListManager.updateReadingListBookSel($bookSelect, readingList);
+
+                    $bookList.append(ReadingListManager.buildReadingListBookHTML(book, this.allowUpdate));
+                    $bookCount.text(`(${readingList.books.length})`);//TODO just have an update function
                 });
             }).on('click', '.reading-list-remove-book-btn', (evt) => {
                 let $btn = $(evt.target),
+                    $bookSelect = $readingListHtml.find('.reading-list-add-book-select'),
                     isbn = $btn.data('book-isbn');
 
-                ReadingListManager.removeBookFromReadingList(readingList, isbn, () => {
-
+                ReadingListManager.removeBookFromReadingList(readingList, isbn, (newReadingList) => {
+                    ReadingListManager.updateReadingListBookSel($bookSelect, readingList);
+                    $bookList.find(`.reading-list-book[data-isbn="${isbn}"]`).remove();
+                    readingList.books = newReadingList.books;
+                    $bookCount.text(`(${readingList.books.length})`);
                 });
             });
         }
