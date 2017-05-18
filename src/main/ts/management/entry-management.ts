@@ -256,6 +256,7 @@ export class EntryManager extends Management {
                 $input.flatpickr({
                     enableTime: true,
                     enableSeconds: true,
+                    disableMobile:true,
                     defaultDate: value,
                     dateFormat: "M d, Y h:i:S K"
                 });
