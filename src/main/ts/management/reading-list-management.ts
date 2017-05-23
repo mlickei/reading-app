@@ -4,10 +4,15 @@ import {User} from "../user/user";
 import {Popup} from "../components/popup";
 import {Expandable} from "../components/expandable";
 import {Book, BookManager} from "./book-management";
+import {Request} from "../requests";
 
 export class ReadingList extends Serializable {
-    constructor(public id:number, public name:String, public books:Book[]) {
+    public default:boolean = false;
+
+    constructor(public id:number, public name:String, public books:Book[], defalt:boolean = false) {
         super();
+
+        this.default = defalt;
     }
 }
 
@@ -238,25 +243,41 @@ export class ReadingListManager extends Management {
         }
     }
 
+    public static pullReadingListJson(readingListObj) {
+        let books:Book[] = [];
+        for (let bookObj of readingListObj.books) {
+            books.push(BookManager.pullBookFromJson(bookObj));
+        }
+
+        return new ReadingList(readingListObj.id, readingListObj.name, books, readingListObj.defalt);
+    }
+
+    public static pullReadingListsJson(readingListsObj):ReadingList[] {
+        let readingLists: ReadingList[] = [];
+
+        for (let readingListObj of readingListsObj) {
+            readingLists.push(ReadingListManager.pullReadingListJson(readingListObj));
+        }
+
+        return readingLists;
+    }
+
     public static getReadingLists(searchConstraints, callback: (readingLists: ReadingList[]) => void) {
         let readingLists: ReadingList[] = [];
         $.ajax(this.URL, {
             type: "GET",
             data: searchConstraints
         }).done((data) => {
-            for (let readingListObj of JSON.parse(data)) {
-                let books:Book[] = [];
-                for (let bookObj of readingListObj.books) {
-                    books.push(new Book(bookObj.isbn, bookObj.title, bookObj.pages, bookObj.authorFirst, bookObj.authorLast));
-                }
-
-                readingLists.push(new ReadingList(readingListObj.id, readingListObj.name, books));
-            }
+            readingLists = ReadingListManager.pullReadingListsJson(JSON.parse(data));
             callback(readingLists);
         }).fail(() => {
             alert("Failed to retrieve reading lists ( * ಥ ⌂ ಥ * )");
             callback(readingLists);
         });
+    }
+
+    public static getReadingListsRequest(searchConstraints):Request {
+        return new Request(this.URL, searchConstraints);
     }
 
     public static removeBookFromReadingList(readingList: ReadingList, isbn: String, callback: (newReadingList: ReadingList) => void) {

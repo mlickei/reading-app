@@ -2,6 +2,7 @@ import {Serializable} from "../serializable";
 import {Management} from "./management";
 import {User} from "../user/user";
 import {Popup} from "../components/popup";
+import {Request} from "../requests";
 
 export class Book extends Serializable {
     constructor(public isbn: string, public title: string, public pages: number, public authorFirst: string, public authorLast: string) {
@@ -162,20 +163,36 @@ export class BookManager extends Management {
         }
     }
 
+    public static pullBookFromJson(bookObj):Book {
+        return new Book(bookObj.isbn, bookObj.title, bookObj.pages, bookObj.authorFirst, bookObj.authorLast);
+    }
+
+    public static pullBooksFromJson(booksObj):Book[] {
+        let books: Book[] = [];
+
+        for (let bookObj of booksObj) {
+            books.push(BookManager.pullBookFromJson(bookObj));
+        }
+
+        return books;
+    }
+
     public static getBooks(searchConstraints, callback: (array: Book[]) => void) {
         let books: Book[] = [];
         $.ajax(this.BOOK_URL, {
             type: "GET",
             data: searchConstraints
         }).done((data) => {
-            for (let bookObj of JSON.parse(data)) {
-                books.push(new Book(bookObj.isbn, bookObj.title, bookObj.pages, bookObj.authorFirst, bookObj.authorLast));
-            }
+            books = BookManager.pullBooksFromJson(JSON.parse(data));
             callback(books);
         }).fail(() => {
             alert("Failed to retrieve books ( * ಥ ⌂ ಥ * )");
             callback(books);
         });
+    }
+
+    public static getBooksReq(searchConstraints):Request {
+        return new Request(this.BOOK_URL, searchConstraints);
     }
 
     public static insertBook(newBook: Book, doneCallback: () => void) {

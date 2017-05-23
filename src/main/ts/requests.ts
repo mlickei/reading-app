@@ -1,8 +1,13 @@
 export class Request {
     public type = "GET";
+    public selfPromise;
+    private selfResolve;
+    private selfReject;
 
     constructor(private url, public data) {
-
+        this.selfPromise = new Promise<any>((resolve, reject) => {
+            this.selfResolve = resolve;
+        });
     }
 
     public run():Promise<any> {
@@ -12,8 +17,10 @@ export class Request {
                 data: this.data
             }).done((data) => {
                 resolve(data);
+                this.selfResolve(data);
             }).fail((data) => {
                 reject(data);
+                this.selfReject(data);
             });
         });
     }

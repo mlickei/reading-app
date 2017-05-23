@@ -7,6 +7,8 @@ import {Popup} from "../components/popup";
 import {Form, Validator} from "../components/form";
 import moment = require('moment');
 import Moment = moment.Moment;
+import {ReadingList, ReadingListManager} from "./reading-list-management";
+import {Requests, Request} from "../requests";
 
 export class ReadingEntry extends Serializable {
     public id: number;
@@ -68,6 +70,10 @@ export class EntryManager extends Management {
 
     private static buildBookOpt(book: Book, selected): string {
         return `<option value="${book.isbn}" ` + ((selected) ? `selected="selected"` : ``) + `><i>${book.title}</i> ${book.authorLast} - ${book.isbn}</option>`;
+    }
+
+    private static buildReadingListOpt(readingList:ReadingList, selected): string {
+        return `<option value="${readingList.id}" ` + ((selected) ? `selected="selected"` : ``) + `>${readingList.name}</option>`;
     }
 
     private setupForm($form):Validator[] {
@@ -169,7 +175,7 @@ export class EntryManager extends Management {
         return validators;
     }
 
-    private setupInsertForm($form, books: Book[]) {
+    private setupInsertForm($form, readingLists:ReadingList[], books: Book[]) {
         let appAuth: AppAuth = new AppAuth();
 
         if (!this.allowAdd) {
@@ -209,11 +215,16 @@ export class EntryManager extends Management {
         });
     }
 
-    private setupStartNewForm($form, books: Book[]) {
+    private setupStartNewForm($form, readingLists:ReadingList[], books: Book[]) {
         let appAuth: AppAuth = new AppAuth();
 
         if (!this.allowAdd) {
             this.$entryMgt.find('.start-entry-form').addClass('hidden');
+        }
+
+        const $readingListSel = $form.find('select[name="reading-list"]');
+        for (let readingList of readingLists) {
+            $readingListSel.append(EntryManager.buildReadingListOpt(readingList, false));
         }
 
         const $bookSel = $form.find('select[name="book"]');
@@ -382,14 +393,30 @@ export class EntryManager extends Management {
     }
 
     public init() {
-        const $entryMgtForm = this.$entryMgt.find('.add-entry-form form');
-        const $newEntryMgtForm = this.$entryMgt.find('.start-entry-form form');
+        const $entryMgtForm = this.$entryMgt.find('.add-entry-form form'),
+            updateMgtForm = $entryMgtForm.length > 0,
+            $newEntryMgtForm = this.$entryMgt.find('.start-entry-form form'),
+            updateNewEntryForm = $newEntryMgtForm.length > 0;
 
-        if ($entryMgtForm.length) {
-            BookManager.getBooks({}, (books: Book[]) => {
-                this.setupInsertForm($entryMgtForm, books);
-                this.setupStartNewForm($newEntryMgtForm, books);
-            });
+        if (updateMgtForm || updateNewEntryForm) {
+            let rlReq = ReadingListManager.getReadingListsRequest({});
+
+            rlReq.run().then((data) => {
+                let readingLists:ReadingList[] = ReadingListManager.pullReadingListsJson(JSON.parse(data)),
+                    defaultList:ReadingList;
+
+                for(let readingList of readingLists) {
+                    if(readingList.default) {
+                        defaultList = readingList;
+                        break;
+                    }
+                }
+
+                this.setupInsertForm($entryMgtForm, readingLists, defaultList.books);
+                this.setupStartNewForm($newEntryMgtForm, readingLists, defaultList.books);
+            }).catch((error) => {
+                alert(`Failed along the way? ${error}`);
+            })
         }
 
         const $entryListing = this.$entryMgt.find('.entry-listing');
