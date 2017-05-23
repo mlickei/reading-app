@@ -19,3 +19,5 @@ CREATE TABLE reading_list_book (
   FOREIGN KEY (isbn) REFERENCES book(isbn),
   FOREIGN KEY (readingListId) REFERENCES reading_list(id) ON DELETE CASCADE
 );
+
+ALTER TABLE reading_list ADD COLUMN `default` BOOLEAN NOT NULL DEFAULT FALSE;

@@ -18,6 +18,8 @@ public class ReadingList {
 	private User user;
 	@Expose
 	private List<Book> books = new ArrayList<>();
+	@Expose
+	private boolean defalt;
 
 	public ReadingList() {
 
@@ -63,5 +65,13 @@ public class ReadingList {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public boolean isDefalt() {
+		return defalt;
+	}
+
+	public void setDefalt(boolean defalt) {
+		this.defalt = defalt;
 	}
 }

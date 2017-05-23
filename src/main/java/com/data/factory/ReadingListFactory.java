@@ -35,8 +35,10 @@ public class ReadingListFactory {
 				readingList.setUser(user);
 				readingList.setName(rs.getString("name"));
 				readingList.setBooks(getReadingListBooks(readingList));
+				readingList.setDefalt(rs.getBoolean("default"));
 
 				readingLists.add(readingList);
+				//TODO this is dup'd make helper method
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -213,6 +215,7 @@ public class ReadingListFactory {
 				readingList.setId(rs.getInt("id"));
 				readingList.setName(rs.getString("name"));
 				readingList.setBooks(getReadingListBooks(readingList));
+				readingList.setDefalt(rs.getBoolean("default"));
 			}
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
