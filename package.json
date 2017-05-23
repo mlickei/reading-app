@@ -14,6 +14,7 @@
   "license": "",
   "homepage": "",
   "devDependencies": {
+    "@types/es6-promise": "0.0.32",
     "@types/jquery": "^2.0.41",
     "@types/node": "^6.0.69",
     "gulp": "^3.9.1",
@@ -27,6 +28,7 @@
     "node-normalize-scss": "^1.4.0"
   },
   "dependencies": {
+    "@types/es6-promise": "0.0.32",
     "@types/jquery": "^2.0.41",
     "flatpickr": "2.5.9",
     "gulp-preprocess": "^2.0.0",

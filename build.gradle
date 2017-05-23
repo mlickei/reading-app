@@ -60,7 +60,7 @@ compileTypeScript {
     compilerExecutable "${nodeExecutable()} node_modules/typescript/lib/tsc.js"
     dependsOn "npmInstall"
     source = [file('src/main/ts')]
-    target = "es5"
+    target = "es6"
     module = "amd"
     moduleResolution = "node"
     isolatedModules = false
